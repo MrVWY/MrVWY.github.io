@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="最近在TCP卷3中看到了一个time_wait状态截断，引起了我的注意。同时也注意到了TCP重置攻击方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="time_wait状态截断与TCP reset attack">
+<meta property="og:url" content="http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近在TCP卷3中看到了一个time_wait状态截断，引起了我的注意。同时也注意到了TCP重置攻击方法。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/09/20200903160427835.png">
+<meta property="article:published_time" content="2020-09-04T00:59:55.000Z">
+<meta property="article:modified_time" content="2021-01-28T08:07:49.331Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.hizjlhi.com/2020/09/20200903160427835.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>time_wait状态截断与TCP reset attack</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/09/15/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&text=time_wait状态截断与TCP reset attack"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&is_video=false&description=time_wait状态截断与TCP reset attack"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=time_wait状态截断与TCP reset attack&body=Check out this article: http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&name=time_wait状态截断与TCP reset attack&description=&lt;p&gt;最近在TCP卷3中看到了一个time_wait状态截断，引起了我的注意。同时也注意到了TCP重置攻击方法。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&t=time_wait状态截断与TCP reset attack"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#time-wait%E7%8A%B6%E6%80%81%E6%88%AA%E6%96%AD"><span class="toc-number">1.</span> <span class="toc-text">time_wait状态截断</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">作用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reset-attack"><span class="toc-number">2.</span> <span class="toc-text">Reset attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">3.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        time_wait状态截断与TCP reset attack
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-09-04T00:59:55.000Z" itemprop="datePublished">2020-09-04</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/TCP/">TCP</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>最近在TCP卷3中看到了一个time_wait状态截断，引起了我的注意。同时也注意到了TCP重置攻击方法。</p>
+<a id="more"></a>
+<h3 id="time-wait状态截断"><a href="#time-wait状态截断" class="headerlink" title="time_wait状态截断"></a>time_wait状态截断</h3><p>目前time_wait状态截断只要是作用于T/TCP协议中。具体还是看图理解 <img src="http://www.hizjlhi.com/2020/09/20200903160427835.png"> 由上图可知在客户与服务器之间的交互的过程中，比较TCP/IP协议，其多发送了FIN。 这个time_wait状态截断主要发生在上图的新连接主动打开这块，可以明显看出time_wait直接被截。仔细观察结合卷3的解释，出现这情况是因此T/TCP新增的字段CC大于上一条连接(8&gt;6)，于是就导致了老的连接关闭，新的连接开始建立。</p>
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>作用通常是与性能或者内存所挂勾 根据卷3所知出现time_wait截断的目的是为了重用本地端口以减少对控制块内存的需求。但前提是连接的持续时间小于报文段最大生存时间MSL。 不过T/TCP目前并没有成为一个标准和被应用，因此time_wait状态的截断在平常是少见的。</p>
+<h3 id="Reset-attack"><a href="#Reset-attack" class="headerlink" title="Reset attack"></a>Reset attack</h3><p>Reset attack其实就是利用了TCP中的RST字段。当处于正常的TCP连接的双方，任何一方收到了一个RST位为1的包，就会立即重置当前TCP连接，丢弃接收到的该连接的所有数据包，相当于终止了该TCP连接。应用方面有好也有坏，可以伪造RST报文到任意一方以达到破坏TCP连接为目的，也可以利用RST报文来中断TCP连接</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><p>  <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/TCP_reset_attack">TCP reset attack</a></p>
+</li>
+<li><p>  <a target="_blank" rel="noopener" href="https://bbs.huaweicloud.com/blogs/134377">T/TCP中的新TCP选项</a></p>
+</li>
+<li><p>  <a target="_blank" rel="noopener" href="https://robertheaton.com/2020/04/27/how-does-a-tcp-reset-attack-work/">How does a TCP Reset Attack work?</a></p>
+</li>
+<li><p>  <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/T%2FTCP/1647857?fr=aladdin">T/TCP</a></p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#time-wait%E7%8A%B6%E6%80%81%E6%88%AA%E6%96%AD"><span class="toc-number">1.</span> <span class="toc-text">time_wait状态截断</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">作用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reset-attack"><span class="toc-number">2.</span> <span class="toc-text">Reset attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">3.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&text=time_wait状态截断与TCP reset attack"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&is_video=false&description=time_wait状态截断与TCP reset attack"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=time_wait状态截断与TCP reset attack&body=Check out this article: http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&title=time_wait状态截断与TCP reset attack"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&name=time_wait状态截断与TCP reset attack&description=&lt;p&gt;最近在TCP卷3中看到了一个time_wait状态截断，引起了我的注意。同时也注意到了TCP重置攻击方法。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/&t=time_wait状态截断与TCP reset attack"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2021
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

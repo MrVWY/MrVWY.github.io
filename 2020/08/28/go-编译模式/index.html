@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Go与C家族的互调，Go的几种编译模式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go 编译模式">
+<meta property="og:url" content="http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Go与C家族的互调，Go的几种编译模式。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/08/20200826095638331.png">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/08/20200826095532942.png">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/08/20200828140739493.png">
+<meta property="article:published_time" content="2020-08-28T14:21:23.000Z">
+<meta property="article:modified_time" content="2021-01-28T08:07:49.323Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.hizjlhi.com/2020/08/20200826095638331.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Go 编译模式</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&text=Go 编译模式"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&is_video=false&description=Go 编译模式"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Go 编译模式&body=Check out this article: http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&name=Go 编译模式&description=&lt;p&gt;Go与C家族的互调，Go的几种编译模式。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&t=Go 编译模式"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E6%88%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E9%9C%80%E8%A6%81%E7%BB%8F%E8%BF%87%E5%93%AA%E4%BA%9B"><span class="toc-number">1.</span> <span class="toc-text">一个程序编译成可执行程需要经过哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">go 编译模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#buildmode%E5%8F%82%E6%95%B0"><span class="toc-number">2.1.</span> <span class="toc-text">-buildmode参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C%E8%B0%83Go%E3%80%81Go%E8%B0%83C%E4%BE%8B%E5%AD%90"><span class="toc-number">3.</span> <span class="toc-text">C调Go、Go调C例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#C%E8%B0%83Go"><span class="toc-number">3.1.</span> <span class="toc-text">C调Go</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Go%E8%B0%83C"><span class="toc-number">3.2.</span> <span class="toc-text">Go调C</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Go 编译模式
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-08-28T14:21:23.000Z" itemprop="datePublished">2020-08-28</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Go/">Go</a> › <a class="category-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Go与C家族的互调，Go的几种编译模式。</p>
+<a id="more"></a>
+<h3 id="一个程序编译成可执行程需要经过哪些"><a href="#一个程序编译成可执行程需要经过哪些" class="headerlink" title="一个程序编译成可执行程需要经过哪些"></a>一个程序编译成可执行程需要经过哪些</h3><p>会经过4个步骤：</p>
+<ol>
+<li> 预编译：又称为预处理，是做些代码文本的替换工作。是整个编译过程的最先做的工作，生成**.i文件**。<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%A2%84%E7%BC%96%E8%AF%91">参考</a></li>
+<li> 编译：主要对代码进行语法、语义等分析。检查无误后，翻译成二进制机器指令，生成汇编代码，将.i文件转化成**.s文件**。<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BC%96%E8%AF%91">参考</a></li>
+<li> 汇编：把上述的汇编代码翻译成二进制机器指令，将.s文件转化成**.o文件**。</li>
+<li> 链接：又分为静态链接和动态链接，将众多的.o合成一个完整的可执行文件（静态/动态库文件）—Windows下为**.lib<strong>和</strong>.dll<strong>文件(lib是编译时需要的，dll是运行时需要的。)，Linux下为</strong>.a<strong>和</strong>.so**文件。</li>
+</ol>
+<p>注：不同平台下，生成文件可能不同。例如window下，在汇编阶段会产生.obj文件。</p>
+<h3 id="go-编译模式"><a href="#go-编译模式" class="headerlink" title="go 编译模式"></a>go 编译模式</h3><p>关于go build 这个工具集是常用工具，能够将所写的代码打包编译成可执行文件(类型取决于所处平台)，也可以加上-buildmode指定编译模式。</p>
+<h4 id="buildmode参数"><a href="#buildmode参数" class="headerlink" title="-buildmode参数"></a>-buildmode参数</h4><ol>
+<li>-buildmode=archive<ul>
+<li><ul>
+<li>原版文档解释：This is the default build mode for a package that is not main.  It means to build the package into a .a file.  This is already supported for all targets.<ul>
+<li>  个人理解：这个参数主要用来将那么不是名为main的.go编译成.a文件，不过这种方式生成的.a文件。目前尚未弄清生成在哪个文件夹下。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>-buildmode=default<ul>
+<li><ul>
+<li>原版文档解释： Listed main packages are built into executables and listed non-main packages are built into .a files (the default behavior).<ul>
+<li>  个人理解：这个是默认情况下buildmode所采取的方法，其最终生成一个可执行文件和把除main.go外的其他.go编译成.a文件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>-buildmode=shared：<ul>
+<li>  这个参数主要编译成一个.so文件、.a文件，不过要在命令后面配上-linkshared参数，可以参考一下这篇<a target="_blank" rel="noopener" href="http://www.voidcn.com/article/p-mbxdfugq-brh.html">文章</a>。</li>
+</ul>
+</li>
+<li>-buildmode=c-archive （ C动态链接文件）<ul>
+<li>  原版文档解释：Build the listed main package, plus all packages it imports, into a <strong>C archive file</strong>. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.</li>
+<li>  注意：在使用go文件编译成能让C/C++引用的文件时，要主要必须要有的2个要求：第一是要在头部加入import “C”。第二是要在你想让C/C++引用的函数上方加入  //export  你的函数名。</li>
+<li>  产生文件：.a 、.h。.h文件可以在C/C++引用<img src="http://www.hizjlhi.com/2020/08/20200826095638331.png"></li>
+<li>  参考链接-<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/40573401/building-a-dll-with-go-1-7">stackoverflow</a></li>
+</ul>
+</li>
+<li>-buildmode=c-shared<ul>
+<li>  原版文档解释：Build the listed main package, plus all packages it imports, into a <strong>C shared library</strong>. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.</li>
+<li>  大体上和c-archive模式差不多，主要是C archive file和C shared library的区别。按字面意思是file和library的区别。</li>
+<li>  产生文件：一个文件(不知用来干啥)，.h文件供C/C++调用。<img src="http://www.hizjlhi.com/2020/08/20200826095532942.png"></li>
+</ul>
+</li>
+</ol>
+<p>关于buildmode的参数还有exe、pie、plugin，这些参数就不展开多说。可以通过go help buildmode查看文档解析。</p>
+<h3 id="C调Go、Go调C例子"><a href="#C调Go、Go调C例子" class="headerlink" title="C调Go、Go调C例子"></a>C调Go、Go调C例子</h3><h4 id="C调Go"><a href="#C调Go" class="headerlink" title="C调Go"></a>C调Go</h4><p>//A.go<br>import “C”<br>import “fmt”</p>
+<p>//export A<br>func A() {<br>   fmt.Println(“From DLL: A!”)<br>}</p>
+<p>func main() {}</p>
+<p>通过**<em>go build -buildmode=c-archive -o ××.a  A.go</em> ** 生成A.a 和 A.h文件。然后编写.c文件</p>
+<p>#include “h.h”<br>#include &lt;stdio.h&gt;<br>int main()<br>{<br>    Bar();<br>    return 0;<br>}</p>
+<p>编译C+运行：<strong><em>gcc -o main hello.c h.a -undefined reference to `pthread_create’</em></strong> 注：这里的-lpthread参数还需研究，就目前来看是能够调用成功。与其相关的还有一个-pthread参数，仍需自行查阅相关资料。 就目前来看-lpthread是与POSIX(可移植操作系统接口) thread相关 <img src="http://www.hizjlhi.com/2020/08/20200828140739493.png"> 注意：上述只是个简单的例子，具体更复杂的问题涉及到C与Go直接的值范围等到一些问题还需要注意，因此在调用中更应该注重两种语言之间的类型转换。</p>
+<h4 id="Go调C"><a href="#Go调C" class="headerlink" title="Go调C"></a>Go调C</h4><p>主要是运用了Go实现的CGO库调用，参考及内部实现：<a target="_blank" rel="noopener" href="https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-05-internal.html">链接</a> 加油！</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li>  <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5">静态链接(Static link)</a></li>
+<li>  <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5">动态链接(Dynamic Linking)</a></li>
+<li>   <a target="_blank" rel="noopener" href="https://docs.google.com/document/d/1nr-TQHw_er6GOQRsF6T43GGhFDelrAP0NqSS_00RgZQ/view?pli=1#heading=h.fwmrrio0df0i">Go Execution Modes</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E6%88%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E9%9C%80%E8%A6%81%E7%BB%8F%E8%BF%87%E5%93%AA%E4%BA%9B"><span class="toc-number">1.</span> <span class="toc-text">一个程序编译成可执行程需要经过哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">go 编译模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#buildmode%E5%8F%82%E6%95%B0"><span class="toc-number">2.1.</span> <span class="toc-text">-buildmode参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C%E8%B0%83Go%E3%80%81Go%E8%B0%83C%E4%BE%8B%E5%AD%90"><span class="toc-number">3.</span> <span class="toc-text">C调Go、Go调C例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#C%E8%B0%83Go"><span class="toc-number">3.1.</span> <span class="toc-text">C调Go</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Go%E8%B0%83C"><span class="toc-number">3.2.</span> <span class="toc-text">Go调C</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&text=Go 编译模式"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&is_video=false&description=Go 编译模式"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Go 编译模式&body=Check out this article: http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&name=Go 编译模式&description=&lt;p&gt;Go与C家族的互调，Go的几种编译模式。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&t=Go 编译模式"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2021
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
