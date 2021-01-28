@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Reverse Polish Notationye也称逆波兰表达式(后缀表达式)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逆波兰表达式(Reverse Polish Notation)">
+<meta property="og:url" content="http://example.com/2020/07/20/reverse-polish-notation/index.html">
+<meta property="og:site_name" content="Bit">
+<meta property="og:description" content="Reverse Polish Notationye也称逆波兰表达式(后缀表达式)。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/07/20200724043232386.png">
+<meta property="article:published_time" content="2020-07-20T05:38:48.000Z">
+<meta property="article:modified_time" content="2021-01-28T08:07:49.240Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.hizjlhi.com/2020/07/20200724043232386.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>逆波兰表达式(Reverse Polish Notation)</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/07/21/lc%E7%AC%AC200%E5%91%A8/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/07/20/lc%E7%AC%AC198%E5%91%A8/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/07/20/reverse-polish-notation/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/07/20/reverse-polish-notation/&text=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/07/20/reverse-polish-notation/&is_video=false&description=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=逆波兰表达式(Reverse Polish Notation)&body=Check out this article: http://example.com/2020/07/20/reverse-polish-notation/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/07/20/reverse-polish-notation/&name=逆波兰表达式(Reverse Polish Notation)&description=&lt;p&gt;Reverse Polish Notationye也称逆波兰表达式(后缀表达式)。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/07/20/reverse-polish-notation/&t=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E3%80%81%E4%B8%AD%E3%80%81%E5%90%8E%E7%BC%80%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">前、中、后缀表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%AD%E7%BC%80%E5%8F%98%E5%90%8E%E7%BC%80%E4%BE%8B%E5%AD%901"><span class="toc-number">1.1.</span> <span class="toc-text">中缀变后缀例子1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%AD%E7%BC%80%E5%8F%98%E5%90%8E%E7%BC%80%E4%BE%8B%E5%AD%902"><span class="toc-number">1.2.</span> <span class="toc-text">中缀变后缀例子2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E7%BC%80%E5%8F%98%E5%90%8E%E7%BC%80%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">中缀变后缀代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">具体流程如下：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">代码实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%BC%80%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="toc-number">3.</span> <span class="toc-text">后缀表达式计算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-number">3.1.</span> <span class="toc-text">具体流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="toc-number">3.2.</span> <span class="toc-text">代码实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        逆波兰表达式(Reverse Polish Notation)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-07-20T05:38:48.000Z" itemprop="datePublished">2020-07-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/LeetCode/">LeetCode</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Reverse Polish Notationye也称逆波兰表达式(后缀表达式)。</p>
+<a id="more"></a>
+<h3 id="前、中、后缀表达式"><a href="#前、中、后缀表达式" class="headerlink" title="前、中、后缀表达式"></a>前、中、后缀表达式</h3><p>所谓的前、中、后缀表达式也十分简单，复杂点的可以把a、b看出2个不同的运算表达式，如下： 前缀表达式：+ab 中缀表达式：a+b 后缀表达式：ab+</p>
+<h4 id="中缀变后缀例子1"><a href="#中缀变后缀例子1" class="headerlink" title="中缀变后缀例子1"></a>中缀变后缀例子1</h4><p>a+b*c</p>
+<p>根据上面的中缀表达式。首先我们把a、b*c看成2个整体，这样就回到了一开始的a+b模式。a+b*c就变为了ab*c+，接着还剩b*c这一部分思路一样，ab*c+就变为了abc*+。 <img src="http://www.hizjlhi.com/2020/07/20200724043232386.png"> 经过上面的例子，可以大致了解中缀变后缀的基本流程。</p>
+<h4 id="中缀变后缀例子2"><a href="#中缀变后缀例子2" class="headerlink" title="中缀变后缀例子2"></a>中缀变后缀例子2</h4><p>(a*b+c)*d</p>
+<p>根据上面的中缀表达式。首先我们把(a*b+c)、d看成2个整体，这样就回到了一开始的a+b模式。(a*b+c)*d就变为了(a*b+c)d*，接着还剩(a*b+c)这一部分思路一样，(a*b+c)就变为了abc*+，接上前面的d*，整个中缀变后缀的结果为abc*+d*。</p>
+<h3 id="中缀变后缀代码实现"><a href="#中缀变后缀代码实现" class="headerlink" title="中缀变后缀代码实现"></a>中缀变后缀代码实现</h3><p>根据前面的2个例子，可以使用一个存储数字的num数组和一个存储运算符的stack栈。</p>
+<h4 id="具体流程如下："><a href="#具体流程如下：" class="headerlink" title="具体流程如下："></a>具体流程如下：</h4><ol>
+<li> 遍历中缀表达式ch，<strong>如果遇到”(“**，就直接入栈。</strong>如果遇到数字<strong>，将其存储到num数组并用</strong>空格隔开<strong>。</strong>如果遇到”)”**，将栈上的运算符全部添加到num数组中，”(“除外，最后遍历到”(“需要将其从栈上删除。</li>
+<li> 如果遇到运算符，这里分2种情况：</li>
+</ol>
+<p>第一种情况，如果当前ch的字符比栈顶元素的运算符的优先级<strong>大</strong>，那么当前ch的字符入栈。 第二种情况，如果当前ch的字符比栈顶元素的运算符的优先级**小并且栈顶元素不为”(“**，那么将栈顶元素取出添加到num数组中，直到当前ch的字符比栈顶元素的运算符的优先级大，然后当前ch的字符入栈。</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><p>//比较运算符的优先级<br>func getPriority(ch byte) int {<br>   priority := 0<br>   switch ch {<br>      case ‘+’: priority = 1<br>      case ‘-‘: priority = 1<br>      case ‘(‘: priority = 2<br>      case ‘/‘: priority = 3<br>      case ‘*‘: priority = 3<br>      default:<br>         priority = 0<br>   }<br>   return priority<br>}</p>
+<p>//中缀变后缀<br>func changeRPN(ch string) string {<br>   nums := make([]byte,0) //store number<br>   stack := make([]byte,0) //store operator<br>   for i := 0 ; i &lt; len(ch) ; i++ {<br>      if ch[i] == ‘ ‘ {continue} //分隔符<br>      if ch[i] &gt;= ‘0’ &amp;&amp; ch[i] &lt;= ‘9’ {<br>         //如果是二位数以上<br>         for i &lt; len(ch) &amp;&amp; ch[i] &gt;= ‘0’ &amp;&amp; ch[i] &lt;= ‘9’ {<br>            nums = append(nums, ch[i])<br>            i++<br>         }<br>         nums = append(nums, ‘ ‘) //分隔符,不然会出现11*2 -&gt; 112*<br>         i–<br>      }</p>
+<pre><code>  if ch\[i\] == &#39;(&#39; &#123;
+     //直接入栈
+     stack = append(stack, ch\[i\])
+  &#125;else if ch\[i\] == &#39;)&#39; &#123;
+     //将括号中间的符号输出到尾部
+     for len(stack) != 0 &#123;
+        top := stack\[len(stack)-1\]
+        if top == &#39;(&#39; &#123;
+           stack = stack\[:len(stack)-1\]
+           break
+        &#125;
+        nums = append(nums, top)
+        nums = append(nums, &#39; &#39;)
+        stack = stack\[:len(stack)-1\]
+     &#125;
+  &#125;
+
+  if ch\[i\] == &#39;+&#39;  ch\[i\] == &#39;-&#39;  ch\[i\] == &#39;\*&#39;  ch\[i\] == &#39;/&#39; &#123;
+     if len(stack) == 0 &#123;
+        stack = append(stack, ch\[i\])
+     &#125;else &#123;
+        if getPriority(ch\[i\]) &gt; getPriority(stack\[len(stack)-1\]) &#123;
+           stack = append(stack, ch\[i\])
+        &#125;else &#123;
+           //如果当前运算符优先级比运算栈栈顶的运算符优先级小,将栈顶运算符输出到尾部
+           for len(stack) != 0 &amp;&amp; getPriority(ch\[i\]) &lt;= getPriority(stack\[len(stack)-1\]) &amp;&amp; stack\[len(stack)-1\] != &#39;(&#39; &#123;
+              nums = append(nums, stack\[len(stack)-1\])
+              nums = append(nums, &#39; &#39;)
+              stack = stack\[:len(stack)-1\]
+           &#125;
+           stack = append(stack, ch\[i\])
+        &#125;
+     &#125;
+  &#125;</code></pre>
+<p>   }<br>   for len(stack) != 0 {<br>      nums = append(nums, stack[len(stack)-1])<br>      nums = append(nums, ‘ ‘)<br>      stack = stack[:len(stack)-1]<br>   }</p>
+<p>   result := “”<br>   for i := 0 ; i &lt; len(nums) ; i++ {<br>      result += string(nums[i])<br>   }<br>   return result<br>}</p>
+<h3 id="后缀表达式计算"><a href="#后缀表达式计算" class="headerlink" title="后缀表达式计算"></a>后缀表达式计算</h3><h4 id="具体流程"><a href="#具体流程" class="headerlink" title="具体流程"></a>具体流程</h4><p>首先需要一个存储数字的stack栈，当遇到运算符时，只需要将栈上的2个元素取出计算，再将求出的值放进栈中即可。最后我们只需要输出栈顶元素就得出答案。 注意：2个数字之间是用空格隔开的，因此上面转后缀时我们已经处理好了，是为了避免1*12变成112*的误区，使得不清楚是1*12还是11*2。处理好的1*12为1 12 *。</p>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><p>func calculateRPN(ch string) int {<br>   length := len(ch)<br>   var value1, value2, result int<br>   stack := make([]int,0)<br>   for i := 0 ; i &lt; length ; i++ {<br>      if ch[i] &gt;= ‘0’ &amp;&amp; ch[i] &lt;= ‘9’ {<br>         tmp := int(ch[i] - 48)<br>         j := i+1<br>         for ch[j] &gt;= ‘0’ &amp;&amp; ch[j] &lt;= ‘9’ {<br>            tmp = tmp * 10 + int(ch[j] - 48)<br>            j++<br>         }<br>         stack = append(stack, tmp)<br>         i = j-1<br>      }<br>      if ch[i] == ‘+’  ch[i] == ‘-‘  ch[i] == ‘*‘  ch[i] == ‘/‘ {<br>         value2 = stack[len(stack)-1]<br>         stack = stack[:len(stack)-1]<br>         value1 = stack[len(stack)-1]<br>         stack = stack[:len(stack)-1]<br>         if ch[i] == ‘+’ { result = value1+value2<br>         }else if ch[i] == ‘-‘ {result = value1-value2<br>         }else if ch[i] == ‘*‘ {result = value1*value2<br>         }else if ch[i] == ‘/‘ {result = value1/value2}<br>         stack = append(stack, result)<br>      }<br>   }<br>   return stack[len(stack)-1]<br>}</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>逆波兰表达式的操作与思路实现起来不算太难，主要思路要理解的。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E3%80%81%E4%B8%AD%E3%80%81%E5%90%8E%E7%BC%80%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">前、中、后缀表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%AD%E7%BC%80%E5%8F%98%E5%90%8E%E7%BC%80%E4%BE%8B%E5%AD%901"><span class="toc-number">1.1.</span> <span class="toc-text">中缀变后缀例子1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%AD%E7%BC%80%E5%8F%98%E5%90%8E%E7%BC%80%E4%BE%8B%E5%AD%902"><span class="toc-number">1.2.</span> <span class="toc-text">中缀变后缀例子2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E7%BC%80%E5%8F%98%E5%90%8E%E7%BC%80%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">中缀变后缀代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">具体流程如下：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">代码实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%BC%80%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="toc-number">3.</span> <span class="toc-text">后缀表达式计算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-number">3.1.</span> <span class="toc-text">具体流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="toc-number">3.2.</span> <span class="toc-text">代码实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/07/20/reverse-polish-notation/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/07/20/reverse-polish-notation/&text=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/07/20/reverse-polish-notation/&is_video=false&description=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=逆波兰表达式(Reverse Polish Notation)&body=Check out this article: http://example.com/2020/07/20/reverse-polish-notation/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/07/20/reverse-polish-notation/&title=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/07/20/reverse-polish-notation/&name=逆波兰表达式(Reverse Polish Notation)&description=&lt;p&gt;Reverse Polish Notationye也称逆波兰表达式(后缀表达式)。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/07/20/reverse-polish-notation/&t=逆波兰表达式(Reverse Polish Notation)"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    2021
+	<a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/">豫ICP备190号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

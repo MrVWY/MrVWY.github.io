@@ -4,12 +4,835 @@
   
     
     <entry>
-      <title>123</title>
-      <link href="2021/01/28/123/"/>
-      <url>2021/01/28/123/</url>
+      <title>Hello World</title>
+      <link href="2021/01/26/hello-world/"/>
+      <url>2021/01/26/hello-world/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
       
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>记录贴：nginx Compilation parameters</title>
+      <link href="2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/"/>
+      <url>2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/</url>
+      
+        <content type="html"><![CDATA[<p>记录一下一些常见的nginx Compilation parameters。</p><a id="more"></a><h3 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h3><p><code>--prefix=_path_</code></p><p>设置nginx安装目录路径</p><p><code>--sbin-path=_path_</code></p><p>设置nginx可执行程序文件目录路径</p><p><code>--modules-path=_path_</code></p><p>设置nginx模块目录路径</p><p><code>--conf-path=_path_</code></p><p>设置 <code>nginx.conf</code> 配置文件路径</p><p><code>--error-log-path=_path_</code></p><p>设置nginx 错误日志文件路径</p><p><code>--pid-path=_path_</code></p><p>设置 <code>nginx.pid</code> 文件路径</p><p><code>--lock-path=_path_</code> </p><p> 设置 <code>nginx.lock</code> 文件路径</p><p><code>--user=_name_</code></p><p>设置用户</p><p><code>--group=_name_</code></p><p>设置用户组</p><h3 id="模块配置"><a href="#模块配置" class="headerlink" title="模块配置"></a>模块配置</h3><h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><code>--with-select_module 、``--without-select_module</code></p><p>是否使用IO多路复用中的select()。</p><p><code>--with-poll_module、``--without-poll_module</code></p><p>是否使用IO多路复用中的poll()。</p><p><code>--with-threads</code></p><p>开启线程池。</p><p><code>--with-http_ssl_module</code></p><p>开启HTTPS，具体配置请看<a href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html">HTTPS protocol support</a> ，依赖于openssl。</p><p><code>--with-http_v2_module</code></p><p>开启并支持HTTP/2。</p><p><code>--with-http_realip_module</code></p><p>  <a href="http://nginx.org/en/docs/http/ngx_http_realip_module.html">ngx_http_realip_module</a>  模块，ngx_http_realip_module模块可以在反向代理中，返回真实用户IP给真实服务器，否则返回的是nginx服务器IP。</p><p><code>--with-http_addition_module</code></p><p> <a href="http://nginx.org/en/docs/http/ngx_http_addition_module.html">ngx_http_addition_module</a> 模块。作用在响应前后增加或者删除一些字段。</p><p><code>--with-http_image_filter_module</code> <code>--with-http_image_filter_module=dynamic</code></p><p><a href="http://nginx.org/en/docs/http/ngx_http_image_filter_module.html">ngx_http_image_filter_module</a> 模块。用于不同格式的图片转换。</p><p><code>--with-http_sub_module</code></p><p><a href="http://nginx.org/en/docs/http/ngx_http_sub_module.html">ngx_http_sub_module</a> 模块，可修改指定字符串。</p><p><code>--with-http_dav_module</code></p><p>官方文档翻译过来说是使用webdav对文件管理自动化，具体用法不清楚。</p><p><code>--with-http_flv_module</code></p><p><a href="http://nginx.org/en/docs/http/ngx_http_flv_module.html">ngx_http_flv_module</a> 模块，为Flash视频（FLV）文件提供伪流服务器端支持。</p><p><code>--with-http_mp4_module</code></p><p> <a href="http://nginx.org/en/docs/http/ngx_http_mp4_module.html">ngx_http_mp4_module</a> module。提供对mp4文件的流式服务的支持。</p><p><code>--with-http_gunzip_module</code></p><p>enables building the <a href="http://nginx.org/en/docs/http/ngx_http_gunzip_module.html">ngx_http_gunzip_module</a> 模块。为那些不支持gzip压缩的用户提供类似于gzip的服务，有助于减少数据传输量。</p><p><code>--with-http_gzip_static_module</code></p><p><a href="http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html">ngx_http_gzip_static_module</a> 模块。使用“gzip”方法压缩响应的过滤器。这通常有助于将传输数据的大小减少一半甚至更多。依赖于zlib</p><p><code>--with-http_auth_request_module</code></p><p><a href="http://nginx.org/en/docs/http/ngx_http_auth_request_module.html">ngx_http_auth_request_module</a> 模块。提供对于请求的访问控制和Auth认证协议。</p><p><code>--with-http_random_index_module</code></p><p><a href="http://nginx.org/en/docs/http/ngx_http_random_index_module.html">ngx_http_random_index_module</a> 模块，选取设定目录中的随机文件作为索引文件。玩法：同一网站不同主页。</p><p><code>--with-http_secure_link_module</code></p><p><a href="http://nginx.org/en/docs/http/ngx_http_secure_link_module.html">ngx_http_secure_link_module</a> 模块.，用于检查请求的链接的真实性，保护资源免受未经授权的访问并限制链接的寿命。</p><p><code>--with-http_stub_status_module</code></p><p> <a href="http://nginx.org/en/docs/http/ngx_http_stub_status_module.html">ngx_http_stub_status_module</a> 模块，提供了基本访问信息的查询。</p><h4 id="fastcgi、uwsgi、scgi模块临时文件路径"><a href="#fastcgi、uwsgi、scgi模块临时文件路径" class="headerlink" title="fastcgi、uwsgi、scgi模块临时文件路径"></a><a href="http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html">fastcgi</a>、<a href="http://nginx.org/en/docs/http/ngx_http_uwsgi_module.html">uwsgi</a>、<a href="http://nginx.org/en/docs/http/ngx_http_scgi_module.html">scgi</a>模块临时文件路径</h4><p><code>--http-fastcgi-temp-path=_path、_``--http-uwsgi-temp-path=_path、_``--http-scgi-temp-path=_path_</code></p><p><code>--without-http_fastcgi_module、``--without-http_uwsgi_module、``--without-http_scgi_module</code></p><h4 id="stream模块"><a href="#stream模块" class="headerlink" title="stream模块"></a>stream模块</h4><p>用来实现四层协议的转发、代理或者负载均衡</p><p>--with-stream</p><p><code>--with-stream=dynamic</code></p><p><code>--with-stream_ssl_module</code></p><p><code>--with-stream_realip_module</code></p><p><code>--with-stream_geoip_module</code> <code>--with-stream_geoip_module=dynamic</code></p><p><code>--with-stream_ssl_preread_module</code></p><h4 id="pcre"><a href="#pcre" class="headerlink" title="pcre"></a>pcre</h4><p>The library is required for regular expressions support in the <a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location">location</a> directive and for the <a href="http://nginx.org/en/docs/http/ngx_http_rewrite_module.html">ngx_http_rewrite_module</a> module.</p><p><code>--without-pcre、``--with-pcre、``--with-pcre=_path、_``--with-pcre-opt=_parameters、_``--with-pcre-jit</code></p><h4 id="zlib"><a href="#zlib" class="headerlink" title="zlib"></a>zlib</h4><p>The library is required for the <a href="http://nginx.org/en/docs/http/ngx_http_gzip_module.html">ngx_http_gzip_module</a> module.</p><p><code>--with-zlib=_path_</code></p><p><code>--with-zlib-opt=_parameters_</code></p><p><code>--with-zlib-asm=_cpu_</code></p><p>enables the use of the zlib assembler sources optimized for one of the specified CPUs: <code>pentium</code>, <code>pentiumpro</code>.</p><h4 id="openssl"><a href="#openssl" class="headerlink" title="openssl"></a>openssl</h4><p><code>--with-openssl=_path、_``--with-openssl-opt=_parameters_</code></p><h4 id="Perl语言相关"><a href="#Perl语言相关" class="headerlink" title="Perl语言相关"></a>Perl语言相关</h4><p><code>--with-http_perl_module、``--with-http_perl_module=dynamic、``--with-perl_modules_path=_path、_``--with-perl=_path_</code></p><h4 id="邮件服务相关"><a href="#邮件服务相关" class="headerlink" title="邮件服务相关"></a>邮件服务相关</h4><p><code>--with-mail、``--with-mail=dynamic、``--with-mail_ssl_module、``--without-mail_pop3_module、``--without-mail_imap_module、``--without-mail_smtp_module</code></p><h4 id="第三方模块添加"><a href="#第三方模块添加" class="headerlink" title="第三方模块添加"></a>第三方模块添加</h4><p><code>--add-module=_path、_``--add-dynamic-module=_path_</code></p><h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h3><p>输出下面命令，选择你所需要的模块</p><p>./configure –prefix…………</p><p>接着就make &amp;&amp; make install。注意make install 会把原来安装nginx的路径全部覆盖，建议先进行备份。</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="http://nginx.org/en/docs/configure.html">http://nginx.org/en/docs/configure.html</a></li><li>  <a href="https://cloud.tencent.com/developer/doc/1158">https://cloud.tencent.com/developer/doc/1158</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>通过函数计算搭建wordpress(二)</title>
+      <link href="2020/09/28/%E9%80%9A%E8%BF%87%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress%E4%BA%8C/"/>
+      <url>2020/09/28/%E9%80%9A%E8%BF%87%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress%E4%BA%8C/</url>
+      
+        <content type="html"><![CDATA[<p>在上文通过fun工具去创建了wordpress的函数计算，但是在实际安装中也遇到了不少的坑，在此记录下来。</p><a id="more"></a><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>经过上一篇文章，wordpress的函数计算已经成功的部署在我的阿里云上，但是操作比较复杂，你可以使用傻瓜式部署方法选择其上面的。</p><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>当部署成功之后，正准备install wordpress，结果来了一个tables prefix must not be empty的错误。网上的做法是通过修改wordpress目录下的wp-config.php文件。这一步涉及到的问题便大了。 一方面是不同地域的ecs和nas是不能直接连接挂载，如果要跨地域挂载，就要交钱……，但网上的说法都是直接复制粘贴阿里云nas文档的命令，完全忽略了这个跨地域问题。对于挂载点，你可以通过阿里云上的专有网络VPC查看你的ecs在哪个网络，接着通过添加挂载点让你的ecs挂载上nas，前提是同一地域。 另一方面就是不知道部署上去的数据库的相关配置在哪，为此我还专门开了一个云数据库来进行配置。 最后本人买了一个腾讯云上的云数据库，通过修改wp-config.php的内容使worpdress连上数据库进行install。</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ol><li> <a href="https://help.aliyun.com/document_detail/90529.html?spm=a2c4g.11174283.6.568.7cc34da2KwgQuJ">nas文档</a></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 部署 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Why is my nil error value not equal to nil?</title>
+      <link href="2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/"/>
+      <url>2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/</url>
+      
+        <content type="html"><![CDATA[<p>最近看到一个Go的官方文档里面的一个标题Why is my nil error value not equal to nil? 想到以前有人问过但那是没往interface内部机制去想(即使关于go里面interface构造也有所了解)</p><a id="more"></a><p>先来看一段代码</p><p>func foo() error {<br>    var err *os.PathError = nil<br>    return err<br>}</p><p>func main(){<br>   err := foo()<br>   fmt.Println(err == nil) //false<br>   fmt.Println(err == (*os.PathError)(nil)) //true<br>}</p><h3 id="why-nil-is-not-nil"><a href="#why-nil-is-not-nil" class="headerlink" title="why nil is not nil?"></a>why nil is not nil?</h3><p>前提：要了解go中的interface内部构造，分清楚空接口和非空接口。可以参考🔗<a href="http://www.hizjlhi.com/archives/354">链接</a>。总的来说还是牵涉到interface的动静类型相关。 在上述代码中，通过foo函数返回的err值在非空接口中可以表示为[nil，*os.PathError]，其与nil([nil，nil])必然不相等。 而 (*os.PathError)(nil) 的写法实际上等于 var a *os.PathErrot = nil。这种 (*os.PathError)(nil) 写法就比较少见。主要还是interface的动静态类型要区分。</p><h3 id="回想"><a href="#回想" class="headerlink" title="回想"></a>回想</h3><p>现在回想起来，当时问我两个nil比较是否相等，那时一脸懵逼。回想起来问题的本质应该是要从上述所讲的方面来出发来说明两个nil比较是否相等。</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ol><li> <a href="https://yourbasic.org/golang/gotcha-why-nil-error-not-equal-nil/">Go Gotchas</a></li><li> <a href="https://golang.org/doc/faq#nil_error">Frequently Asked Questions (FAQ) in Go offical website</a></li><li> <a href="https://www.youtube.com/watch?v=ynoY2xz-F8s">Understanding nil</a></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>通过函数计算搭建wordpress(一)</title>
+      <link href="2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/"/>
+      <url>2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/</url>
+      
+        <content type="html"><![CDATA[<p>最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。</p><a id="more"></a><h3 id="所需工具"><a href="#所需工具" class="headerlink" title="所需工具"></a>所需工具</h3><ol><li> nodejs和fun工具(阿里巴巴自创)，同时建议nodejs要安装最新版，把nodejs安装好之后就可以通过npm install @alicloud/fun -g来安装fun工具，文档链接为<a href="https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md?spm=a2c4g.11186623.2.45.4616fc78j3Sr6U&file=installation-zh.md">fun</a></li><li> 在阿里云上设置你的AccessKey(如果有这步自行跳过)</li><li> 准备好你的域名，然后解析到阿里云的<a href="https://help.aliyun.com/document_detail/52984.html?spm=5176.11065259.1996646101.searchclickresult.1c642ae2Kdcg3k">计算节点域名</a>上。</li><li> 准备php环境。</li><li> 准备git工具</li></ol><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="1、clone工程"><a href="#1、clone工程" class="headerlink" title="1、clone工程"></a>1、clone工程</h4><p>git clone <a href="https://github.com/awesome-fc/fc-wordpress.git">https://github.com/awesome-fc/fc-wordpress.git</a></p><h4 id="2、选择你所要部署的数据库"><a href="#2、选择你所要部署的数据库" class="headerlink" title="2、选择你所要部署的数据库"></a>2、选择你所要部署的数据库</h4><p>通过解压fc-wordpress之后会有2种数据库给你选择，分别是sqlite和mysql(自行决定)，在此本人选择了mysql进行操作。 .env文件：使用命令cp .env_example .env，查看ls -a。配置解析：</p><p>DEFAULT_REGION=cn-qingdao(这里本人选择青岛的计算节点)<br>ACCOUNT_ID=你阿里云的账户ID<br>ENDPOINT=http://你阿里云的账户ID.cn-qingdao.fc.aliyuncs.com<br>ACCESS_KEY_ID=你阿里云的AccessKey ID<br>ACCESS_KEY_SECRET=你阿里云的AccessKey Secret</p><p>初始化：</p><p>fun nas init<br>fun nas info</p><p>接着通过上面步骤之后就会自动创建一个文件目录/fc-wordpress/fc-web-mysql/.fun/nas/auto-default/fc-wp-mysql/wordpress，你可以通过php -S 0.0.0.0：80来测试一下是否出错，同时要自行创建一个管理员。 把wordpress上传到nas</p><p>func nas sync<br>fun nas ls nas:///mnt/auto/  #检查是否同步成功</p><h4 id="最后一步-有坑"><a href="#最后一步-有坑" class="headerlink" title="最后一步(有坑)"></a>最后一步(有坑)</h4><ol><li> 修改fc-web-mysql下的index.php文件中的$host参数中的值为你的域名。</li><li> 修改fc-web-mysql下的template.yml文件中的字段fc-wp-demo(名字要独一无二)，注意这一步(本人当时就卡在这，因为官方的文件说的是修改 template.yml LogConfig 中的 Project, 任意取一个不会重复的名字即可)。</li><li> 修改fc-web-mysql下的template.yml文件中的 fc-wordpress-domain-&gt;Properties-&gt;DomainName中的值为你的域名</li><li> 其他的应该只是一些注释和描述，本人没细看，主要还是下面打红字的地方</li></ol><p>Transform: ‘Aliyun::Serverless-2018-04-03’<br>Resources:<br>  fc-wp-mysql:<br>    Type: ‘Aliyun::Serverless::Service’<br>    Properties:<br>      Description: ‘run wordpress on FC’<br>      NasConfig: Auto<br>      LogConfig:<br>        Project: fc-wp-demo<br>        Logstore: mysql-log<br>…………..<br>fc-wp-demo:<br>  Type: ‘Aliyun::Serverless::Log’<br>  Properties:<br>    Description: ‘fc web log project’<br>  mysql-log:<br>    Type: ‘Aliyun::Serverless::Log::Logstore’<br>    Properties:<br>      TTL: 10<br>      ShardCount: 1<br>fc-wordpress-domain:<br>  Type: ‘Aliyun::Serverless::CustomDomain’<br>  Properties:<br>     DomainName: 你的域名<br>     Protocol: HTTP<br>     RouteConfig:<br>        Routes:<br>           ‘/*‘:<br>           ServiceName: fc-wp-mysql<br>           FunctionName: wp-func</p><h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><p>fun deploy</p><p>部署成功之后，在你的阿里云上面就会相应的服务与函数。比如说_FUN_NAS_fc-wp-mysql服务、fc-web-mysql服务和一个fun-generated-default-service服务(确保远端nas目录存在)。</p><h3 id="注意事项-坑"><a href="#注意事项-坑" class="headerlink" title="注意事项(坑)"></a>注意事项(坑)</h3><p>在func nas sync之前，建议访问后台把WordPress地址和站点地址全给出你的域名，不然在部署成功之后你访问网址就会导致有一些样式资源会走你所部署wordpress的服务器ip去获取资源，就不会走你的域名到达nas获取资源，这时就会出现404错误。</p><h3 id="目前状况和测试"><a href="#目前状况和测试" class="headerlink" title="目前状况和测试"></a>目前状况和测试</h3><p>目前本人另外申请了一个域名还在备案，之后性能和测试再更新。  </p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ol><li> <a href="https://help.aliyun.com/document_detail/146729.html?spm=a2c4g.11186623.6.744.790dfc78XNX0RF#h2-3-3-9">十分钟搭建基于 Wordpress 的 Serverless Web 应用</a></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 部署 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>iptables 四表五链</title>
+      <link href="2020/09/15/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/"/>
+      <url>2020/09/15/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/</url>
+      
+        <content type="html"><![CDATA[<p>最近被问到iptables的底层链和表，因此在这自己手动画图和总结一下。不过使用man iptables查看是发现不止有4表，实际上还有一张表叫security表。</p><a id="more"></a><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>iptables只是一个工具，实际上内部核心是基于<a href="https://zh.wikipedia.org/wiki/Netfilter">Netfilter</a>框架去实现其功能的一个命令行工具。</p><h3 id="四表和五链"><a href="#四表和五链" class="headerlink" title="四表和五链"></a>四表和五链</h3><h4 id="四表"><a href="#四表" class="headerlink" title="四表"></a>四表</h4><p>首先表这概念主要是把相同功能的规则集中在一起。而不是每条规则都散落和重复的出现在每个不同的链中。</p><h5 id="raw表"><a href="#raw表" class="headerlink" title="raw表"></a>raw表</h5><p>raw表主要用来决定是否跟踪连接和配置notrack目标。优先级最高。用法：可以配置该表来决定哪一条连接可以被跟踪。其提供两条调用链来供使用：prerouting、output。 例子：</p><p>//对来自于ip为192.168.10.117的所有数据包不进行追踪<br>iptables -t raw -A PREROUTING -s 192.168.10.117 -j NOTRACK<br>//对来自于ip为192.168.10.117的所有数据包进行追踪<br>iptables -t raw -A PREROUTING -s 192.168.10.117 -j TRACK</p><h5 id="mangle表"><a href="#mangle表" class="headerlink" title="mangle表"></a>mangle表</h5><p>该表主要用于数据包的修改，例如：TTL，IP数据包首部，给数据包打上标签(–set-mask)。其提供五条调用链来供使用：prerouting、foward、postrouting、input、output。 参考：<a href="https://serverfault.com/questions/467756/what-is-the-mangle-table-in-iptables">what-is-the-mangle-table-in-iptables</a></p><h5 id="nat表"><a href="#nat表" class="headerlink" title="nat表"></a>nat表</h5><p>该表主要用于网络地址转换。其提供4条调用链来供使用：prerouting、postrouting、input、output。</p><h5 id="filter表"><a href="#filter表" class="headerlink" title="filter表"></a>filter表</h5><p>该表是用来过滤网络上的数据包，决定数据包是否可以进入上层协议栈进行处理。其提供3条调用链来供使用：input、output、foward。</p><h4 id="五个规则链"><a href="#五个规则链" class="headerlink" title="五个规则链"></a>五个规则链</h4><p>链可以看出一道道的“关卡”</p><h5 id="prerouting链"><a href="#prerouting链" class="headerlink" title="prerouting链"></a>prerouting链</h5><p>路由前链，处理刚到达本机的数据包，进行路由决策。可以使用的表：raw、mangle、nat。</p><h5 id="foward链"><a href="#foward链" class="headerlink" title="foward链"></a>foward链</h5><p>转发链，当prerouting链判断目的地不是本机时，会经过该链并执行规则。可以使用的表：mangle、filter。</p><h5 id="postrouting链"><a href="#postrouting链" class="headerlink" title="postrouting链"></a>postrouting链</h5><p>数据包经过处理后，在网卡前，再对其进行规则匹配和修改。可以使用的表：mangle、nat。</p><h5 id="input链"><a href="#input链" class="headerlink" title="input链"></a>input链</h5><p>经prerouting链进行路由决策之后，进入本机所要匹配的规则和修改。可以使用的表：mangle、nat、filter。</p><h5 id="output链"><a href="#output链" class="headerlink" title="output链"></a>output链</h5><p>经过本机处理好的数据并需要向外发送，经该关卡所要匹配的规则和修改。可以使用的表：raw、mangle、nat、filter。</p><h4 id="思维图"><a href="#思维图" class="headerlink" title="思维图"></a>思维图</h4><p><img src="http://www.hizjlhi.com/2020/09/20200914163440890.png"></p><h3 id="第五张表—security表"><a href="#第五张表—security表" class="headerlink" title="第五张表—security表"></a>第五张表—security表</h3><p>该表是用来强制性访问控制(Mandatory Access Control,MAC)，通过设置内核中SElinux来实现。其提供2条调用链来供使用：input、output。不过我记得在某些场景下，这个SElinux通常需要给关闭。因此该表可能在平常用的不多。 <img src="http://www.hizjlhi.com/2020/09/20200915105245370.png"></p><h3 id="工作流程（重）"><a href="#工作流程（重）" class="headerlink" title="工作流程（重）"></a>工作流程（重）</h3><p><img src="http://www.hizjlhi.com/2020/09/20200914163703653.png">  </p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="https://wiki.archlinux.org/index.php/Iptables_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E6%A8%A1%E5%9D%97_%EF%BC%88Modules%EF%BC%89">iptables-Aarchlinux</a></li><li>  <a href="https://unix.stackexchange.com/questions/243079/netfilter-iptables-why-not-using-the-raw-table">netfilter/iptables: why not using the raw table?</a></li><li>  <a href="https://linux.die.net/man/8/iptables">iptables(8) - Linux man page</a></li><li>  <a href="https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture">A Deep Dive into Iptables and Netfilter Architecture</a></li><li>  <a href="https://zh.wikipedia.org/wiki/Netfilter">Netfilter</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>time_wait状态截断与TCP reset attack</title>
+      <link href="2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/"/>
+      <url>2020/09/04/tcp%E4%BA%8B%E5%8A%A1%E4%B8%8Etcp-reset-attack/</url>
+      
+        <content type="html"><![CDATA[<p>最近在TCP卷3中看到了一个time_wait状态截断，引起了我的注意。同时也注意到了TCP重置攻击方法。</p><a id="more"></a><h3 id="time-wait状态截断"><a href="#time-wait状态截断" class="headerlink" title="time_wait状态截断"></a>time_wait状态截断</h3><p>目前time_wait状态截断只要是作用于T/TCP协议中。具体还是看图理解 <img src="http://www.hizjlhi.com/2020/09/20200903160427835.png"> 由上图可知在客户与服务器之间的交互的过程中，比较TCP/IP协议，其多发送了FIN。 这个time_wait状态截断主要发生在上图的新连接主动打开这块，可以明显看出time_wait直接被截。仔细观察结合卷3的解释，出现这情况是因此T/TCP新增的字段CC大于上一条连接(8&gt;6)，于是就导致了老的连接关闭，新的连接开始建立。</p><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>作用通常是与性能或者内存所挂勾 根据卷3所知出现time_wait截断的目的是为了重用本地端口以减少对控制块内存的需求。但前提是连接的持续时间小于报文段最大生存时间MSL。 不过T/TCP目前并没有成为一个标准和被应用，因此time_wait状态的截断在平常是少见的。</p><h3 id="Reset-attack"><a href="#Reset-attack" class="headerlink" title="Reset attack"></a>Reset attack</h3><p>Reset attack其实就是利用了TCP中的RST字段。当处于正常的TCP连接的双方，任何一方收到了一个RST位为1的包，就会立即重置当前TCP连接，丢弃接收到的该连接的所有数据包，相当于终止了该TCP连接。应用方面有好也有坏，可以伪造RST报文到任意一方以达到破坏TCP连接为目的，也可以利用RST报文来中断TCP连接</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li><p>  <a href="https://en.wikipedia.org/wiki/TCP_reset_attack">TCP reset attack</a></p></li><li><p>  <a href="https://bbs.huaweicloud.com/blogs/134377">T/TCP中的新TCP选项</a></p></li><li><p>  <a href="https://robertheaton.com/2020/04/27/how-does-a-tcp-reset-attack-work/">How does a TCP Reset Attack work?</a></p></li><li><p>  <a href="https://baike.baidu.com/item/T%2FTCP/1647857?fr=aladdin">T/TCP</a></p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> TCP </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Go 编译模式</title>
+      <link href="2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"/>
+      <url>2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/</url>
+      
+        <content type="html"><![CDATA[<p>Go与C家族的互调，Go的几种编译模式。</p><a id="more"></a><h3 id="一个程序编译成可执行程需要经过哪些"><a href="#一个程序编译成可执行程需要经过哪些" class="headerlink" title="一个程序编译成可执行程需要经过哪些"></a>一个程序编译成可执行程需要经过哪些</h3><p>会经过4个步骤：</p><ol><li> 预编译：又称为预处理，是做些代码文本的替换工作。是整个编译过程的最先做的工作，生成**.i文件**。<a href="https://baike.baidu.com/item/%E9%A2%84%E7%BC%96%E8%AF%91">参考</a></li><li> 编译：主要对代码进行语法、语义等分析。检查无误后，翻译成二进制机器指令，生成汇编代码，将.i文件转化成**.s文件**。<a href="https://baike.baidu.com/item/%E7%BC%96%E8%AF%91">参考</a></li><li> 汇编：把上述的汇编代码翻译成二进制机器指令，将.s文件转化成**.o文件**。</li><li> 链接：又分为静态链接和动态链接，将众多的.o合成一个完整的可执行文件（静态/动态库文件）—Windows下为**.lib<strong>和</strong>.dll<strong>文件(lib是编译时需要的，dll是运行时需要的。)，Linux下为</strong>.a<strong>和</strong>.so**文件。</li></ol><p>注：不同平台下，生成文件可能不同。例如window下，在汇编阶段会产生.obj文件。</p><h3 id="go-编译模式"><a href="#go-编译模式" class="headerlink" title="go 编译模式"></a>go 编译模式</h3><p>关于go build 这个工具集是常用工具，能够将所写的代码打包编译成可执行文件(类型取决于所处平台)，也可以加上-buildmode指定编译模式。</p><h4 id="buildmode参数"><a href="#buildmode参数" class="headerlink" title="-buildmode参数"></a>-buildmode参数</h4><ol><li>-buildmode=archive<ul><li><ul><li>原版文档解释：This is the default build mode for a package that is not main.  It means to build the package into a .a file.  This is already supported for all targets.<ul><li>  个人理解：这个参数主要用来将那么不是名为main的.go编译成.a文件，不过这种方式生成的.a文件。目前尚未弄清生成在哪个文件夹下。</li></ul></li></ul></li></ul></li><li>-buildmode=default<ul><li><ul><li>原版文档解释： Listed main packages are built into executables and listed non-main packages are built into .a files (the default behavior).<ul><li>  个人理解：这个是默认情况下buildmode所采取的方法，其最终生成一个可执行文件和把除main.go外的其他.go编译成.a文件</li></ul></li></ul></li></ul></li><li>-buildmode=shared：<ul><li>  这个参数主要编译成一个.so文件、.a文件，不过要在命令后面配上-linkshared参数，可以参考一下这篇<a href="http://www.voidcn.com/article/p-mbxdfugq-brh.html">文章</a>。</li></ul></li><li>-buildmode=c-archive （ C动态链接文件）<ul><li>  原版文档解释：Build the listed main package, plus all packages it imports, into a <strong>C archive file</strong>. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.</li><li>  注意：在使用go文件编译成能让C/C++引用的文件时，要主要必须要有的2个要求：第一是要在头部加入import “C”。第二是要在你想让C/C++引用的函数上方加入  //export  你的函数名。</li><li>  产生文件：.a 、.h。.h文件可以在C/C++引用<img src="http://www.hizjlhi.com/2020/08/20200826095638331.png"></li><li>  参考链接-<a href="https://stackoverflow.com/questions/40573401/building-a-dll-with-go-1-7">stackoverflow</a></li></ul></li><li>-buildmode=c-shared<ul><li>  原版文档解释：Build the listed main package, plus all packages it imports, into a <strong>C shared library</strong>. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.</li><li>  大体上和c-archive模式差不多，主要是C archive file和C shared library的区别。按字面意思是file和library的区别。</li><li>  产生文件：一个文件(不知用来干啥)，.h文件供C/C++调用。<img src="http://www.hizjlhi.com/2020/08/20200826095532942.png"></li></ul></li></ol><p>关于buildmode的参数还有exe、pie、plugin，这些参数就不展开多说。可以通过go help buildmode查看文档解析。</p><h3 id="C调Go、Go调C例子"><a href="#C调Go、Go调C例子" class="headerlink" title="C调Go、Go调C例子"></a>C调Go、Go调C例子</h3><h4 id="C调Go"><a href="#C调Go" class="headerlink" title="C调Go"></a>C调Go</h4><p>//A.go<br>import “C”<br>import “fmt”</p><p>//export A<br>func A() {<br>   fmt.Println(“From DLL: A!”)<br>}</p><p>func main() {}</p><p>通过**<em>go build -buildmode=c-archive -o ××.a  A.go</em> ** 生成A.a 和 A.h文件。然后编写.c文件</p><p>#include “h.h”<br>#include &lt;stdio.h&gt;<br>int main()<br>{<br>    Bar();<br>    return 0;<br>}</p><p>编译C+运行：<strong><em>gcc -o main hello.c h.a -undefined reference to `pthread_create’</em></strong> 注：这里的-lpthread参数还需研究，就目前来看是能够调用成功。与其相关的还有一个-pthread参数，仍需自行查阅相关资料。 就目前来看-lpthread是与POSIX(可移植操作系统接口) thread相关 <img src="http://www.hizjlhi.com/2020/08/20200828140739493.png"> 注意：上述只是个简单的例子，具体更复杂的问题涉及到C与Go直接的值范围等到一些问题还需要注意，因此在调用中更应该注重两种语言之间的类型转换。</p><h4 id="Go调C"><a href="#Go调C" class="headerlink" title="Go调C"></a>Go调C</h4><p>主要是运用了Go实现的CGO库调用，参考及内部实现：<a href="https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-05-internal.html">链接</a> 加油！</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="https://baike.baidu.com/item/%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5">静态链接(Static link)</a></li><li>  <a href="https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5">动态链接(Dynamic Linking)</a></li><li>   <a href="https://docs.google.com/document/d/1nr-TQHw_er6GOQRsF6T43GGhFDelrAP0NqSS_00RgZQ/view?pli=1#heading=h.fwmrrio0df0i">Go Execution Modes</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>当TCP出现了大量的短链接时......</title>
+      <link href="2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/"/>
+      <url>2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/</url>
+      
+        <content type="html"><![CDATA[<p>最近看到一个问题是关于TCP的短链接</p><a id="more"></a><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>在一段时间里，有大量的短链接请求服务器，服务器会发生什么情况？</p><h3 id="time-wait状态与可能导致情况"><a href="#time-wait状态与可能导致情况" class="headerlink" title="time_wait状态与可能导致情况"></a>time_wait状态与可能导致情况</h3><p>当TCP进入了四次挥手阶段，当主动请求关闭连接时就会在接下来的过程中进入time_wait状态，其时长为2msl。具体就不多说，TCP三次握手和四次挥手都是基础知识。 那么会不会出现一种情况，当大量的短链接请求过来，但每条短链接请求的数据量都比较小，服务器飞速的处理完毕，这时候没有发生任何的错误，但是仍要等待2msl时间才能关闭结束TCP连接。因此思考一下，如果服务器处理时间为万分之2msl，那么这个在不发生任何包丢失的情况下，这个等待2msl时间是不是有点不合理？ 因此在有无数个短链接请求过来时，大量的socket都停留在了time_wait状态导致服务器里的socket数量爆满(换句话说必须要等到2msl后才能释放)。</p><h4 id="可能会发生的情况"><a href="#可能会发生的情况" class="headerlink" title="可能会发生的情况"></a>可能会发生的情况</h4><p>在linux中，有着对这种情况的解释，本人通过man tcp的命令找到里面对一个字段tcp_max_tw_buckets解释如下图 <img src="http://www.hizjlhi.com/2020/08/20200824072625562.png"> 这段话说明了当linux中处于time_wait状态的socket一旦超过规定的值，就会导致部分socket关闭。</p><h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>关于解决方法网上已经有很多，不过主要还是涉及到几个参数分别为tcp_tw_reuse、tcp_tw_recycle，前者是对time_wait socket重用，后者是对 time_wait  socket的快速回收。 <img src="http://www.hizjlhi.com/2020/08/20200824072729625.png"> 可以通过linux参数说明得知，当启动tcp_tw_recycle可以对socket快速回收但是当网络是在NAT的情况下，就可能会引起一系列问题，因此该参数要慎用。 不过一般情况下，服务器都是作为被动连接的一方，而tcp_tw_reuse这个参数是否开启主要还是基于你是主动发起还是被动连接，因为time_wait状态只出现在主动发起一方。 注：查看当前TCP状态：netstat -an grep tcp</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt">kernel.org (相关参数)</a></li><li>  <a href="https://cloud.tencent.com/developer/article/1412003">以讹传讹的“tcp_tw_reuse”</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>tcp -reuseport与backlog</title>
+      <link href="2020/08/18/nginx-listen%E5%8F%82%E6%95%B0-reuseport%E4%B8%8Ebacklog/"/>
+      <url>2020/08/18/nginx-listen%E5%8F%82%E6%95%B0-reuseport%E4%B8%8Ebacklog/</url>
+      
+        <content type="html"><![CDATA[<p>在了解了nginx  reuseport和backlog参数之后，发现其内部原理不光涉及到nginx这一表面，还和TCP连接中SYN queue，Accept queue相关，同时也涉及到linux的socket复用。</p><a id="more"></a><h3 id="nginx-listen参数"><a href="#nginx-listen参数" class="headerlink" title="nginx listen参数"></a>nginx listen参数</h3><p>下面为listen的配置格式以及参数</p><p><code>**listen** _address_[:_port_] [default_server] [ssl] [http2  spdy] [proxy_protocol] [setfib=_number_] [fastopen=_number_] [backlog=_number_] [rcvbuf=_size_] [sndbuf=_size_] [accept_filter=_filter_] [deferred] [bind] [ipv6only=onoff] [reuseport] [so_keepalive=onoff[_keepidle_]:[_keepintvl_]:[_keepcnt_]];</code></p><p>这篇文章主要讲述reuseport和backlog参数，其他的可以自行去官网查询，同时文档会放在Reference中</p><h4 id="reuseport"><a href="#reuseport" class="headerlink" title="reuseport"></a>reuseport</h4><p>reuseport参数，官网的解释有点模糊。不过去Google一下发现这参数与linux的SO_REUSEPORT参数有关。百度上大多数叫法是socket重用，也贴近这个reuse port 这个名称。 在linux系统中一切皆文件，而一个socket则对应一个IP-Port，而so_reuseport这个参数可以使得多个socket bind()/listen()同一个TCP/UDP端口，这就意味着每一个进程都可以拥有自己的socket从而提高了服务器的性能，把以前的一个进程处理多个客户变成了多个进程处理多个客户的这样一种改变。同时多个进程都拥有了自己的socket，就不必再去争抢了，也避免了锁的竞争。</p><h4 id="backlog参数"><a href="#backlog参数" class="headerlink" title="backlog参数"></a>backlog参数</h4><p>backlog参数只要是设置linux系统的accept queue。在TCP建立连接时会维护两个队列分别为SYN queue(待完成连接队列)和accept queue(已完成连接队列)。</p><ul><li>  SYN队列：当客户端第一次发送SYN包时，服务器回应SYN+ACK之后，等待客户端的ACK，这时候就会将这天待完成的连接放进SYN队列中。</li><li>  Accept队列：当客户端回应ACK之后，两边都是出于established状态，服务器就会从SYN队列将连接取出加入到当前队列。</li></ul><p>那么问题来了，既然有队列那么肯定会涉及到队列要设置多长才合适的问题。因此backlog参数就是用来设置accept队列的长度。 当accept队列满了之后，可能会涉及到SYN队列的连接，如果其中一条连接想加入到accept队列(即客户端回应ACK)，那么可能就会忽略这个ack包或者等待触发重发机制-重发SYN+ack。因此设置好backlog也是极为关键的一点。 在TCP/IP详解卷三的14.5中提到，当队列满了情况下，服务器会自动丢弃连接请求，这里看得有点懵。通过Google一下发现backlog在linux2.2之前是用来指定待完成的连接请求也就是SYN queue，而accpet queue的数量则是用tcp_max_tw_buckets设置，而2.2版本之后就改为知道accept queue的长度。 通过man listen命令可以得知，当队列满了的情况下，客户端可能会收到带有ECONNREFUSED指示的错误，或者如果基础协议支持重传，则可以忽略该请求，以便以后在连接时重新尝试成功。 <img src="http://www.hizjlhi.com/2020/08/20200818063439391.png"> 补一张自己画的图： <img src="http://www.hizjlhi.com/2020/08/20200818163504305.png"></p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>nignx listen的reuseport与backlog配置其实并不难，但还是要了解一下主要用途和涉及的一些知识点。</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="https://man7.org/linux/man-pages/man7/socket.7.html">socket(7) — Linux manual page</a></li><li>  <a href="https://blog.cloudflare.com/syn-packet-handling-in-the-wild/">SYN packet handling in the wild</a></li><li>  <a href="https://mp.weixin.qq.com/s?__biz=MjM5NzUwNDA5MA==&mid=201005717&idx=1&sn=74036633114ee6212e57ee4576dbfcbc&3rd=MzA3MDU4NTYzMw==&scene=6#rd">TCP三次握手之backlog</a></li><li>  <a href="https://stackoverflow.com/questions/14388706/how-do-so-reuseaddr-and-so-reuseport-differ">How do SO_REUSEADDR and SO_REUSEPORT differ?</a></li><li>  <a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#listen">nginx文档</a></li><li>  <a href="https://stackoverflow.com/questions/62641621/what-is-the-difference-between-tcp-max-syn-backlog-and-somaxconn">What is the difference between tcp_max_syn_backlog and somaxconn?</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> TCP </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>TCP 粘包？</title>
+      <link href="2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/"/>
+      <url>2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/</url>
+      
+        <content type="html"><![CDATA[<p>因为个人也是网工出身，大一时被一个很负责的老师教我计算机网络这一课程，同时粗略地看了TCP-IP详解第一版的PDF，在网上的这一概念就一看而过了。</p><a id="more"></a><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>关于“粘包”这概念一开始我也是十分模糊，网上一搜全是相关内容一开始就了解一下是如何解决这问题就结束了。直到看到一篇文章-我工作五年的时候也不知道 “TCP 粘包”，这一下使我陷入了深深的思考，脑中全是TCP协议定义的字段和那零零星星的记忆，发现这一概念还真没出现在所看到的书籍中。这一下就有趣起来了。</p><h3 id="“粘包”这一概念是如何产生的"><a href="#“粘包”这一概念是如何产生的" class="headerlink" title="“粘包”这一概念是如何产生的"></a>“粘包”这一概念是如何产生的</h3><p>关于TCP这一协议就不详述了，关键是当发送方中有2个应用程序A、B，接收方收到了这2个程序A、B所发送的数据包（比如说各2M），那么接收方开始recv()数据，那么这时候你就应该开始思考到底读取多少字节的数据才好呢？读多读少肯定会出问题。因此这就是所出现的“粘包”这一概念，简单来说就是接收方处理缓冲区的数据包的边界的问题。 <img src="http://www.hizjlhi.com/2020/08/20200810171255219.png"> TCP一个基于<strong>字节流</strong>的传输层通信协议，它是一个面向<strong>字节流</strong>的一个协议，保证了数据字节顺序可靠的传达到接收方。就是说TCP已经把数据按顺序的传达到了，至于接收方只需要按顺序读取即可，但是你一次读多少读到哪里就不归我管了。很明显问题就出现在传输层以上的应用层，应用程序是如何读取的事了。</p><h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>读到这问题已经很明显，相关的解决方法网上也大同小异。</p><h4 id="PSH解决方案"><a href="#PSH解决方案" class="headerlink" title="PSH解决方案"></a>PSH解决方案</h4><p>这个方案是在知乎上找到的一个解决方法，仔细一想好像也有道理，PSH是TCP中的一个字段，如果使用了PSH标志，就不会等到缓冲区填满直接将缓冲区的数据全部推到上层。不过在知乎看的时候在评论区看到似乎还有问题，这里就不清楚具体情况了。如果想了解可以从下方Reference点进去了解。</p><h3 id="TCP-IP每层的协议单元与协议"><a href="#TCP-IP每层的协议单元与协议" class="headerlink" title="TCP/IP每层的协议单元与协议"></a>TCP/IP每层的协议单元与协议</h3><p>关于每层的协议和名词都十分多，这里我就挑一些与本文有关的概念，比如数据报、包、段等。请看下图： Tip：协议数据单元PDU（Protocol Data Unit） <img src="http://www.hizjlhi.com/2020/08/20200810182116176.png"> 由此可以作用在传输层的TCP的PDU为段，而包的概念则出现在网络层上面。</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="https://stackoverflow.com/questions/13059323/how-does-tcp-psh-work/13059521#13059521">How does TCP PSH work?</a></li><li>  <a href="https://www.v2ex.com/t/519253">我工作五年的时候也不知道 “TCP 粘包”</a></li><li>  <a href="https://www.zhihu.com/question/20210025">怎么解决TCP网络传输「粘包」问题？—-知乎</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>关于Go interface的interfacetype与_type</title>
+      <link href="2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/"/>
+      <url>2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/</url>
+      
+        <content type="html"><![CDATA[<p>好久没聊过Go了，今天无意中看到一篇文章是关于Go语言规范的，涉及到以前看过的interface内部构造，因此打算在这用写的形式总结一下，加深理解。</p><a id="more"></a><h3 id="题目一"><a href="#题目一" class="headerlink" title="题目一"></a>题目一</h3><p>注：题目来源会在下方参考写出。本文主要是对里面涉及到的知识进行个人总结。</p><p>……..<br>type T interface{}<br>type X string<br>type Y = string</p><p>func main() {<br>   var t T = “abc”<br>   var x X = “abc”<br>   var y Y = “abc”</p><p>   fmt.Println(t == x)<br>   fmt.Println(t == string(x))</p><p>   fmt.Println(t == y)<br>   fmt.Println(t == string(y))<br>}<br>// 输出false   true  true  true</p><p>具体为什么可以自己先思考一下，主要涉及到Go里面的interface内部构造。</p><h3 id="interface的内部结构"><a href="#interface的内部结构" class="headerlink" title="interface的内部结构"></a>interface的内部结构</h3><p>总所周知，在Go里面任何类型都实现了空接口，而非空接口则必须要实现其里面的方法才算是实现了这个非空接口。 当比较t==x时，t的动态类型是string，而x的动态类型是</p><h4 id="空接口结构"><a href="#空接口结构" class="headerlink" title="空接口结构"></a>空接口结构</h4><p>type eface struct {<br>   _type *_type<br>   data  unsafe.Pointer<br>}</p><p>空接口的结构也十分简单，_type是指向Go内部所定义的类型系统，在这就不展开述说，而data这指向接口的数据。</p><h4 id="非空接口结构"><a href="#非空接口结构" class="headerlink" title="非空接口结构"></a>非空接口结构</h4><p>非空接口的构造相对复杂，这里就贴个本人画的图： <img src="http://www.hizjlhi.com/2020/08/20200804170130760.png"> 由此可见，在Go中的interface内部构造还是挺复杂的。</p><h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><p>解决题目的关键是要理解Go interface。</p><h4 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h4><p>比如说请看下面一题</p><p>var rw io.ReadWriter<br>v, _ := os.Open(“test.txt”)<br>rw = v<br>fmt.Printf(“%T”, rw)<br>//*os.File</p><p>问题来了，我们用一个var定义了一个io.ReadWriter类型的rw，之后一系列操作结果显示rw的类型为*os.File 这里就涉及到iface结构里面的interfacetype与_type这俩个字段了。interfacetype字段是指向<strong>接口所定义的类型信息</strong>，也可以理解为一个静态类型。而_type字段则是<strong>接口实际指向的类型信息</strong>，也就是你人为的手动的赋值(也可称动态类型)。 由此这就可以解释清楚了，在Go里面所有类型都实现了空接口，而用var定义的rw初始的interfacetype指向了io.ReadWriter类型，之后通过os包打开了一个文件v，其类型为*os.File。但又赋给rw，这时rw的_type字段便指向了*os.File类型。因此最后结果就为*os.File。</p><h4 id="题目一的解法"><a href="#题目一的解法" class="headerlink" title="题目一的解法"></a>题目一的解法</h4><p>首先分析一下三个type，type X string只是一个自定义类型，底层类型还是string，但X与string是不同类型的。而type Y = string，Y只是string的一个别名。 根据Go语言规范里面的一句话： A value <code>x</code> of non-interface type <code>X</code> and a value <code>t</code> of interface type <code>T</code> are comparable when values of type <code>X</code> are comparable and <code>X</code> implements <code>T</code>. They are equal if <code>t</code>‘s dynamic type is identical to <code>X</code> and <code>t</code>‘s dynamic value is equal to <code>x</code>. 再结合上述所说的interface内部构造，可以得知t的动态类型(_type)为string，动态值为abc，而x动态类型(_type)为X，动态值为abc，因此 t != x 。</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="https://golang.org/ref/spec">The Go Programming Language Specification(Go语言规范)</a></li><li>  <a href="https://mp.weixin.qq.com/s/gSQBxGSTNwDfuliQuHppQg">题目来源</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>聊聊Thread-Caching Malloc</title>
+      <link href="2020/08/02/%E8%81%8A%E8%81%8Athread-caching-malloc/"/>
+      <url>2020/08/02/%E8%81%8A%E8%81%8Athread-caching-malloc/</url>
+      
+        <content type="html"><![CDATA[<p>TCmalloc是一种高效的内存管理技术，可以应用在很多地方。Go的内存管理也基于这实现的和借鉴的。因此理解TCmalloc的实现机制是必需的。</p><a id="more"></a><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>关于TCMalloc的相关资料和讲解，网上有很多关于其细节文章，在这就不一一阐述。主要目的是大体的结合官方文档和图片来阐述，但是具体细节个人是希望通过查阅资料去理解，最重要是靠个人理解。</p><h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><p>虽然图是在网上借鉴的，但个人走了一遍官方文档并查阅相关资料，并图上加了一点自己的注释。 <img src="http://www.hizjlhi.com/2020/07/20200722022116565.png"></p><h4 id="Central-Free-Lists-、Thread-Cache-Free-Lists"><a href="#Central-Free-Lists-、Thread-Cache-Free-Lists" class="headerlink" title="Central Free Lists 、Thread Cache Free Lists"></a>Central Free Lists 、Thread Cache Free Lists</h4><p>关于Central Free Lists 、Thread Cache Free Lists这两个list分别对应着CentralCache和ThreadCache。CentralCache的主要工作是管理分配回收ThreadCache中的span。而ThreadCache的创建与销毁都是随着线程的创建与销毁进行的。 <img src="http://www.hizjlhi.com/2020/07/20200722022316165.png"> 初始化的主要工作是对PageHeap、CentralCache初始化、分配器和Size Class的初始化。当有线程需要申请内存时，ThreadCache会分配内存给它，如果不够就去CentralCache取。</p><h4 id="内存回收"><a href="#内存回收" class="headerlink" title="内存回收"></a>内存回收</h4><p>关于内存回收这方面，建议参考文档和网上的一些资料，这方面偏理解。</p><h4 id="内存碎片"><a href="#内存碎片" class="headerlink" title="内存碎片"></a>内存碎片</h4><p>可以参考这片文章，注意里面的关键词语“对齐”–也就是所谓的内存对齐(可以参考我这篇博客 <a href="https://202.182.125.62/wp-admin/post.php?post=302&action=edit">Data Structure Alignment</a>)，链接：<a href="https://wallenwang.com/2018/11/tcmalloc/#ftoc-heading-45">点击</a></p><h3 id="思考：TCmalloc的好处"><a href="#思考：TCmalloc的好处" class="headerlink" title="思考：TCmalloc的好处"></a>思考：TCmalloc的好处</h3><p>在上面的第一张图，可以知道TCmalloc给小对象做了三层的缓存服务，如果不够就会一步一步的向后面的服务获取内存，而向PageHeap、CentralCache内的内存都是提前向系统申请好的。因此线程不需要直接通过系统调用申请，而是申请TCmalloc所分配好的内存，从而使得整个过程都处于一种用户态的形式，不需要进入内核态。比如C函数库中的内存分配函数malloc()就涉及到一次用户态到内核态之间的切换。通过以这种形式来提供性能。</p><h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>Go的内存模型也是基于TCmalloc的设计思想。不过我在<a href="https://baike.baidu.com/item/tcmalloc/2832982?fr=aladdin">百度百科</a>上面还发现了TCmalloc还可以应用在MySQL上，让它在高并发下内存占用更加稳定，这也是对mysql的一种不错的优化。</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="https://gperftools.github.io/gperftools/tcmalloc.html">https://gperftools.github.io/gperftools/tcmalloc.html</a></li><li>  <a href="https://github.com/google/tcmalloc">https://github.com/google/tcmalloc</a></li><li>  <a href="https://github.com/google/tcmalloc/blob/master/docs/design.md">https://github.com/google/tcmalloc/blob/master/docs/design.md</a></li><li>  <a href="https://wallenwang.com/2018/11/tcmalloc/#ftoc-heading-36">https://wallenwang.com/2018/11/tcmalloc/#ftoc-heading-36</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>关于XDEBUG_SESSION_START</title>
+      <link href="2020/08/01/%E5%85%B3%E4%BA%8Exdebug-session-start/"/>
+      <url>2020/08/01/%E5%85%B3%E4%BA%8Exdebug-session-start/</url>
+      
+        <content type="html"><![CDATA[<p>最近看到博客上居然有条连接请求到30多次，而且还是一段时间内请求的，这引起了我的注意。</p><a id="more"></a><h3 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h3><p>问题来自于博客统计到一段时间内有30几条请求的路径全都是“/?XDEBUG_SESSION_START=phpstorm”。从后台点进去之后发现进去的页面上面还带有管理员的操作栏，这下我慌了。</p><h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>首先从Google上了解到，xebug是php的一个扩展功能，具体用来调试代码的。但继续Google之后，居然发现了关于xebug的渗透攻击，这下可不能不管了。想从xebug的官方文档入手去修改php.ini。</p><h4 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h4><p>同时还发现如果你浏览器还存在session的话，还可以通过在网址后面加上这条路径，就会之间<strong>绕过</strong>登陆页面直通后台。因此这也是日常使用的一个要点。</p><h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>目前解决方案主要是修改php.ini或者封了这条访问路径。</p><h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><ul><li>  <a href="https://blog.spoock.com/2017/09/19/xdebug-attack-surface/">xebug攻击</a></li><li>  <a href="https://xdebug.org/">xebug文档</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>redis的渐进式rehash与Go Map的bucket搬迁</title>
+      <link href="2020/07/31/redis%E7%9A%84%E6%B8%90%E8%BF%9B%E5%BC%8Frehash%E4%B8%8Ego-map%E7%9A%84bucket%E6%90%AC%E8%BF%81/"/>
+      <url>2020/07/31/redis%E7%9A%84%E6%B8%90%E8%BF%9B%E5%BC%8Frehash%E4%B8%8Ego-map%E7%9A%84bucket%E6%90%AC%E8%BF%81/</url>
+      
+        <content type="html"><![CDATA[<p>redis的在处理哈希表的扩容和缩容引入了一个渐进式rehash机制，其中该机制和Go中的map里的bucket搬迁有一定的相似。</p><a id="more"></a><h3 id="redis的渐进式rehash"><a href="#redis的渐进式rehash" class="headerlink" title="redis的渐进式rehash"></a>redis的渐进式rehash</h3><p>redis的字典的底层数据结构主要是哈希表，其采用链地址法来解决键冲突的问题。而当哈希表所保存的键值过多或者过少时，就会触发rehash机制。通过再初始化一个比原来大一倍的空间，最后将原哈希表的键值放到新哈希表中。 渐进式rehash所解决的问题就是当原哈希表的键值过于庞大，如果一次性的迁移会导致cpu，内存等使用率急剧上升，因此为了不影响服务器性能，渐进式rehash就采用一次只迁移一部分键值的方式，慢慢的将原哈希表的键值迁移到新的哈希表。</p><h3 id="Go-Map的bucket搬迁"><a href="#Go-Map的bucket搬迁" class="headerlink" title="Go Map的bucket搬迁"></a>Go Map的bucket搬迁</h3><p>关于bucket的搬迁，只要还是看源码里的evacuate函数，关键点对在于hmap结构的nevacuate字段计数(h.nevacuate++)，最后通过对比是否到达了newbit来完成bucket的搬迁。 具体详细源码可以去runtime/map.go查看，就不一一分析。</p><h3 id="采取该机制的作用"><a href="#采取该机制的作用" class="headerlink" title="采取该机制的作用"></a>采取该机制的作用</h3><p>主要作用是防止哈希表的键值过多，一次性搬迁所引发的性能问题。而再搬迁过程中，遇到了查找或者更新操作就先遍历旧再遍历新，而遇到了插入操作就直接去新的哈希表里去插入。</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="http://redisbook.com/preview/dict/incremental_rehashing.html">Redis的设计与实现</a></li><li>  <a href="https://github.com/golang/go/blob/f92337422ef2ca27464c198bb3426d2dc4661653/src/runtime/map.go#L1128">runtime/map.go</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>LC第32周夜喵+第201周</title>
+      <link href="2020/07/30/lc%E7%AC%AC32%E5%91%A8%E5%A4%9C%E5%96%B5%E7%AC%AC201%E5%91%A8/"/>
+      <url>2020/07/30/lc%E7%AC%AC32%E5%91%A8%E5%A4%9C%E5%96%B5%E7%AC%AC201%E5%91%A8/</url>
+      
+        <content type="html"><![CDATA[<p>有时候思路在脑不在手…….仍需加油</p><a id="more"></a><h3 id="夜喵"><a href="#夜喵" class="headerlink" title="夜喵"></a>夜喵</h3><h4 id="5469-K-次操作转变字符串"><a href="#5469-K-次操作转变字符串" class="headerlink" title="5469. K 次操作转变字符串"></a>5469. K 次操作转变字符串</h4><p>这道题关键要理解题目所给出的示例3的意图</p><p>s = “aab”, t = “bbb”, k = 27</p><p><strong>第 1 次操作时，我们将第一个 ‘a’ 切换 1 次得到 ‘b’ 。在第 27 次操作时，我们将第二个字母 ‘a’ 切换 27 次得到 ‘b’ 。</strong> 自行理解一下就可以知道，<strong>如果当前字母表运行到了b的位置，如果下一次还要转成b的话就必须绕一圈回来，也就是b+26次操作。</strong>那么表示X与X+26其实是一样的操作结果。 因此可以用一个26位的数组arr来表示从s的第i位转成t的第i位有多少位。最后我们通过判断数组arr中的每一位的操作是否大于所规定的K即可。 例如：arr里面有1，2。可以通过(ans[i]-1)*26+i &gt; k判断。比如当前arr[i] = 1，表示s的第i位转成t的第i位有1位需要进行该操作，如果arr[i] = 2，表示s的第i位转成t的第i位有2位需要进行该操作，注意这里需要*26，原因如上面加粗部分。</p><h4 id="5470-平衡括号字符串的最少插入次数"><a href="#5470-平衡括号字符串的最少插入次数" class="headerlink" title="5470. 平衡括号字符串的最少插入次数"></a>5470. 平衡括号字符串的最少插入次数</h4><p>这道题很明显就是用栈的思想解决，详见代码注释</p><h4 id="5485-找出最长的超赞子字符串"><a href="#5485-找出最长的超赞子字符串" class="headerlink" title="5485. 找出最长的超赞子字符串"></a>5485. 找出最长的超赞子字符串</h4><p>这题听人说是和1371题很想，只需要抓住子串中俩俩为偶数，其中一个为奇数，不过还没开始写，以后更新…..加油！</p><h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>代码部分：<a href="https://github.com/MrVWY/LeetCode-Study/blob/master/Competition/Night_Cat_Farm/32.go">我的GitHub</a></p><h3 id="第201周"><a href="#第201周" class="headerlink" title="第201周"></a>第201周</h3><p>思路也比较简单但比赛时却弄不出，详见<a href="https://github.com/MrVWY/LeetCode-Study/blob/master/Competition/Daily/201.go">GitHub代码注释</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>LC第200周</title>
+      <link href="2020/07/21/lc%E7%AC%AC200%E5%91%A8/"/>
+      <url>2020/07/21/lc%E7%AC%AC200%E5%91%A8/</url>
+      
+        <content type="html"><![CDATA[<p>其中一题听人说来源于&lt;挑战程序设计竞赛&gt;</p><a id="more"></a><h3 id="5477-排布二进制网格的最少交换次数"><a href="#5477-排布二进制网格的最少交换次数" class="headerlink" title="5477. 排布二进制网格的最少交换次数"></a>5477. 排布二进制网格的最少交换次数</h3><h4 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h4><p>给你一个 n x n 的二进制网格 grid，每一次操作中，你可以选择网格的 相邻两行 进行交换。一个符合要求的网格需要满足主对角线以上的格子全部都是 0 。请你返回使网格满足要求的最少操作次数，如果无法使网格符合要求，请你返回 -1 。主对角线指的是从 (1, 1) 到 (n, n) 的这些格子。</p><h4 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h4><p>首先假设我们拥有4*4行的矩阵N，其为：[ [1,0,1,0] , [0,0,0,0] , [0,1,0,0] , [0,0,0,1] ]。 那么首先我们要思考<strong>第一个问题</strong>在矩阵N中是否可以用第三行去换第一行？ 答案是不可以的，因为根据题意要是主对角线以上的格子全为0，那么第1行的第1位之后全为0，第2行第2位之后全为0……..(以此类推)。那么由此可以很清楚的知道，在矩阵N中，如果我们要用第三行去换第一行，那么就要保证第1位之后的全为1。但是根据矩阵N这显然是不行的。 其次<strong>第二个问题</strong>如果有2行是符合刚才上述所说的可以换，那么根据题意要求的最少操作次数，我们应该选择离对应行近的交换。因此我们可以从第1行开始，确定好第1行后，接着确定第二行……..如果遇到某一行没有合适的交换那么就可以判断出该矩阵是不能通过交换对应的行来达到题目的要求。</p><h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>代码方面，我们可以用一个数字arr[N]记录每一行最后一个1出现的位置，或者统计每一行从后向前连着几个0。 然后通过与主对角线的位置比较，看它是在主对角线的左边还是右边，借此来判断是否符合交换条件(上述第一个问题)。</p><p>func minSwaps(grid [][]int) int {<br>   N := len(grid)<br>   a := make([]int, N) //第i行最后一个1出现的位置</p><p>   for i := 0 ; i &lt; N ; i++ {<br>      a[i] = -1<br>      for j := 0 ; j &lt; N ; j++ {<br>         if grid[i][j] == 1 {<br>            a[i] = j<br>         }<br>      }<br>   }<br>   res := 0<br>   for i := 0 ; i &lt; N ; i++ {<br>      j := i<br>      for ; j &lt; N ; j++ {<br>         //关键点, 通过与对角线的比较来判断每一行最后一个1出现的位置是否可以跟对应的行交换<br>         if a[j] &lt;= i {<br>            break<br>         }<br>      }<br>      if j == N {return -1}<br>      for ; j &gt; i ; j– {<br>         //将适合的行数换到对应的行<br>         a[j], a[j-1] = a[j-1], a[j]<br>         res++<br>      }<br>   }<br>   return res<br>}</p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li>  <a href="https://github.com/guanhui07/studyFiles/blob/master/%E7%AE%97%E6%B3%95/%E6%8C%91%E6%88%98%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B(%E7%AC%AC2%E7%89%88).pdf">挑战程序设计竞赛(第2版).pdf—-127页</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>逆波兰表达式(Reverse Polish Notation)</title>
+      <link href="2020/07/20/reverse-polish-notation/"/>
+      <url>2020/07/20/reverse-polish-notation/</url>
+      
+        <content type="html"><![CDATA[<p>Reverse Polish Notationye也称逆波兰表达式(后缀表达式)。</p><a id="more"></a><h3 id="前、中、后缀表达式"><a href="#前、中、后缀表达式" class="headerlink" title="前、中、后缀表达式"></a>前、中、后缀表达式</h3><p>所谓的前、中、后缀表达式也十分简单，复杂点的可以把a、b看出2个不同的运算表达式，如下： 前缀表达式：+ab 中缀表达式：a+b 后缀表达式：ab+</p><h4 id="中缀变后缀例子1"><a href="#中缀变后缀例子1" class="headerlink" title="中缀变后缀例子1"></a>中缀变后缀例子1</h4><p>a+b*c</p><p>根据上面的中缀表达式。首先我们把a、b*c看成2个整体，这样就回到了一开始的a+b模式。a+b*c就变为了ab*c+，接着还剩b*c这一部分思路一样，ab*c+就变为了abc*+。 <img src="http://www.hizjlhi.com/2020/07/20200724043232386.png"> 经过上面的例子，可以大致了解中缀变后缀的基本流程。</p><h4 id="中缀变后缀例子2"><a href="#中缀变后缀例子2" class="headerlink" title="中缀变后缀例子2"></a>中缀变后缀例子2</h4><p>(a*b+c)*d</p><p>根据上面的中缀表达式。首先我们把(a*b+c)、d看成2个整体，这样就回到了一开始的a+b模式。(a*b+c)*d就变为了(a*b+c)d*，接着还剩(a*b+c)这一部分思路一样，(a*b+c)就变为了abc*+，接上前面的d*，整个中缀变后缀的结果为abc*+d*。</p><h3 id="中缀变后缀代码实现"><a href="#中缀变后缀代码实现" class="headerlink" title="中缀变后缀代码实现"></a>中缀变后缀代码实现</h3><p>根据前面的2个例子，可以使用一个存储数字的num数组和一个存储运算符的stack栈。</p><h4 id="具体流程如下："><a href="#具体流程如下：" class="headerlink" title="具体流程如下："></a>具体流程如下：</h4><ol><li> 遍历中缀表达式ch，<strong>如果遇到”(“**，就直接入栈。</strong>如果遇到数字<strong>，将其存储到num数组并用</strong>空格隔开<strong>。</strong>如果遇到”)”**，将栈上的运算符全部添加到num数组中，”(“除外，最后遍历到”(“需要将其从栈上删除。</li><li> 如果遇到运算符，这里分2种情况：</li></ol><p>第一种情况，如果当前ch的字符比栈顶元素的运算符的优先级<strong>大</strong>，那么当前ch的字符入栈。 第二种情况，如果当前ch的字符比栈顶元素的运算符的优先级**小并且栈顶元素不为”(“**，那么将栈顶元素取出添加到num数组中，直到当前ch的字符比栈顶元素的运算符的优先级大，然后当前ch的字符入栈。</p><h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><p>//比较运算符的优先级<br>func getPriority(ch byte) int {<br>   priority := 0<br>   switch ch {<br>      case ‘+’: priority = 1<br>      case ‘-‘: priority = 1<br>      case ‘(‘: priority = 2<br>      case ‘/‘: priority = 3<br>      case ‘*‘: priority = 3<br>      default:<br>         priority = 0<br>   }<br>   return priority<br>}</p><p>//中缀变后缀<br>func changeRPN(ch string) string {<br>   nums := make([]byte,0) //store number<br>   stack := make([]byte,0) //store operator<br>   for i := 0 ; i &lt; len(ch) ; i++ {<br>      if ch[i] == ‘ ‘ {continue} //分隔符<br>      if ch[i] &gt;= ‘0’ &amp;&amp; ch[i] &lt;= ‘9’ {<br>         //如果是二位数以上<br>         for i &lt; len(ch) &amp;&amp; ch[i] &gt;= ‘0’ &amp;&amp; ch[i] &lt;= ‘9’ {<br>            nums = append(nums, ch[i])<br>            i++<br>         }<br>         nums = append(nums, ‘ ‘) //分隔符,不然会出现11*2 -&gt; 112*<br>         i–<br>      }</p><pre><code>  if ch\[i\] == &#39;(&#39; &#123;     //直接入栈     stack = append(stack, ch\[i\])  &#125;else if ch\[i\] == &#39;)&#39; &#123;     //将括号中间的符号输出到尾部     for len(stack) != 0 &#123;        top := stack\[len(stack)-1\]        if top == &#39;(&#39; &#123;           stack = stack\[:len(stack)-1\]           break        &#125;        nums = append(nums, top)        nums = append(nums, &#39; &#39;)        stack = stack\[:len(stack)-1\]     &#125;  &#125;  if ch\[i\] == &#39;+&#39;  ch\[i\] == &#39;-&#39;  ch\[i\] == &#39;\*&#39;  ch\[i\] == &#39;/&#39; &#123;     if len(stack) == 0 &#123;        stack = append(stack, ch\[i\])     &#125;else &#123;        if getPriority(ch\[i\]) &gt; getPriority(stack\[len(stack)-1\]) &#123;           stack = append(stack, ch\[i\])        &#125;else &#123;           //如果当前运算符优先级比运算栈栈顶的运算符优先级小,将栈顶运算符输出到尾部           for len(stack) != 0 &amp;&amp; getPriority(ch\[i\]) &lt;= getPriority(stack\[len(stack)-1\]) &amp;&amp; stack\[len(stack)-1\] != &#39;(&#39; &#123;              nums = append(nums, stack\[len(stack)-1\])              nums = append(nums, &#39; &#39;)              stack = stack\[:len(stack)-1\]           &#125;           stack = append(stack, ch\[i\])        &#125;     &#125;  &#125;</code></pre><p>   }<br>   for len(stack) != 0 {<br>      nums = append(nums, stack[len(stack)-1])<br>      nums = append(nums, ‘ ‘)<br>      stack = stack[:len(stack)-1]<br>   }</p><p>   result := “”<br>   for i := 0 ; i &lt; len(nums) ; i++ {<br>      result += string(nums[i])<br>   }<br>   return result<br>}</p><h3 id="后缀表达式计算"><a href="#后缀表达式计算" class="headerlink" title="后缀表达式计算"></a>后缀表达式计算</h3><h4 id="具体流程"><a href="#具体流程" class="headerlink" title="具体流程"></a>具体流程</h4><p>首先需要一个存储数字的stack栈，当遇到运算符时，只需要将栈上的2个元素取出计算，再将求出的值放进栈中即可。最后我们只需要输出栈顶元素就得出答案。 注意：2个数字之间是用空格隔开的，因此上面转后缀时我们已经处理好了，是为了避免1*12变成112*的误区，使得不清楚是1*12还是11*2。处理好的1*12为1 12 *。</p><h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><p>func calculateRPN(ch string) int {<br>   length := len(ch)<br>   var value1, value2, result int<br>   stack := make([]int,0)<br>   for i := 0 ; i &lt; length ; i++ {<br>      if ch[i] &gt;= ‘0’ &amp;&amp; ch[i] &lt;= ‘9’ {<br>         tmp := int(ch[i] - 48)<br>         j := i+1<br>         for ch[j] &gt;= ‘0’ &amp;&amp; ch[j] &lt;= ‘9’ {<br>            tmp = tmp * 10 + int(ch[j] - 48)<br>            j++<br>         }<br>         stack = append(stack, tmp)<br>         i = j-1<br>      }<br>      if ch[i] == ‘+’  ch[i] == ‘-‘  ch[i] == ‘*‘  ch[i] == ‘/‘ {<br>         value2 = stack[len(stack)-1]<br>         stack = stack[:len(stack)-1]<br>         value1 = stack[len(stack)-1]<br>         stack = stack[:len(stack)-1]<br>         if ch[i] == ‘+’ { result = value1+value2<br>         }else if ch[i] == ‘-‘ {result = value1-value2<br>         }else if ch[i] == ‘*‘ {result = value1*value2<br>         }else if ch[i] == ‘/‘ {result = value1/value2}<br>         stack = append(stack, result)<br>      }<br>   }<br>   return stack[len(stack)-1]<br>}</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>逆波兰表达式的操作与思路实现起来不算太难，主要思路要理解的。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>LC第198周</title>
+      <link href="2020/07/20/lc%E7%AC%AC198%E5%91%A8/"/>
+      <url>2020/07/20/lc%E7%AC%AC198%E5%91%A8/</url>
+      
+        <content type="html"><![CDATA[<p>理清题目，从总到细，从远到近，从大到小—对待问题</p><a id="more"></a><h3 id="5465-子树中标签相同的节点数"><a href="#5465-子树中标签相同的节点数" class="headerlink" title="5465. 子树中标签相同的节点数"></a>5465. 子树中标签相同的节点数</h3><p>图+dfs</p><p>var ans []int<br>var graph [][]int<br>func countSubTrees(n int, edges [][]int, labels string) []int {<br>   graph = make([][]int, n)<br>   for i := 0 ; i &lt; n ; i++ {<br>      graph[i] = make([]int, 0)<br>   }<br>   for _, v := range edges {<br>      graph[v[0]] = append(graph[v[0]], v[1])<br>      graph[v[1]] = append(graph[v[1]], v[0])<br>   }<br>   ans = make([]int, n)<br>   dfs(0, make([]bool, n), labels)<br>   return ans<br>}</p><p>func dfs(node int, visited []bool, labels string) []int {<br>   visited[node] = true<br>   count := make([]int, 26)<br>   count[labels[node]-‘a’]++<br>   for _, next := range graph[node] {<br>      if !visited[next]{<br>         res := dfs(next, visited, labels)<br>         for i := 0; i &lt; 26; i++ {<br>            count[i] += res[i];<br>         }<br>      }<br>   }<br>   ans[node] = count[labels[node]-‘a’]<br>   return count<br>}</p><h3 id="5467-找到最接近目标值的函数值"><a href="#5467-找到最接近目标值的函数值" class="headerlink" title="5467. 找到最接近目标值的函数值"></a>5467. 找到最接近目标值的函数值</h3><p>首先根据题目所给的函数，其实就是一个求arr[l,r]之间的&amp;操作，结合题目给的例子，可以发现<strong>当l固定时，随着r的不断增加，其&amp;操作求出来的值就会变得越来越小</strong>。同时题目所给的要求是要求出<code>func(arr, l, r) - target</code> 的最小值，总体思路就是求出arr[l,r]中与target最接近的值即可。 那么问题来了，首先题目的arr的长度为10^5，如果我们一个一个的进行&amp;操作，这样肯定行不通因为时间复杂度太高，因此必须想到一种方法能够把对arr[l,r]内&amp;操作的复杂度降低。 如果你了解线段树的话，这个问题就迎刃而解了。通过构造一个arr的线段树，我们可以将时间复杂度降为logn。同时结合滑动窗口(原因：上面加粗字段)，我们能够在一次遍历中就可以完成任务。</p><p>//超时…还要再改<br>func buildTree(tree, arr []int, node, start, end int) {<br>   if start == end {<br>      tree[node] = arr[start]<br>   }else {<br>      mid := (start+end) &gt;&gt; 1<br>      leftNode := node &lt;&lt; 1<br>      rightNode := node &lt;&lt; 1  1<br>      buildTree(tree, arr, leftNode, start, mid)<br>      buildTree(tree, arr, rightNode, mid+1, end)<br>      tree[node] = tree[leftNode] &amp; tree[rightNode]<br>   }<br>}</p><p>func queryTree(tree []int, node, start, end, L, R int) int {<br>   if L == start &amp;&amp; R == end {<br>      return tree[node]<br>   }<br>   mid := (start+end) &gt;&gt; 1<br>   leftNode := node &lt;&lt; 1<br>   rightNode := node &lt;&lt;1  1<br>   if R &lt;= mid {<br>      return queryTree(tree, leftNode, start, mid, L, R)<br>   }<br>   if L &gt; mid {<br>      return queryTree(tree, rightNode, mid+1, end, L, R)<br>   }<br>   return queryTree(tree, leftNode, start, mid, L, mid) &amp; queryTree(tree, rightNode, mid+1, end, mid+1, R)<br>}</p><p>func closestToTarget(arr []int, target int) int {<br>   n := len(arr)<br>   tree := make([]int, 100000)<br>   buildTree(tree, arr, 1, 0, n-1)<br>   l, r, ans := 0, 0, math.MaxInt32<br>   for r &lt; n {<br>      res := queryTree(tree, 1, 0, n-1, l, r)<br>      if res &lt; target {<br>         r = max(l+1, r)<br>      }else {<br>         r++<br>      }<br>      ans = min(ans, int(math.Abs(float64(res-target))))<br>   }<br>   return ans<br>}</p><p>拓展：也可以使用区间最值(RMQ)来替换线段树求解</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Data Structure Alignment</title>
+      <link href="2020/07/18/data-structure-alignment/"/>
+      <url>2020/07/18/data-structure-alignment/</url>
+      
+        <content type="html"><![CDATA[<p>最近看到一个很有意思的编程问题，同时也引出了Data Structure Alignment的知识点，这便引起了我的兴趣。</p><a id="more"></a><h3 id="提问"><a href="#提问" class="headerlink" title="提问"></a>提问</h3><p>作为程序员，想必都知道int16，int32、int64所对应的字节数。那么在下面2个结构体所占的字节数又为多少呢？</p><p>type A struct{<br>   a int8<br>   d int16<br>   c int32<br>   b int64<br>}</p><p>type B struct{<br>   a int8<br>   c int32<br>   b int64<br>   d int16<br>}</p><h4 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h4><p><img src="http://www.hizjlhi.com/2020/07/20200717180044881.png"> 答案显而易见，如果仔细观察就会发现A、B两个结构体中的字段类型排序不同。这就涉及到了Data Structure Alignment(也就是内存对齐)的知识点了。</p><h4 id="32位与64位的区别"><a href="#32位与64位的区别" class="headerlink" title="32位与64位的区别"></a>32位与64位的区别</h4><p>在了解什么是内存对齐前，首先要知道CPU、内存、地址总线、数据总线的概念。当cpu想要从内存中获取数据，就要通过地址总线传送地址给内存，内存在根据传送过来的地址得到数据，最后将数据从数据总线传给cpu。通常8根数据总线就寻址255byte的内存空间，而平常我们所说的32位和64位实际上是代表32根/64根数据总线，它们所对应可寻址空间位2^32和2^64。也就是说64位的机子当对于32位的机子的寻址空间更大了。</p><h3 id="什么是Data-Structure-Alignment"><a href="#什么是Data-Structure-Alignment" class="headerlink" title="什么是Data Structure Alignment"></a>什么是Data Structure Alignment</h3><h4 id="内存条的bank，chip，rank"><a href="#内存条的bank，chip，rank" class="headerlink" title="内存条的bank，chip，rank"></a>内存条的bank，chip，rank</h4><p>(这里偏理解的东西，个人感觉不好口述，还是贴一下大佬的图（会在下面Refrence注明）) <img src="http://www.hizjlhi.com/2020/07/20200717182436110.png"> 而8个Bank所对应的同一个位置的字节(8个位置)连起来就称为连续8个字节(这里标注为a0到a8)。但是如果不是从a0开始，而是从a1到a9呢？这时候就不能在一次操作中一次取出，而是通过二次操作，第一次取a1到a8，第二次取a9。这样就浪费了一次cpu的操作，而且更极端的情况就是一个占2字节的值分别在a8，a9上，这样不仅消费cpu，更浪费内存(因此明明可用a0、a1来解决同时又可以在一次操作完全取出)。所以编译器就会给不同类型的数据安排适合的内存地址，以此来提高性能。简单来说就是争取在cpu一次操作(操作8个字节)中，一次性读取出想要的数据。 因此Data Structure Alignment(内存对齐)出现便是作用于此。注意不同平台每种类型的对齐边界都会有所不同。</p><h3 id="题目图解-64位window下"><a href="#题目图解-64位window下" class="headerlink" title="题目图解(64位window下)"></a>题目图解(64位window下)</h3><p><img src="http://www.hizjlhi.com/2020/07/20200717190554660.png"></p><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul><li><p>  <a href="https://en.wikipedia.org/wiki/Data_structure_alignment">Data Structure Alignment in Wikipedia</a></p></li><li><p>  <a href="https://stackoverflow.com/questions/42053791/is-it-necessary-to-use-data-structure-alignment">Is it necessary to use Data structure alignment</a></p></li><li><p>  <a href="https://www.bilibili.com/video/BV1Ja4y1i7AF?t=150">Bilibili</a></p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>关于Go Race Detector</title>
+      <link href="2020/07/16/%E5%85%B3%E4%BA%8Ego-race-detector/"/>
+      <url>2020/07/16/%E5%85%B3%E4%BA%8Ego-race-detector/</url>
+      
+        <content type="html"><![CDATA[<p>碰巧在看Go question的PDF时，意外发现在其上面所推荐的博客上看到一篇关于<a href="https://xargin.com/map-concurrent-throw/">map 并发崩溃一例</a>的文章，他所使用的检查bug方法引起了我的注意和回想。</p><a id="more"></a><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在那篇文章中，他所使用检测bug命令是go run -race ×.go。当时-race就引起了我的注意，因此在前几篇关于Go的文章中，在阅读源码的过程中我经常看到这个关于race包的引用，当时我是不知道这里这一小段的代码具体作用是干啥的，直到今晚看到这篇关于<a href="https://xargin.com/map-concurrent-throw/">map 并发崩溃一例</a>的文章我才知道其的实际作用。 下面随手贴几段关于race包在各处的代码</p><p>//chan.go<br>func send(c *hchan, sg *sudog, ep unsafe.Pointer, unlockf func(), skip int) {<br>   if raceenabled {<br>      if c.dataqsiz == 0 {<br>         racesync(c, sg)<br>      } else {<br>         qp := chanbuf(c, c.recvx)<br>         raceacquire(qp)<br>         racerelease(qp)<br>         raceacquireg(sg.g, qp)<br>         racereleaseg(sg.g, qp)<br>         c.recvx++<br>         …….<br>      }<br>   }<br>…….<br>}</p><p>func closechan(c *hchan) {<br>   …….<br>   if raceenabled {<br>      callerpc := getcallerpc()<br>      racewritepc(c.raceaddr(), callerpc, funcPC(closechan))<br>      racerelease(c.raceaddr())<br>   }<br>   ………<br>}<br>//rwmutex.go<br>func (rw *RWMutex) RLock() {<br>   if race.Enabled {<br>      _ = rw.w.state<br>      race.Disable()<br>   }<br>   …..<br>   if race.Enabled {<br>      race.Enable()<br>      race.Acquire(unsafe.Pointer(&amp;rw.readerSem))<br>   }<br>}</p><p>可以看出race包在Go源码中是十分常见的。</p><h3 id="race是什么"><a href="#race是什么" class="headerlink" title="race是什么"></a>race是什么</h3><p>根据官网文档，-race选项用于检测数据竞争。在开启了race检测之后，如果程序发生了例如map的竞争，它会一层一层的将错误打印出来。常用于并发程序的检测。具体的操作和说明在这就不多说，请移步到下面的参考文献查阅。</p><h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>race检测已经添加到go tool chan中，可以在命令行中加入-race，即可开启。 类如：go run -race 、go test -race等 参考文献及案例</p><ul><li>  <a href="https://blog.golang.org/race-detector">The Go Blog-Introducing the Go Race Detector</a></li><li>  <a href="https://golang.org/doc/articles/race_detector.html">Data Race Detector</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>理解AMQ协议和消息发布的性能权衡</title>
+      <link href="2020/07/14/%E7%90%86%E8%A7%A3amq%E5%8D%8F%E8%AE%AE%E5%92%8C%E6%B6%88%E6%81%AF%E5%8F%91%E5%B8%83%E7%9A%84%E6%80%A7%E8%83%BD%E6%9D%83%E8%A1%A1/"/>
+      <url>2020/07/14/%E7%90%86%E8%A7%A3amq%E5%8D%8F%E8%AE%AE%E5%92%8C%E6%B6%88%E6%81%AF%E5%8F%91%E5%B8%83%E7%9A%84%E6%80%A7%E8%83%BD%E6%9D%83%E8%A1%A1/</url>
+      
+        <content type="html"><![CDATA[<p>最近在深入RabbitMQ一书，看到了AMQ协议的的底层帧结构，因此在这总结一下。</p><a id="more"></a><h3 id="AMQP-RPC帧结构"><a href="#AMQP-RPC帧结构" class="headerlink" title="AMQP RPC帧结构"></a>AMQP RPC帧结构</h3><p>AMQP 使用类和方法在客户端和服务器之间创建公共语言，这些类和方法被称为 AMQP 命令。 AMQP 中的类定义了一个功能范围，每个类都包含执行不同任务的方法。就比如Connection.Start命令是由Connection类和Start方法构成Connection.Start RPC请求的。</p><h4 id="AMQP-帧组件"><a href="#AMQP-帧组件" class="headerlink" title="AMQP 帧组件"></a>AMQP 帧组件</h4><p>一共包括5种组件 <img src="http://www.hizjlhi.com/2020/07/20200713092210308.png"></p><h4 id="帧类型"><a href="#帧类型" class="headerlink" title="帧类型"></a>帧类型</h4><p>五种类型的帧 ：</p><ul><li>  协议头帧：用于连接，仅使用一次</li><li>  方法帧：携带发送/接收的RPC请求或响应</li><li>  内容头帧：消息的大小和属性</li><li>  消息体帧：消息内容</li><li>  心跳帧：一种机制确保两端正常工作</li></ul><h4 id="方法帧结构"><a href="#方法帧结构" class="headerlink" title="方法帧结构"></a>方法帧结构</h4><p>注意里面的Mandatory字段是要求要有反馈消息的。 <img src="http://www.hizjlhi.com/2020/07/20200713094852809.png"></p><h4 id="内容头帧结构"><a href="#内容头帧结构" class="headerlink" title="内容头帧结构"></a>内容头帧结构</h4><p><img src="http://www.hizjlhi.com/2020/07/20200713095317547.png"></p><h4 id="消息头帧结构"><a href="#消息头帧结构" class="headerlink" title="消息头帧结构"></a>消息头帧结构</h4><p><img src="http://www.hizjlhi.com/2020/07/20200713095529930.png"></p><h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><p>先发送方法帧，发送内容头帧，最后发送消息头帧。</p><h3 id="关于消息发布的性能权衡"><a href="#关于消息发布的性能权衡" class="headerlink" title="关于消息发布的性能权衡"></a>关于消息发布的性能权衡</h3><p>在深入rabbitmq一书中，提到了关于消息发布的权衡。下图是rabbitmq所列出的可靠投递机制的组合使用的性能 <img src="http://www.hizjlhi.com/2020/07/20200714074018572.png"> 可以看出在使用越多的可靠投递机制时，都会对其性能产生影响变得越来越慢(也就是图中的乌龟)。就这章而言，个人的思考的点在于需要确保消息在队列中不丢失，其次关于消息投递的可靠性可以通过事务或者mandatory、备用交换机等来解决，具体选取取决于个人。</p><h4 id="HA队列"><a href="#HA队列" class="headerlink" title="HA队列"></a>HA队列</h4><p>HA队列是用来避免节点故障，相当于主从。它把队列复制为多个队列，当收到消息时会同步到其他几个队列，当消息消费完成时消息的所有副本将会从所有队列中删除。</p><h4 id="delivery-mode"><a href="#delivery-mode" class="headerlink" title="delivery-mode"></a>delivery-mode</h4><p>可以通过设置delivery-mode=2将消息持久化到磁盘，但要关注服务器的I/O能力，这可能会导致性能问题。</p><h4 id="RabbitMQ-回推"><a href="#RabbitMQ-回推" class="headerlink" title="RabbitMQ 回推"></a>RabbitMQ 回推</h4><p>rabbimq的回推是为了解决在2.0版本时，发布者应用程序因为发布消息太快而开始对 RabbitMQ 造成压力。虽然可以用Channel. Flow方法来告诉发布者我这边压力太大希望缓一缓，但是执不执行就要看发布者了。由此rabbitmq回推便由此产生。不使用Channel. Flow方法，转而使用一种被称为TCP背压(Backpressure，也相当于TCP Flow Control)的机制来解决这个问题。 RabbitMQ不会礼貌地要求发布者停止发送消息，而是停止接受 TCP 套接字上的低层数据。 内部实现： RabbitMQ 使用信用的概念来管理回推发布者的时机。在建立新的连接时，连 接将被分配一个预定数量的可用信用值。然后，当 RabbitMQ 接收每个 RPC 命令时，将扣 除一个点的信用值。 一旦 RPC 请求在内部完成处理，连接就会返还被扣除的信用值。连接 的信用值余额由 RabbitMQ 评估，以确定它是否应该从连接的套接字读取数据。 如果一个连 接的信用值不足，它将被跳过直到它有足够的信用值为止。 另外RabbitMQ还定义了2个方法分别为Connection.Blocked 和 Connection.Unblocked用通知客户端已经被阻塞或取消阻塞。</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于消息发布的性能权衡，可以通过协议的设置应用于不同类型和场景，同时不同的设置组合可能会对性能产生影响。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>LC第30周夜喵</title>
+      <link href="2020/07/13/lc%E7%AC%AC30%E5%91%A8%E5%A4%9C%E5%96%B5/"/>
+      <url>2020/07/13/lc%E7%AC%AC30%E5%91%A8%E5%A4%9C%E5%96%B5/</url>
+      
+        <content type="html"><![CDATA[<p>战果2/4，第三第四题很遗憾……</p><a id="more"></a><h3 id="5446-三次操作后最大值与最小值的最小差"><a href="#5446-三次操作后最大值与最小值的最小差" class="headerlink" title="5446. 三次操作后最大值与最小值的最小差"></a>5446. 三次操作后最大值与最小值的最小差</h3><p>这题刚开始想到的是，先排序然后最大的变最小的或者最小的变最大，但是结果仍然不对，这2种方案适合在数组超过5个数的时候还管用，在做题时卡在了5个数的数组，心想不可能暴力求出来吧。最后发现原来还缺了2种方案。</p><p>func minDifference(nums []int) int {<br>   if len(nums) &lt; 4 {return 0}<br>   sort.Ints(nums)<br>   //依次对应四种方案: 去除最小3个/去除最小2个和最大1个/去除最小1个和最大2个/去除最大3个<br>   return min(min(nums[len(nums)-1]-nums[3], nums[len(nums)-2]-nums[2]), min(nums[len(nums)-3]-nums[1], nums[len(nums)-4]-nums[0]))<br>}</p><p>func min(a, b int) int {<br>   if a &gt; b{<br>      return b<br>   }<br>   return a<br>}</p><h3 id="5447-石子游戏-IV"><a href="#5447-石子游戏-IV" class="headerlink" title="5447. 石子游戏 IV"></a>5447. 石子游戏 IV</h3><p>这道题很明显是博弈DP，就不多说了主要是理解性的东西，请看下面的代码注释。</p><p>func winnerSquareGame(n int) bool {<br>   dp := make([]bool, n+1)<br>   for i := 0 ; i &lt;= n ; i++ {<br>      for j := 1 ; j*j+i &lt;= n ; j++ {//取几个<br>         if(!dp[i]) {//如果第i个是Bob取,那么Alice可以取到j*j+i为true<br>            dp[j*j+i] = true<br>         }<br>      }<br>   }<br>   return dp[n] //true表示这局是Alice,false表示这局是Bob<br>}</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>RMQ</title>
+      <link href="2020/07/06/rmq/"/>
+      <url>2020/07/06/rmq/</url>
+      
+        <content type="html"><![CDATA[<p>范围最值查询方法(RMQ)</p><a id="more"></a><h3 id="RMQ解决什么问题"><a href="#RMQ解决什么问题" class="headerlink" title="RMQ解决什么问题"></a>RMQ解决什么问题</h3><p>比如现在由区间为[l,r]的数组，求当中的最大或者最小值。一般通常思路都是for循环遍历数组找最大或者最小值，时间复杂度为O(n)，但是对于区间不算大还好，如果该区间很大很大，那么就要考虑这种方法是否可用了。而RMQ能够在该区间内查询到结果，时间复杂度为O(N)~O(logN)。</p><h3 id="RMQ思想"><a href="#RMQ思想" class="headerlink" title="RMQ思想"></a>RMQ思想</h3><p>关于RMQ的伪代码和计算方式，在<a href="https://zh.wikipedia.org/wiki/%E8%8C%83%E5%9B%B4%E6%9C%80%E5%80%BC%E6%9F%A5%E8%AF%A2">Wikipedia</a>上有就不重复了。关键是理清楚里面的范围变化。 RMQ使用二维数组dp[i][j]来表示范围[i, i+2^j-1]中的最大/最小值。在Wikipedia上计算时要把[i, i+2^j-1]分成2段来求解，至于具体在Wikipedia上的伪代码(如下所示)是扎弄得，请看下图。</p><p>F[i][j - 1], F[i + (1 &lt;&lt; (j - 1))][j - 1]</p><p><img src="http://www.hizjlhi.com/2020/07/20200706131005582.png"> 还是顺便贴一下伪代码把，因此有个地方需要了解注意</p><p>// 长度为 0 时，表示数据自身。<br>for (int i = 0; i &lt; Length; ++i) F[i][0] = Array[i];</p><p>for (int j = 1; (1 &lt;&lt; j) &lt;= Length; ++j)<br> for (int i = 0; i + (1 &lt;&lt; j) - 1 &lt; Length; ++i)<br>F[i][j] = min(<br>   F[i][j - 1], F[i + (1 &lt;&lt; (j - 1))][j - 1]<br>); // 分成长度相等的两段</p><p>这里可以注意到伪代码的for循环是先j再i，而不是一般的先i再j。比如说求最大值，首先我们先两两比较 (1,2),(3,4)….，然后再从其中两两比较的结果再比较最大值，说白了得到了1个区间(含有2个数)的最大值就可以求出2个区间的最大值(各含有2个数)，而那么小的数便不再理会只关注区间中的最大值就可以推出总的区间最大值。因此如果先i再j，那么就变成前i个元素的最值，但是前i个元素的最值可能是由几个不同的区间所求的因此这时候就无法求的结果。</p><h4 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h4><p>如果你理解了上面的，就会发现RMQ的主要思想是从2个区间的最值求出一个区间的最值。因此对于查询区间里的最值，核心思想是比较两大半区间的最值即可。</p><p>//核心代码，其中i是中位数那个位置也就是区间总长度/2<br>min(F[Left][i], F[Right - (1 &lt;&lt; i) + 1][i]);</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>关于wordpress backup问题</title>
+      <link href="2020/07/05/%E5%85%B3%E4%BA%8Ewordpress-backup%E9%97%AE%E9%A2%98/"/>
+      <url>2020/07/05/%E5%85%B3%E4%BA%8Ewordpress-backup%E9%97%AE%E9%A2%98/</url>
+      
+        <content type="html"><![CDATA[<p>最近在研究关于wordpress备份的问题，目前稍有眉目已经在线上运行中，效果还不错，相应的解决方案请看下文。</p><a id="more"></a><h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>对于个人而言，关于wordpress站点的备份，主要还是使用的内置的wordpress-importer来对站点里的内容进行备份，它会把站点里面的数据存到一个xml文件中。相对于其他备份，我只需将重要的部分(文章，分类标签等)保存起来，然后再通过wordpress-importer导回另外一个站点，而且xml文件也比较小，占用空间不大。</p><h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><p>wordpress官网也提供相关的CLI供我们使用，具体下载链接为：<a href="https://make.wordpress.org/cli/handbook/guides/installing/">官网链接</a> 。对于命令行的导出，可以使用wp export + 参数 的方式进行导出。相应的命令参数可以去Github上查看文档—-<a href="https://github.com/wp-cli/export-command">wp-cli/export-command</a>，<a href="https://github.com/wp-cli/wp-cli">wp-cli</a>  这里就不多说了。 个人思路是通过脚本定时执行wp export命令导出xml文件，再上传到其他个人服务器上面去。</p><h3 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h3><p>在操作wp export遇到了几个坑，第一点是当前目录是否存在wp-config.php，看过wordprss后台数据库的都知道，wordpress把文章都存在wp-post的表中，而数据库的连接是在wp-config.php中设置的，wordpress-importer应该就是找到wp-config.php从数据库中提取数据打包成xml文件。因此确保在执行wp export命令时当前目录要有wp-config.php文件。 第二点是关于执行wp export之后，报错信息为</p><p>PHP Fatal error:  Uncaught Error: Class ‘DOMDocument’ not found in phar:///usr/local/bin/wp/vendor/nb/oxymel/Oxymel.php:147<br>Stack trace:</p><p>这点首先确定问题为PHP的DOMDocument的事，具体相应的解决方法在<a href="https://github.com/wp-cli/wp-cli/issues/3363">Github</a>上也找到了。</p><h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>解决方法可以去我<a href="https://github.com/MrVWY/wodpress-backup">GitHub</a>上面查看(注:上面的Go脚本是我随手编写的，在实际中我已经改成用shell编写了，可以无视！)，下面放一些效果图 <img src="http://www.hizjlhi.com/2020/07/20200714133632307.png"> 可以看到文章，分类标签等通过wp-cli导出来也就164KB(对应着目前本文章之前的文章等资料)，因此也十分让我满意。</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于wordpress站点的备份目前的思路大概也比较清楚，主要是对于wp-cli的一些坑需要留意。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>LC第196周</title>
+      <link href="2020/07/01/lc%E7%AC%AC196%E5%91%A8/"/>
+      <url>2020/07/01/lc%E7%AC%AC196%E5%91%A8/</url>
+      
+        <content type="html"><![CDATA[<p>战果不佳….题目很长，想的太复杂。</p><a id="more"></a><h3 id="5453-所有蚂蚁掉下来前的最后一刻"><a href="#5453-所有蚂蚁掉下来前的最后一刻" class="headerlink" title="5453. 所有蚂蚁掉下来前的最后一刻"></a>5453. 所有蚂蚁掉下来前的最后一刻</h3><p>这题思路也十分简单，关键是你要理清几个关键点。 第一点，在两只蚂蚁相遇时它们就反方向前进，这里可以看成依旧按照原来方向前进，具体解释如下图： <img src="http://www.hizjlhi.com/2020/07/20200706041053215.png"> 由上图可知，蚂蚁A来回的距离位x1+y1，但是这里我们可以看出x1+x2，这就相当于在相遇线之后题目说是两只蚂蚁反方向走，但是我们可以看出蚂蚁A和蚂蚁B交换了身份，但是本质是不变的，两只蚂蚁到最后都会走出木板。因此答案却决于两只蚂蚁的位置了。 因此理解了上图那么该题我们只需要关注的点是在最左边向右，最右边向左的两只蚂蚁，因此木板上没有蚂蚁的时刻，全都取决于在边缘上的两只蚂蚁，求出它们当中走完全程的最大值即可。</p><p>//方法一<br>func getLastMoment(n int, left []int, right []int) int {<br>   maxs := 0<br>   for _, v := range left {<br>      maxs = max(maxs, v)<br>   }<br>   for _, v := range right {<br>      maxs = max(maxs, n-v)<br>   }<br>   return maxs<br>}</p><p>//方法二<br>//过滤2个数组中相邻的两个点（也就是会相遇的两只蚂蚁）<br>func getLastMoment(n int, left []int, right []int) int {<br>   sort.Ints(left)<br>   sort.Ints(right)</p><p>   if len(left) == 0 &amp;&amp; len(right) == 0 {<br>      return 0<br>   }<br>   //向右为零<br>   if len(right) == 0 {<br>      return left[len(left)-1]<br>   }<br>   //向左为零<br>   if len(left) == 0 {<br>      return n-right[0]<br>   }</p><p>   maxs := -1<br>   for i := len(right)-1 ; i&gt;=0 ; i– {<br>      for j := 0 ; j &lt; len(left) ; j++ {<br>         if left[j] &gt;= right[i] {<br>            maxs = max(maxs, n - right[i])<br>            maxs = max(maxs, left[j])<br>            left[j] = -1<br>            right[i] = -1<br>            break<br>         }<br>      }<br>   }</p><p>   for i := 0 ; i &lt; len(right) ; i++ {<br>      if right[i] != -1 {<br>         maxs = max(maxs, n-right[i])<br>      }<br>   }</p><p>   for i := 0 ; i &lt; len(left) ; i++ {<br>      if left[i] != -1 {<br>         maxs = max(maxs, left[i])<br>      }<br>   }</p><p>   return maxs<br>}</p><h3 id="5454-统计全-1-子矩形"><a href="#5454-统计全-1-子矩形" class="headerlink" title="5454. 统计全 1 子矩形"></a>5454. 统计全 1 子矩形</h3><p>主要思路是，不要顺着走，要逆着走。要算n*n的矩形，首先要知道当前(i，j)的长度为多少吧，因此先从左到右计算出每一个(i，j)位置的最大长度为多少。接着把每个点都当成一个矩形的右下角，从每一行开始向上计算最大宽度，最后把结果累加即可。详细解释请看代码。</p><p>func numSubmat(mat [][]int) int {<br>   row := len(mat)<br>   col := len(mat[0])<br>   //从左到右,计算出第i个位置的最大长度weight<br>   for i := 0 ; i &lt; row ; i++ {<br>      l := 0<br>      for j := 0 ; j &lt; col ; j++ {<br>         if mat[i][j] == 1 {<br>            l++<br>         }else {<br>            //说明前面有0,应该把长度重新置位1<br>            l = 0<br>         }<br>         mat[i][j] = l<br>      }<br>   }</p><p>   total := 0<br>   //从下到上, 计算高度height<br>   for i := 0 ; i &lt; row ; i++ {//第i行<br>      for j := 0 ; j &lt; col ; j++{//第j个<br>         min := math.MaxInt32<br>         for k := i ; k &gt;=0 ; k– {//高度,从下到上<br>            min = mins(min, mat[k][j])<br>            if min == 0 {//说明再从下到上的过程中遇到了0,应该立即停止接着下一个<br>               break<br>            }<br>            total += min<br>         }<br>      }<br>   }</p><p>   return total<br>}</p><p>func mins(a, b int) int {<br>   if a &gt; b {<br>      return b<br>   }<br>   return a<br>}</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>对epoll的理解</title>
+      <link href="2020/07/01/%E5%AF%B9epoll%E7%9A%84%E7%90%86%E8%A7%A3/"/>
+      <url>2020/07/01/%E5%AF%B9epoll%E7%9A%84%E7%90%86%E8%A7%A3/</url>
+      
+        <content type="html"><![CDATA[<p>最近弄个人博客时，遇到了一些关于epoll的问题与在这过程中对epoll的理解，在这记录下来。</p><a id="more"></a><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在调试个人博客时，发现服务器上的nginx居然没有配置epoll事件驱动，在之前学习Go的net包时，也接触过底层源码，也了解过其底层也是使用了epoll。为此我也专门去了解epoll，还有select、poll。</p><h3 id="Nginx配置epoll"><a href="#Nginx配置epoll" class="headerlink" title="Nginx配置epoll"></a>Nginx配置epoll</h3><p>在nginx.conf下配置事件驱动模型epoll</p><p>events {<br>   accept_mutex on; #设置网路连接序列化，防止惊群现象发生，默认为on<br>   multi_accept on; #设置一个进程是否同时接受多个网络连接，默认为off<br>   use epoll; #事件驱动模型，selectpollkqueueepollresig/dev/polleventport<br>   worker_connections 1024; #最大连接数，默认为512<br>}</p><p>特别要注意一点在events里的accept_mutex配置涉及到一个<a href="https://en.wikipedia.org/wiki/Thundering_herd_problem">Thundering herd problem</a>(<strong>惊群问题</strong>)需要我们留意。 其他的一些配置就不再多说，配置也比较简单，主要还是走官网文档。记得修改过后要重启nginx</p><h3 id="关于epoll"><a href="#关于epoll" class="headerlink" title="关于epoll"></a>关于epoll</h3><p>其实epoll、select、poll都是I/O多路复用的机制，本质上还是同步I/O需要自己负责进行读写。而select、poll都是出现在epoll之前，select的机制就是使用轮询的方式扫描fd，同时在其过程还涉及到内核态与用户态来回复制fd，效率低下。poll的机制原理与select十分相似，主要一点不同是poll采取fd的结构是链式，没有最大连接数限制，而select的最大连接数默认为1024。 关于epoll的一些组成在这就不必多说，网上都有，关键是要理解其内部的各组件的作用。</p><h4 id="API"><a href="#API" class="headerlink" title="API"></a>API</h4><p>关于epoll，它有三个API分epoll_create、epoll_ctl、epoll_wait，原本对于这三个API我还有不太理解除了epoll_create。于是Google了一下，发现里面大有文章。 在epoll_create会在内核产生一个epoll的fd，而之后的epoll_ctl、epoll_wait都是以它为中心进行操作，epoll_ctl可以理解为一个事件监听器，它可以把需要监听的事件全都注册进epoll的fd中，并用红黑树进行存储。如果事件触发，那么epoll会从这个事件插入到一个链表中，最后通过epoll_wait进行调用。</p><h4 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h4><p>关于源码部分，我在Github上找到一个epoll的源码分析，里面分析的十分详细，不仅包括了完整源码，而且还分析了epoll是如何得知fd的状态变化的，具体深入到内核的poll技术，可以去参考一下<a href="https://github.com/Liu-YT/IO-Multiplexing/blob/master/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/epoll.md">这里</a>。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>LC第29周夜喵</title>
+      <link href="2020/06/28/lc%E7%AC%AC29%E5%91%A8%E5%A4%9C%E5%96%B5/"/>
+      <url>2020/06/28/lc%E7%AC%AC29%E5%91%A8%E5%A4%9C%E5%96%B5/</url>
+      
+        <content type="html"><![CDATA[<p>战果2/4，第三题想着用滑动窗口实现，不过就在如何将滑动窗口推进这想不出</p><a id="more"></a><p>题目：删掉一个元素以后全为 1 的最长子数组 给你一个二进制数组 nums ，你需要从中删掉一个元素。请你在删掉元素的结果数组中，返回最长的且只包含 1 的非空子数组的长度。如果不存在这样的子数组，请返回 0。 该题关键是想明白滑动窗口在什么情况下滑动，也就是当判断带该区间有2个0时，那么滑动窗口就开始滑动使得区间只含1个0。在代码里sum可以看作是有几个1，而right-left-1表示区间里含有2个0。</p><p>func longestSubarray(nums []int) int {<br>   left, sum, res := 0,0,0<br>   for right := 0 ; right &lt; len(nums) ; right++ {<br>      sum += (nums[right] &amp; 1) //遇到1相加<br>     ** //right-left-1表示该区间个数减去2个0之后剩余的1的个数**<br>      for left &lt; right &amp;&amp; <strong>sum &lt;= right - left - 1</strong>{<br>         if nums[left] == 1 {<br>            sum–<br>         }<br>         left++<br>      }<br>      res = max(res, right-left)<br>   }<br>   return res<br>}</p><p>func max(a, b int) int {<br>   if a &gt; b {<br>      return a<br>   }<br>   return b<br>}</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>浅谈Copy-on-write</title>
+      <link href="2020/06/28/%E6%B5%85%E8%B0%88copy-on-write/"/>
+      <url>2020/06/28/%E6%B5%85%E8%B0%88copy-on-write/</url>
+      
+        <content type="html"><![CDATA[<p>最近在看到了一种Copy-on-write(写时复制，COW)的技术，因此在这做一下记录</p><a id="more"></a><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>根据Wikipedia和StackOverflow上面的描述，COW是一种计算机资源管理方面的优化技术，目前我所了解到用到的地方有redis持久化、docker的AUFS文件系统等。</p><h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>目前有一个数据块A，进程1、2、3、4都想访问数据块A，这时候进程1234都是以只读的方式去读取数据A。在cow中，比如进程2想要修改数据块A，这时候触发cow的机制，此时数据块A会被复制一份（这里为了方便区别我们称为数据块B）出来给进程2修改（注意这时候已经有2份数据块A分布在2个不同的内存地址中），而其他进程134不会受到任何影响仍在读取数据块A，而进程2现在在读取数据块B。</p><h3 id="Linux的Copy-on-write"><a href="#Linux的Copy-on-write" class="headerlink" title="Linux的Copy-on-write"></a>Linux的Copy-on-write</h3><p>linux的cow主要是在进程方面，主要涉及fork()和exec()，通过fork产生一个子进程。传统的fork会把父进程的所有资源（代码段、数据段、堆、栈）都copy一份给子进程，而使用了cow机制的fork不会复制整个父进程的资源，而是父进程和子进程都共用一个资源，只有当子进程需要写入数据时，才会复制一份给子进程，在此之前都是以只读方式来共享资源。</p><h3 id="redis的Copy-on-write"><a href="#redis的Copy-on-write" class="headerlink" title="redis的Copy-on-write"></a>redis的Copy-on-write</h3><p>redis的写时复制主要在其持久化这里，当redis要执行持久化时，其会fork一个子进程来从内存中读取数据，写到磁盘上。如果这时候redis要更新数据或者写操作，那么就会触发cow，开辟一个新的内存块让更新的数据存放。当然如果子进程存在期间发生大量的更新或者写操作，那么此时机子很可能将耗费比较多的性能在copy的操作上。附：<a href="http://origin.redisbook.com/index.html">《Redis设计与实现》</a></p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于Copy-on-write，主要还是要理解其思想，下面是摘录自Wikipedia的概括： 其核心思想是，如果有多个调用者（callers）同时请求相同资源（如内存或磁盘上的数据存储），他们会共同获取相同的指针指向相同的资源，直到某个调用者试图修改资源的内容时，系统才会真正复制一份专用副本（private copy）给该调用者，而其他调用者所见到的最初的资源仍然保持不变。这过程对其他的调用者都是透明的（transparently）。此作法主要的优点是如果调用者没有修改该资源，就不会有副本（private copy）被建立，因此多个调用者只是读取操作时可以共享同一份资源。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Explicit Congestion Notification (ECN) in IP</title>
+      <link href="2020/06/18/explicit-congestion-notification-ecn-in-ip/"/>
+      <url>2020/06/18/explicit-congestion-notification-ecn-in-ip/</url>
+      
+        <content type="html"><![CDATA[<p>最近看到群里交流讨论到TCP/IP的标记位，看到了几个在印象中课本上没有的标记位，因此记录下来，方便日后查阅。</p><a id="more"></a><h3 id="IP的ECN-显式拥塞通知"><a href="#IP的ECN-显式拥塞通知" class="headerlink" title="IP的ECN(显式拥塞通知)"></a>IP的ECN(显式拥塞通知)</h3><p>ECN使用IP首部的Tos字段最后2位(也称最低有效位)，根据<a href="https://tools.ietf.org/html/rfc3168#section-5">RFC 3168</a>，可以得知这2位分别成为ECT和CE，ECT由发送方来设定是否支持ECN，而CE是由路由器来设定，通知接收方当前拥塞，这也意味着路由器要支持ECN。 ECT和CE有4种不同的组合00、01、10、11分别表示不同的状态。</p><ul><li>  00表示不支持ECN传输(Not-ECT)</li><li>  01和10表示支持ECT传输——ECT(0)、ECT(1)</li><li>  11表示发生拥塞(CE)。</li></ul><h3 id="TCP的ECN"><a href="#TCP的ECN" class="headerlink" title="TCP的ECN"></a>TCP的ECN</h3><p>TCP头中新增三个flag来支持ECN，分别是Nonce Sum(NS)、ECN-Echo(ECE)和Congestion Window Reduced(CWR)。 NS用于防止TCP发送者的数据包标记被意外或恶意改动，而另外2位则是回传拥塞指示。当接收者收到IP报文，发现IP头部的ECN位为11，则会通知上层标记ECE位用于通知发送方减少发送速率。而发送方收到这个标记了ECE位的包后，发送速率减半，同时也会标记CWR位用于通知接收方已经确认阻塞指令。 附一张图： <img src="http://www.hizjlhi.com/2020/05/20200628121725644.png"></p><h3 id="ECN与现有的TCP拥塞控制"><a href="#ECN与现有的TCP拥塞控制" class="headerlink" title="ECN与现有的TCP拥塞控制"></a>ECN与现有的TCP拥塞控制</h3><p>现有的TCP拥塞控制都是在中间路由器丢包之后，TCP协议根据RTO超时来重传丢失的包，但是对于主机之间的TCP连接来说它不知道当前发送的链路正在拥塞，它要等待RTO计时器超时后开始重传报文和降低发送速率，这个RTO计时器超时过程花费个几秒或者十几秒等。(网络波动从轻载-过载-轻载) 而ECN机制可以让TCP发送端能够感知当前链路的拥塞程度，以此通过设置ECE标记来通知对方要降低发送速率(依靠路由器设置ECN位为11)，而不是静静的等待RTO超时再发送数据。</p><h3 id="补充另外几个标记位"><a href="#补充另外几个标记位" class="headerlink" title="补充另外几个标记位"></a>补充另外几个标记位</h3><p>URG:一个正向偏移值，表示在包中的第几个字节开始有紧急数据要处理，直接交给上层协议，<strong>不需要经过缓冲区</strong> PSH:表示需要将收到的数据立即交给上次协议，但是不需要等到整个缓冲区填满，直接上交，<strong>经过缓冲区</strong>。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 杂谈 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>夜谈sync.Mutex</title>
+      <link href="2020/06/17/%E5%A4%9C%E8%B0%88sync-mutex%E4%B8%8Esync-rwmutex/"/>
+      <url>2020/06/17/%E5%A4%9C%E8%B0%88sync-mutex%E4%B8%8Esync-rwmutex/</url>
+      
+        <content type="html"><![CDATA[<p>在上篇了解完<a href="http://www.hizjlhi.com/archives/176">channel中的锁自旋机制</a>后，引起了我对sync包中的mutex和rwmutex这两个锁的兴趣。因此这篇文章打算来探秘一下这两种锁的实现。</p><a id="more"></a><h3 id="Mutex"><a href="#Mutex" class="headerlink" title="Mutex"></a>Mutex</h3><p>mutex有2种操作模式：正常和饥饿。在正常模式下，等待者按FIFO顺序排队，但唤醒的等待者不能马上获取锁，它还要和刚到达的goroutine们竞争，而且刚到的goroutine们有一个优势（它们已经在CPU上运行了）。因此刚唤醒的等待者可能很大几率会竞争失败。在这种情况下，它还会在这个队列中前面继续请求锁，如果请求时间超过1ms都没有就会将这个mutex对象（也就是锁）切换成饥饿模式。 在处于饥饿模式下，在队列最前面的等待者会直接获得这个锁的所有权，而其他刚到的goroutine们也不会尝试去获取锁的所有权，这时候也不会自旋。而是会加入到队列的末尾。 从饥饿模式切回到正常模式，触发条件为：（1）当前获得锁的所有权的等待者发现它是队列种的最后一个。（2）请求锁的时间小于1ms。符合这2种条件，那么当前获得锁的goroutine就会将锁切回正常模式。</p><h4 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h4><p>const (<br>   mutexLocked = 1 &lt;&lt; iota // mutex is locked<br>   mutexWoken //mutex唤醒<br>   mutexStarving //mutex饥饿<br>   mutexWaiterShift = iota //mutex转移<br>   starvationThresholdNs = 1e6 //mutex饥饿阈值<br>)</p><p>mutexLocked = 0001, mutexWoken = 0010, mutexStarving = 0100, mutexWaiterShift = 1000</p><h4 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h4><p>type Mutex struct {<br>   state int32 //当前Mutex的状态，0表示当前为unlocked状态<br>   sema  uint32 //信号量<br>}</p><h4 id="上锁"><a href="#上锁" class="headerlink" title="上锁"></a>上锁</h4><p>上锁这个过程分为fast path 和 slow path。 首先fast path过程十分简单，就是通过原子操作，对mutex.state检查和交换（如果mutex.state==0）</p><p>func (m *Mutex) Lock() {<br>   // Fast path<br>   if atomic.CompareAndSwapInt32(&amp;m.state, 0, mutexLocked) {<br>      if race.Enabled {<br>         race.Acquire(unsafe.Pointer(m))<br>      }<br>      return<br>   }<br>   …..<br>}</p><p>接着如果fast path路径执行不了，说明该mutex.state!=0，于是进入了slow path过程，跟着代码走。</p><p>func (m *Mutex) lockSlow() {<br>   var waitStartTime int64<br>   starving := false<br>   awoke := false //被唤醒标记，关于这个被唤醒标记，个人理解为，当自选到一定次数时，就会达到饥饿状态，那么我这个goroutine不能一直在这<br>   //进行自旋，因此到了饥饿状态，在下一次请求锁时，是一定可以获得锁的所有权的。因此在后面又要判断awoke将mutexWoken位置位0<br>   iter := 0 //自旋次数<br>   old := m.state<br>   for {</p><pre><code>  //如果当前m.state = mutexLocked，通过runtime\_canSpin判断是否可以自旋  //这里面的mutexLockedmutexStarving表示将mutexStarving位置位1，用于判断old是否为饥饿状态  if old&amp;(mutexLockedmutexStarving) == mutexLocked &amp;&amp; runtime\_canSpin(iter) &#123;     //将m.state(old)置位为mutexWoken     if !awoke &amp;&amp; old&amp;mutexWoken == 0 &amp;&amp; old&gt;&gt;mutexWaiterShift != 0 &amp;&amp;        atomic.CompareAndSwapInt32(&amp;m.state, old, oldmutexWoken) &#123;        awoke = true     &#125;     runtime\_doSpin() //自旋     iter++     old = m.state     continue  &#125;  new := old  //如果old的mutexStarving位不为0，那么将new值的mutexLocker位置为1，表示不要取获取一个出于饥饿模式的锁，新来的goroutine要去到队列尾部  if old&amp;mutexStarving == 0 &#123;     new = mutexLocked  &#125;  //如果old的mutexLocked和mutexStarving都不为0，那么说明当前已经上锁而且还处于饥饿状态，  //将m.state的饥饿阈值+1  if old&amp;(mutexLockedmutexStarving) != 0 &#123;     new += 1 &lt;&lt; mutexWaiterShift  &#125;  //starving = true 且 old的mutexLocked位不为0，将new值的mutexStarving位置位1  if starving &amp;&amp; old&amp;mutexLocked != 0 &#123;     new = mutexStarving  &#125;  if awoke &#123;     //如果awoke为true，说明是被唤醒。     if new&amp;mutexWoken == 0 &#123;        throw(&quot;sync: inconsistent mutex state&quot;)     &#125;     //重置mutexWoken位为0     new &amp;^= mutexWoken  &#125;  //进行原子操作，可能要和其他刚到的goroutine们竞争  if atomic.CompareAndSwapInt32(&amp;m.state, old, new) &#123;     //如果old的mutexLocked位=0，说明抢锁成功     if old&amp;(mutexLockedmutexStarving) == 0 &#123;        break //正常模式抢锁成功，直接退出     &#125;     //饥饿/正常模式抢锁     queueLifo := waitStartTime != 0 第一次 queue 一定为false     if waitStartTime == 0 &#123;        waitStartTime = runtime\_nanotime() //获取等待时间     &#125;     //如果queueLifo为true，将当前goroutine调到queue最前面     runtime\_SemacquireMutex(&amp;m.sema, queueLifo, 1)     starving = starving  runtime\_nanotime()-waitStartTime &gt; starvationThresholdNs //当前waitStartTime是否大于1ms     old = m.state     if old&amp;mutexStarving != 0 &#123;        //如果是饥饿模式        if old&amp;(mutexLockedmutexWoken) != 0  old&gt;&gt;mutexWaiterShift == 0 &#123;           throw(&quot;sync: inconsistent mutex state&quot;)        &#125;        delta := int32(mutexLocked - 1&lt;&lt;mutexWaiterShift)        //饥饿模式变回正常模式        if !starving  old&gt;&gt;mutexWaiterShift == 1 &#123;           delta -= mutexStarving        &#125;        atomic.AddInt32(&amp;m.state, delta)//更新，完成        break     &#125;     awoke = true //不是饥饿模式，又抢锁失败，重新发起抢锁竞争     iter = 0  &#125; else &#123;     old = m.state //重新发起竞争  &#125;</code></pre><p>   }<br>}</p><p>上锁过程尤其要注意slow path过程，首先它先判断当前模式是否为饥饿模式，如果是饥饿模式不让自旋。接着自旋后面是判断计算new的值分3种情况。接着就进行CAS原子操作，也分几种情况，一种是正常/饥饿模式抢锁失败，另一种是正常/饥饿模式抢锁成功，具体流程结合上面代码理解。</p><h4 id="解锁"><a href="#解锁" class="headerlink" title="解锁"></a>解锁</h4><p>解锁过程相对于上锁过程比较简洁</p><p>func (m *Mutex) Unlock() {</p><p>   // 将m.state中的mutexLocked位置位0<br>   new := atomic.AddInt32(&amp;m.state, -mutexLocked)<br>   if new != 0 {<br>      m.unlockSlow(new)<br>   }<br>}</p><p>func (m *Mutex) unlockSlow(new int32) {<br>   if (new+mutexLocked)&amp;mutexLocked == 0 {<br>      throw(“sync: unlock of unlocked mutex”)<br>   }<br>   //查看new中的mutexStarving是否位0<br>   if new&amp;mutexStarving == 0 {<br>      old := new<br>      for {<br>         //如果没有goroutine在等待锁，那么直接return<br>         if old&gt;&gt;mutexWaiterShift == 0  old&amp;(mutexLockedmutexWokenmutexStarving) != 0 {<br>            return<br>         }<br>         new = (old - 1&lt;&lt;mutexWaiterShift)  mutexWoken<br>         if atomic.CompareAndSwapInt32(&amp;m.state, old, new) {<br>            runtime_Semrelease(&amp;m.sema, false, 1)<br>            return<br>         }<br>         old = m.state<br>      }<br>   } else {<br>      //释放信号量唤醒在等待的goroutine<br>      runtime_Semrelease(&amp;m.sema, true, 1)<br>   }<br>}</p><p>总结 sync.Mutex的lock和unlock理解起来还是有点难度，其中涉及了很多位操作来判断当前mutex出于哪一种状态来做出相应的操作。因此总的来说要慢慢理解，有空时我会更新一副大致流程图出来，方便理解。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>夜谈map</title>
+      <link href="2020/06/16/%E5%A4%9C%E8%B0%88map/"/>
+      <url>2020/06/16/%E5%A4%9C%E8%B0%88map/</url>
+      
+        <content type="html"><![CDATA[<p>哈希表是几乎所有语言都会有的一个数据结构，而Go中也有着map的数据结构，但是在遍历map却是无序的，而且在其里面涉及了内存对齐、哈希冲突等知识点，这是值得去了解。</p><a id="more"></a><h3 id="map结构"><a href="#map结构" class="headerlink" title="map结构"></a>map结构</h3><h4 id="hmap"><a href="#hmap" class="headerlink" title="hmap"></a>hmap</h4><p>在Go中hmap是map的主要结构体，在这主要关注字段B、buckets、oldbuckets。</p><p>type hmap struct {<br>   count     int // 元素个数，len()<br>   flags     uint8<br>   B         uint8  //  2^B = 桶的个数<br>   noverflow uint16 // 溢出桶的大概数量<br>   hash0     uint32 // hash seed 哈希函数的”种子“，</p><p>   buckets    unsafe.Pointer // 指向buckets数组，大小为2^B<br>   oldbuckets unsafe.Pointer // 旧buckets，发生在bucket需要增大的情况下<br>   nevacuate  uintptr //已经搬迁了的桶数–搬迁进度<br>   extra *mapextra<br>}</p><p>flag标记位</p><p>// flags<br>iterator     = 1 // 当前有迭代器在使用buckets<br>oldIterator  = 2 // 当前有迭代器在使用oldbuckets<br>hashWriting  = 4 //当前有goroutine在对map进行写操作<br>sameSizeGrow = 8 //等量增长</p><h4 id="mapextra"><a href="#mapextra" class="headerlink" title="mapextra"></a>mapextra</h4><p>type mapextra struct {<br>   overflow    *[]*bmap<br>   oldoverflow *[]*bmap</p><p>   // nextOverflow holds a pointer to a free overflow bucket.<br>   nextOverflow *bmap<br>}</p><h4 id="bmap"><a href="#bmap" class="headerlink" title="bmap"></a>bmap</h4><p>在hmap中的buckets字段是个指针，其指向了bmap，buckerCnt = 1&lt;&lt;3 = 8。另外bmap结构中存放的是tophash（高位哈希）,它包括此存储桶的每个键的哈希值的最高位。 Tip:在bmap中8个key-value的排序，是8个key紧接着8个value这样的排序，这里就引出了一个<strong>内存对齐</strong>的概念，如果有兴趣请移步此<a href="https://www.bilibili.com/video/BV1Ja4y1i7AF">视频</a>了解。</p><p>const {<br>   // Maximum number of key/elem pairs a bucket can hold.<br>   bucketCntBits = 3<br>   bucketCnt     = 1 &lt;&lt; bucketCntBits<br>}</p><p>type bmap struct {<br>   tophash [bucketCnt]uint8<br>}</p><p>但是在查阅Google之后，Go在编译期间会给这个bmap加料，这便解决了我的一个疑惑：它里面的overflow字段哪来的。 加料之后的bmap：</p><p>type bmap struct {<br>   topbits  [8]uint8<br>   keys     [8]keytype<br>   values   [8]valuetype<br>   pad      uintptr<br>   overflow uintptr<br>}</p><h4 id="hiter"><a href="#hiter" class="headerlink" title="hiter"></a>hiter</h4><p>哈希迭代器，从字段和Google查询中，不难判断，这个hiter应该时与在hmap扩容时，对map的遍历相关联的。</p><p>type hiter struct {<br>   key         unsafe.Pointer // key字段<br>   elem        unsafe.Pointer  //value字段<br>   t           *maptype<br>   h           *hmap<br>   buckets     unsafe.Pointer // 初始化时指向的buckets<br>   bptr        *bmap          // 当前指向的buckets<br>   overflow    *[]*bmap<br>   oldoverflow *[]*bmap<br>   startBucket uintptr        // 开始遍历时的编号<br>   offset      uint8          // 偏移量<br>   wrapped     bool           // 是否已经从头开始遍历<br>   B           uint8          //hmap中的B<br>   i           uint8<br>   bucket      uintptr<br>   checkBucket uintptr<br>}</p><h4 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h4><p><img src="http://www.hizjlhi.com/2020/06/20200622172122708.png">  </p><h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>在处理哈希函数时，一定会遇到哈希冲突的问题，一般的解决方法是开放地址法和拉链法。而这里Go中就采用了拉链法，在编译期间给bmap后面增加了一个字段overflow来连接着产生哈希冲突的bmap。另外bmap中key和value的排放位置也十分讲究，这里就引出了这个内存对齐的概念就不详细讲述。</p><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>makemap返回的也是一个*hmap</p><p>func makemap(t *maptype, hint int, h *hmap) *hmap {<br>   mem, overflow := math.MulUintptr(uintptr(hint), t.bucket.size)<br>   if overflow  mem &gt; maxAlloc {<br>      hint = 0<br>   }</p><p>   // 初始化 Hmap<br>   if h == nil {<br>      h = new(hmap)<br>   }<br>   // 获取一个随机哈希种子<br>   h.hash0 = fastrand()</p><p>   // 根据hint，计算B<br>   B := uint8(0)<br>   for overLoadFactor(hint, B) {<br>      B++<br>   }<br>   h.B = B</p><p>   // 创建buckets<br>   if h.B != 0 {<br>      var nextOverflow *bmap<br>      h.buckets, nextOverflow = <strong>makeBucketArray</strong>(t, h.B, nil)<br>      if nextOverflow != nil {<br>         h.extra = new(mapextra)<br>         h.extra.nextOverflow = nextOverflow<br>      }<br>   }</p><p>   return h<br>}</p><h3 id="读写操作"><a href="#读写操作" class="headerlink" title="读写操作"></a>读写操作</h3><h4 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h4><p>访问操作主要有2种函数分别是：mapaccess1和mapaccess2。俩者的区别是前一个是不到bool类型的返回，后一个是带bool类型的返回。</p><p>a := A[‘A’] //mapaccess1<br>a, ok := A[‘A’] //mapaccess2</p><p>流程：先根据key计算hash，然后计算获得所对应的桶地址b。接着对桶进行遍历。</p><p>func mapaccess1(t *maptype, h *hmap, key unsafe.Pointer) unsafe.Pointer {<br>   ………<br>   alg := t.key.alg<br>   hash := alg.hash(key, uintptr(h.hash0)) // 计算hash<br>   m := bucketMask(h.B) //返回 1&lt;&lt;B - 1<br>   //计算桶的地址<br>   b := (*bmap)(add(h.buckets, *<em>(hash &amp; m)**\</em>uintptr(t.bucketsize)))<br>   top := tophash(hash) //计算高位的哈希值(tophash)</p><p>bucketloop:<br>   //先从正常桶遍历，再从溢出桶遍历<br>   for ; b != nil; b = b.overflow(t) {<br>      //bucketCnt = 8<br>      for i := uintptr(0); i &lt; bucketCnt; i++ {<br>         if b.tophash[i] != top {<br>            if b.tophash[i] == emptyRest {<br>               break bucketloop<br>            }<br>            continue<br>         }<br>         k := add(unsafe.Pointer(b), dataOffset+i*uintptr(t.keysize))<br>         // 判断是否符合<br>         if alg.equal(key, k) {<br>            // 计算k对于的value地址<br>            e := add(unsafe.Pointer(b), dataOffset+bucketCnt*uintptr(t.keysize)+i*uintptr(t.elemsize))<br>            return e<br>         }<br>      }<br>   }<br>   // 找不到输出nil<br>   return unsafe.Pointer(&amp;zeroVal[0])<br>}</p><p>代码整体来说算是直接。</p><h4 id="写入"><a href="#写入" class="headerlink" title="写入"></a>写入</h4><p>func mapassign(t *maptype, h *hmap, key unsafe.Pointer) unsafe.Pointer {<br>   //计算哈希值和桶的位置<br>   alg := t.key.alg<br>   hash := alg.hash(key, uintptr(h.hash0))<br>   h.flags ^= hashWriting</p><p>again:<br>   bucket := hash &amp; bucketMask(h.B)<br>   if h.growing() { // 判断当前map是否在扩容<br>      growWork(t, h, bucket)<br>   }<br>   b := (*bmap)(unsafe.Pointer(uintptr(h.buckets) + bucket*uintptr(t.bucketsize)))<br>   top := tophash(hash)</p><p>遍历比较桶的hash和key，查找对应的key</p><p>   var inserti *uint8   //索引<br>   var insertk unsafe.Pointer //键<br>   var elem unsafe.Pointer  //值<br>bucketloop:<br>   for {<br>      for i := uintptr(0); i &lt; bucketCnt; i++ {<br>         //判断tophash是否相等<br>         if b.tophash[i] != top {<br>            if isEmpty(b.tophash[i]) &amp;&amp; inserti == nil {<br>               inserti = &amp;b.tophash[i]<br>               insertk = add(unsafe.Pointer(b), dataOffset+i*uintptr(t.keysize))<br>               elem = add(unsafe.Pointer(b), dataOffset+bucketCnt*uintptr(t.keysize)+i*uintptr(t.elemsize))<br>            }<br>            if b.tophash[i] == emptyRest {<br>               break bucketloop<br>            }<br>            continue<br>         }<br>         k := add(unsafe.Pointer(b), dataOffset+i*uintptr(t.keysize))</p><pre><code>     //判断key是否相等     if !alg.equal(key, k) &#123;        continue     &#125;     // 如果当前key已经存在value，则更新     if t.needkeyupdate() &#123;        typedmemmove(t.key, k, key)     &#125;     elem = add(unsafe.Pointer(b), dataOffset+bucketCnt\*uintptr(t.keysize)+i\*uintptr(t.elemsize))     goto done //转到done流程  &#125;  //切换到溢出桶遍历  ovf := b.overflow(t)  if ovf == nil &#123;     break  &#125;  b = ovf</code></pre><p>   }</p><p>如果当前桶满了，就会创建一个newoverflow</p><p>if inserti == nil {<br>   newb := h.newoverflow(t, b)<br>   inserti = &amp;newb.tophash[0]<br>   insertk = add(unsafe.Pointer(newb), dataOffset)<br>   elem = add(insertk, bucketCnt*uintptr(t.keysize))<br>}<br>typedmemmove(t.key, insertk, key)<br>*inserti = top<br>h.count++</p><h4 id="扩容"><a href="#扩容" class="headerlink" title="扩容"></a>扩容</h4><p>由于Go中的map是由哈希表构成，当查找key时，它先定位到某个buckets再定位到其中的key。涉及到哈希表，那么必定会牵扯到哈希表的装载因子。在这里Go是这样定义装载因子。</p><h5 id="扩容条件"><a href="#扩容条件" class="headerlink" title="扩容条件"></a>扩容条件</h5><p>mapassign函数触发扩容条件：</p><ol><li> 当装载因子超过6.5</li><li> 当溢出桶过多时</li></ol><p>触发扩容相关的函数</p><p>//判断装载因子是否超过6.5<br>func overLoadFactor(count int, B uint8) bool {<br>   return count &gt; bucketCnt &amp;&amp; uintptr(count) &gt; loadFactorNum*(bucketShift(B)/loadFactorDen)<br>}</p><p>//溢出桶过多<br>func tooManyOverflowBuckets(noverflow uint16, B uint8) bool {<br>   if B &gt; 15 {<br>      B = 15<br>   }<br>   return noverflow &gt;= uint16(1)&lt;&lt;(B&amp;15)<br>}</p><p>根据触发条件的不同所对应的扩容条件，扩容方式也会不同。第一种是因为元素多，桶少。第二种是因为元素少，桶多，例如当向map不断的插入数据并把他们删除，这会造成溢出桶不断增加，而到了最后溢出桶太多但是元素却很少的情况。</p><h5 id="buckets的搬迁"><a href="#buckets的搬迁" class="headerlink" title="buckets的搬迁"></a>buckets的搬迁</h5><p>hashGrow函数主要是对创建一些溢出桶，具体的搬迁操作位于growWork() 和 evacuate()</p><p>func hashGrow(t *maptype, h *hmap) {<br>   bigger := uint8(1)<br>   if !overLoadFactor(h.count+1, h.B) {<br>      bigger = 0<br>      h.flags = sameSizeGrow<br>   }<br>   //将旧的buckets挂到oldbuckets<br>   oldbuckets := h.buckets<br>   //创建溢出桶<br>   newbuckets, nextOverflow := makeBucketArray(t, h.B+bigger, nil)<br>   //更新标记位<br>   flags := h.flags &amp;^ (iterator  oldIterator)<br>   if h.flags&amp;iterator != 0 {<br>      flags = oldIterator<br>   }</p><p>   h.B += bigger<br>   h.flags = flags<br>   h.oldbuckets = oldbuckets<br>   h.buckets = newbuckets<br>   //更新进度<br>   h.nevacuate = 0<br>   h.noverflow = 0</p><p>   ………<br>}</p><h5 id="evacDst"><a href="#evacDst" class="headerlink" title="evacDst"></a>evacDst</h5><p>evacDst是表示搬迁后的目的地址的一个结构体</p><p>type evacDst struct {<br>   b *bmap          //当前目的buckets<br>   i int            // 指向当前key/value的index b<br>   k unsafe.Pointer // 指向当前key<br>   e unsafe.Pointer // 指向当前value<br>}</p><h5 id="evacuate"><a href="#evacuate" class="headerlink" title="evacuate"></a>evacuate</h5><p>func evacuate(t *maptype, h *hmap, oldbucket uintptr) {<br>   //找出旧的buckets<br>   b := (*bmap)(add(h.oldbuckets, oldbucket*uintptr(t.bucketsize)))<br>   newbit := h.noldbuckets() //计算当前map的存储桶的数量<br>   if !evacuated(b) {</p><pre><code>  //搬迁地址  **var xy \[2\]evacDst**  x := &amp;xy\[0\]  x.b = (\*bmap)(add(h.buckets, oldbucket\*uintptr(t.bucketsize)))  x.k = add(unsafe.Pointer(x.b), dataOffset)  x.e = add(x.k, bucketCnt\*uintptr(t.keysize))  //判断当前是否是增加相等的map大小  if !h.sameSizeGrow() &#123;     y := &amp;xy\[1\]     y.b = (\*bmap)(add(h.buckets, (oldbucket+newbit)\*uintptr(t.bucketsize)))     y.k = add(unsafe.Pointer(y.b), dataOffset)     y.e = add(y.k, bucketCnt\*uintptr(t.keysize))  &#125;  //遍历所有的buckets  for ; b != nil; b = b.overflow(t) &#123;     k := add(unsafe.Pointer(b), dataOffset)   //原key     e := add(k, bucketCnt\*uintptr(t.keysize)) //原value     for i := 0; i &lt; bucketCnt; i, k, e = i+1, add(k, uintptr(t.keysize)), add(e, uintptr(t.elemsize)) &#123;        top := b.tophash\[i\]        //判断当前cell是否为空        if isEmpty(top) &#123;           b.tophash\[i\] = evacuatedEmpty //标志为已经被搬空           continue        &#125;        if top &lt; minTopHash &#123;           throw(&quot;bad map state&quot;)        &#125;        k2 := k        if t.indirectkey() &#123;           k2 = \*((\*unsafe.Pointer)(k2))        &#125;        var useY uint8        if !h.sameSizeGrow() &#123;           //通过计算hash来确认目的地址是前半部分x或者是后半部分y           hash := t.key.alg.hash(k2, uintptr(h.hash0))           if h.flags&amp;iterator != 0 &amp;&amp; !t.reflexivekey() &amp;&amp; !t.key.alg.equal(k2, k2) &#123;              useY = top &amp; 1              top = tophash(hash)           &#125; else &#123;              if hash&amp;newbit != 0 &#123;                 useY = 1              &#125;           &#125;        &#125;        //这里不太理解具体意思       ** b.tophash\[i\] = evacuatedX + useY // evacuatedX + 1 == evacuatedY**        dst := &amp;xy\[useY\]                 // 目的地址        if dst.i == bucketCnt &#123;           dst.b = h.newoverflow(t, dst.b)           dst.i = 0           dst.k = add(unsafe.Pointer(dst.b), dataOffset)           dst.e = add(dst.k, bucketCnt\*uintptr(t.keysize))        &#125;        dst.b.tophash\[dst.i&amp;(bucketCnt-1)\] = top        //迁移key        if t.indirectkey() &#123;           \*(\*unsafe.Pointer)(dst.k) = k2        &#125; else &#123;           typedmemmove(t.key, dst.k, k)        &#125;        //迁移value        if t.indirectelem() &#123;           \*(\*unsafe.Pointer)(dst.e) = \*(\*unsafe.Pointer)(e)        &#125; else &#123;           typedmemmove(t.elem, dst.e, e)        &#125;        dst.i++        dst.k = add(dst.k, uintptr(t.keysize))        dst.e = add(dst.e, uintptr(t.elemsize))     &#125;  &#125;</code></pre><p>   if oldbucket == h.nevacuate {<br>      advanceEvacuationMark(h, t, newbit) //更新搬迁进度<br>   }<br>}</p><p>这里有一个点需要注意，在上述evacuated函数加粗的代码，它定义了xy [2]evacDst，里面只含2个evacDst，同时结合上面所定义的cell的状态，可以推测在搬迁过程中，把原来的buckets看出X，而后来等量扩容的部分看成Y，如下图所示。 <img src="http://www.hizjlhi.com/2020/06/20200626082230923.png"> 正因为如此，在搬迁的过程中，由于所计算的地址可能会跟原来的不同，map的遍历是按顺序遍历的，扩容之后有的key就可能被迁移到溢出桶那边，因此map的遍历是无序的。</p><h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p>map的删除是由mapdelete函数来完成，也是两层循环，从正常桶到溢出桶查找对应的key（查找过程和访问过程类似），删除时先删除key再删除value。如果当前map正在扩容那么删除操作会在扩容之后执行。</p><p>if h.growing() {<br>   growWork(t, h, bucket)<br>}<br>……<br>//将key清零<br>if t.indirectkey() {<br>  *(*unsafe.Pointer)(k) = nil<br>} else if t.key.ptrdata != 0 {<br>  memclrHasPointers(k, t.key.size)<br>}</p><p>e := add(unsafe.Pointer(b), dataOffset+bucketCnt*uintptr(t.keysize)+i*uintptr(t.elemsize))<br>//对value清零<br>if t.indirectelem() {<br>  *(*unsafe.Pointer)(e) = nil<br>} else if t.elem.ptrdata != 0 {<br>  memclrHasPointers(e, t.elem.size)<br>} else {<br>  memclrNoHeapPointers(e, t.elem.size)<br>}<br>……..</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Go使用拉链法来解决哈希碰撞来实现哈希表。哈希值在每一个桶中存储对应的哈希值的前8位，每一个桶只能存放8个key/value，一旦超过，新的key/value会被存储到溢出桶中。之后随着key/value的增加，溢出桶的数量和装载因子也会升高，这时候就会触发扩容机制，对key/value迁移到不同的桶中。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>最长上升子序列</title>
+      <link href="2020/06/15/%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97/"/>
+      <url>2020/06/15/%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97/</url>
+      
+        <content type="html"><![CDATA[<p>理解最长上升子序列的二分法（<a href="https://leetcode-cn.com/problems/longest-increasing-subsequence/">题目</a>）</p><a id="more"></a><p>首先我们要维护数组d[i]来记录当前符合上升子序列的所有下标，len表示上升子序列的长度，那么情况下len=1，dp[i]=nums[0] 对于上升的子序列，分2种情况。第一种情况是最简单的，nums数组里面的数都按升序排列，那么我们只需要将这一部分下标按顺序插进d[i]的尾部，同时len=len+1即可。 第二种情况比较复杂，比如当前我们遍历到第i个元素，当d[len]&gt;num[i]时，说明这时候已经不符合第一种情况，因此我们需要对0~len的区间内找一个数使得d[mid]&lt;nums[i]，然后更新d[mid] = i。请看下图： <img src="http://www.hizjlhi.com/2020/06/20200619085709333.png"> 最后我们只需判断数组d的长度即可。 代码如下：</p><p>func lengthOfLIS(nums []int) int {<br>   dp := make([]int,len(nums))<br>   for i := 0 ; i &lt; len(nums) ; i++ {<br>      dp[i]++<br>   }</p><p>   for i := 0 ; i &lt; len(nums) ; i++ {<br>      for j := 0 ; j &lt; i ; j++ {<br>         if nums[j] &lt; nums[i] {<br>            dp[i] = max(dp[i],dp[j]+1)<br>         }<br>      }<br>   }<br>   return maxs(dp)<br>}</p><p>func max(a,b int) int {<br>   if a &gt; b {<br>      return a<br>   }<br>   return b<br>}</p><p>func maxs(dp []int) int {<br>   max := 0<br>   for i := 0 ; i &lt; len(dp) ; i++ {<br>      if dp[i] &gt; max {<br>         max = dp[i]<br>      }<br>   }<br>   return max<br>}</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>夜谈channel中的自旋锁</title>
+      <link href="2020/06/15/%E5%A4%9C%E8%B0%88channel%E4%B8%AD%E7%9A%84%E8%87%AA%E6%97%8B%E9%94%81/"/>
+      <url>2020/06/15/%E5%A4%9C%E8%B0%88channel%E4%B8%AD%E7%9A%84%E8%87%AA%E6%97%8B%E9%94%81/</url>
+      
+        <content type="html"><![CDATA[<p>在上一篇<a href="http://www.hizjlhi.com/archives/162">channel</a>的文章中，关于channel的基本流程和源码都看了一遍。最近在学习中，忽然发现了一种自旋锁。这让我想到了在channel中是否存在这种原理，使得当一个接收goroutine在当前时刻发现channel中没有数据，此时恰好有个goroutine G1开始向channel中推送数据，那么这个接收goroutine能不能在这等待一个极短的时间，然后G1向channel推送完数据呢。答案是有的。</p><a id="more"></a><h3 id="首先了解几个参数"><a href="#首先了解几个参数" class="headerlink" title="首先了解几个参数"></a>首先了解几个参数</h3><p>const (<br>   active_spin     = 4  //主动自旋<br>   active_spin_cnt = 30<br>   passive_spin    = 1  //被动自旋<br>)</p><p>关于active_spin_cnt目前没有找到相关解释，后面找到会补上。</p><h3 id="hcan-lock"><a href="#hcan-lock" class="headerlink" title="hcan.lock"></a>hcan.lock</h3><p>关键代码如下：</p><p>func lock(l *mutex) {<br>   …….<br>  ** //  在单核CPU上没有自旋**<br> <strong>// 在多核CPU上存在自旋且不断的进行ACTIVE_SPIN的尝试</strong><br>   spin := 0<br>   if ncpu &gt; 1 {<br>      spin = active_spin<br>   }<br>Loop:<br>   for i := 0; ; i++ {<br>      v := atomic.Loaduintptr(&amp;l.key)<br>      if v&amp;locked == 0 {<br>         // 如果没有锁，尝试去锁上（抢占）<br>         if atomic.Casuintptr(&amp;l.key, v, vlocked) {<br>            return<br>         }<br>         i = 0<br>      }<br>      if i &lt; spin {<br>         procyield(active_spin_cnt) //主动自旋<br>      } else if i &lt; spin+passive_spin {<br>         osyield()//被动自旋<br>      } else {<br>         //如果自旋之后还没获得，那么就插入到一个等待锁的队列中<br>         for {<br>            gp.m.nextwaitm = muintptr(v &amp;^ locked)<br>            if atomic.Casuintptr(&amp;l.key, v, uintptr(unsafe.Pointer(gp.m))locked) {<br>               break<br>            }<br>            v = atomic.Loaduintptr(&amp;l.key)<br>            if v&amp;locked == 0 {<br>               continue Loop<br>            }<br>         }<br>         if v&amp;locked != 0 {<br>            // Queued. Wait.<br>            semasleep(-1)<br>            i = 0<br>         }<br>      }<br>   }<br>}</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于channel的自旋锁大致就这些，无论它如果操作，最终都是有一段自旋的短暂时间。这个时间取决于是主动还是被动（i &lt; spin 或者 i &lt; spin+passive_spin）。同时需要注意在channel中的lock字段是一个名为key的uinptr类型的值，在上锁或者解锁时，都是通过对其进行原子操作来改变其的值。因此由于这种机制，在这种情况下，goroutine就省去了从Grunning到Gopark再到Gready的过程。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>LC第193周</title>
+      <link href="2020/06/14/lc%E7%AC%AC193%E5%91%A8/"/>
+      <url>2020/06/14/lc%E7%AC%AC193%E5%91%A8/</url>
+      
+        <content type="html"><![CDATA[<a id="more"></a><h3 id="不同整数的最少数目"><a href="#不同整数的最少数目" class="headerlink" title="不同整数的最少数目"></a>不同整数的最少数目</h3><p>题目：给你一个整数数组 <code>arr</code> 和一个整数 <code>k</code> 。现需要从数组中恰好移除 <code>k</code> 个元素，请找出移除后数组中不同整数的最少数目。 该题刚开始一眼看过去就明白要用到哈希表。因此我们只需要把每个数出现的次数求出接着进行从小到大排序。然后开始遍历已经排序好的哈希表，中间要用变量存放当前已经删去的个数（要小于等于k）和一个表示当前有几种数字（这个变量要随着每次删去而变化），当当前已经删去的个数=k时，break。</p><h3 id="制作-m-束花所需的最少天数"><a href="#制作-m-束花所需的最少天数" class="headerlink" title="制作 m 束花所需的最少天数"></a>制作 m 束花所需的最少天数</h3><p>题目：给你一个整数数组 bloomDay，以及两个整数 m 和 k 。现需要制作 m 束花。制作花束时，需要使用花园中 相邻的 k 朵花 。花园中有 n 朵花，第 i 朵花会在 bloomDay[i] 时盛开，恰好 可以用于 一束 花中。请你返回从花园中摘 m 束花需要等待的最少的天数。如果不能摘到 m 束花则返回 -1 。 看了该题的题解，看到很多人用到了二分，但在那时候没想到。因此之后思考了很久，才把这道题的马甲给拨开。 <strong>这道题可以在一定区间内，查找一个符合题目意思的可以制作出m束花的最小的数。同时这个查找条件还有表达一个意思，那就是如果x天可以制作出m束花，那么大于x天也一定可以制作出m束花。</strong></p><p>func minDays(bloomDay []int, m int, k int) int {<br>   if k*m &gt; len(bloomDay){<br>      return -1<br>   }<br>   l := 0<br>   r := int(math.Pow10(9))<br>   for l &lt; r {<br>      mid := (l+r) / 2<br>      if c(bloomDay, mid, m, k) {<br>         r = mid<br>      }else {<br>         l = mid +1<br>      }<br>   }<br>   return l<br>}</p><p>func c(bloomDay []int,mid int, m int, k int) bool{<br>   cnt := 0//当前第i束花种有几朵花朵<br>   for i := 0 ; i &lt; len(bloomDay) ; i++ {<br>      if bloomDay[i] &lt;= mid {<br>         cnt++<br>      }else{<br>         cnt = 0<br>      }<br>      if cnt == k {<br>         cnt = 0<br>         m -= 1<br>      }<br>      if m == 0 {<br>         return true<br>      }<br>   }<br>   return false<br>}</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Goroutine的状态</title>
+      <link href="2020/06/13/goroutine%E7%9A%84%E7%8A%B6%E6%80%81/"/>
+      <url>2020/06/13/goroutine%E7%9A%84%E7%8A%B6%E6%80%81/</url>
+      
+        <content type="html"><![CDATA[<p>Goroutine status，一个Goroutine从生到死，一共有8种状态，2个GC状态。</p><a id="more"></a><h3 id="Gidle"><a href="#Gidle" class="headerlink" title="Gidle"></a>Gidle</h3><p>表示该goroutine已经被分配，但是尚未初始化。_Gidle = 0</p><h3 id="Grunnable"><a href="#Grunnable" class="headerlink" title="Grunnable"></a>Grunnable</h3><p>表示该goroutine正在排队（在等待运行队列），尚未执行用户代码，还没拥有stack。_Grunnable=1</p><h3 id="Grunning"><a href="#Grunning" class="headerlink" title="Grunning"></a>Grunning</h3><p>表示该goroutine正在运行，已经和M、P配对成功，拥有自己的stack。_Grunning=2</p><h3 id="Gsyscall"><a href="#Gsyscall" class="headerlink" title="Gsyscall"></a>Gsyscall</h3><p>表示该goroutine正在执行系统调用，不执行用户代码，拥有自己的堆栈，不在run queue。它被分配一个M。_Gsyscall=3</p><h3 id="Gwaiting"><a href="#Gwaiting" class="headerlink" title="Gwaiting"></a>Gwaiting</h3><p>表示该goroutine被阻塞，不执行用户代码，不在run queue。_Gwaiting=4</p><h3 id="Gmoribund-unused"><a href="#Gmoribund-unused" class="headerlink" title="Gmoribund_unused"></a>Gmoribund_unused</h3><p>这个本人尚不清楚用处。_Gmoribund_unused=5</p><h3 id="Gdead"><a href="#Gdead" class="headerlink" title="Gdead"></a>Gdead</h3><p>表示该goroutine还没使用，可以刚刚退出、处于空闲列表或者刚刚被初始化。不执行用户代码，可能有stack。_Gdead=6</p><h3 id="Genqueue-unused"><a href="#Genqueue-unused" class="headerlink" title="Genqueue_unused"></a>Genqueue_unused</h3><p>表示当前未使用。_Genqueue_unused=7</p><h3 id="Gcopystack"><a href="#Gcopystack" class="headerlink" title="Gcopystack"></a>Gcopystack</h3><p>表示该goroutine的stack正在复制扩容。_Gcopystack=8</p><h3 id="Gscan与Gscanning"><a href="#Gscan与Gscanning" class="headerlink" title="Gscan与Gscanning"></a>Gscan与Gscanning</h3><p>表示GC正在扫描的堆栈。与Gscan不同，Gscanning是短暂的阻塞一下g，这对应了Go的GC的发展路线，从起初的STW到后面的引入混合写屏障的三色标记。而Gscan会让当前的goroutine停止。</p><p>_Gscan         = 0x1000<br>_Gscanrunnable = _Gscan + _Grunnable // 0x1001<br>_Gscanrunning  = _Gscan + _Grunning  // 0x1002<br>_Gscansyscall  = _Gscan + _Gsyscall  // 0x1003<br>_Gscanwaiting  = _Gscan + _Gwaiting  // 0x1004</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>夜谈Channel</title>
+      <link href="2020/06/13/%E5%A4%9C%E8%B0%88channel/"/>
+      <url>2020/06/13/%E5%A4%9C%E8%B0%88channel/</url>
+      
+        <content type="html"><![CDATA[<p>夜深人静……..</p><a id="more"></a><h3 id="chan结构"><a href="#chan结构" class="headerlink" title="chan结构"></a>chan结构</h3><p>type hchan struct {<br>   qcount   uint           // buffer的总数据量<br>   dataqsiz uint           // circular(圆) queue的大小（可以理解为环形链表）<br>   buf      unsafe.Pointer // 一个指向buffer某个数据的指针<br>   elemsize uint16<br>   closed   uint32<br>   elemtype *_type // element type<br>   sendx    uint   // 已发送的索引位置的下标<br>   recvx    uint   // 已接受的索引位置的下标<br>   recvq    waitq  // 接收队列<br>   sendq    waitq  // 发送队列<br>   lock mutex<br>}</p><p>type waitq struct {<br>   first *sudog //sudog表示一个在等待队列的g<br>   last  *sudog<br>}</p><h3 id="makechan"><a href="#makechan" class="headerlink" title="makechan"></a>makechan</h3><p>makechan里面主要是对hchan、buffer等一些状态检测和调用mallocgc函数分配内存等。不过值得主要的地方是最后return的是一个*hchan。因此在平常使用channel是依据指针操作的，而不是值的复制。</p><h3 id="chan-send"><a href="#chan-send" class="headerlink" title="chan send"></a>chan send</h3><h4 id="初始"><a href="#初始" class="headerlink" title="初始"></a>初始</h4><p>func chansend1(c *hchan, elem unsafe.Pointer) {<br>   chansend(c, elem, <strong>true</strong>, getcallerpc())<br>}</p><p>这里主要得知block字段都是以true值向下转递。</p><p>func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {}</p><p>c表示某个chan，ep表示发送数据的地址，block表示是否为阻塞，callerpc表示调用地址，通过getcallerpc函数获取，返回的是一个程序的PC地址。同时其还有一个孪生函数getcallersp，返回的是一个函数的SP地址。</p><h4 id="判断状态"><a href="#判断状态" class="headerlink" title="判断状态"></a>判断状态</h4><p>1、如果c为nil，是非阻塞状态直接返回false。否则通过gopark函数去永远关闭goroutine。这里提醒一句在golang中基本的channel的读写都是阻塞的。如果要非阻塞，可以在select中加入defalut语句。</p><p>if c == nil {<br>   if !block {<br>      return false<br>   }<br>   gopark(nil, nil, waitReasonChanSendNilChan, traceEvGoStop, 2)<br>   throw(“unreachable”)<br>}</p><p>2、这里有点绕。个人见解为，当c不为nil和非阻塞时，要判断当前channel是否为关闭状态，因此channel可以在一瞬间就关闭了。同时如果buffer中没有数据和没有接收者就返回false。</p><p>if !block &amp;&amp; c.closed == 0 &amp;&amp; ((c.dataqsiz == 0 &amp;&amp; c.recvq.first == nil)<br>   (c.dataqsiz &gt; 0 &amp;&amp; c.qcount == c.dataqsiz)) {<br>   return false<br>}</p><h4 id="加锁、添加数据"><a href="#加锁、添加数据" class="headerlink" title="加锁、添加数据"></a>加锁、添加数据</h4><p>3、加锁，判断channel是否关闭。这里结合第2步可得知，c.closed = 0 表示该channel没有被关闭，而c.closed != 0 表示channel已经被关闭。</p><p>lock(&amp;c.lock)</p><p>if c.closed != 0 {<br>   unlock(&amp;c.lock)<br>   panic(plainError(“send on closed channel”))<br>}</p><p>4、从接收队列中取出一个接收者通过send函数发送数据</p><p>if sg := c.recvq.dequeue(); sg != nil {<br>   send(c, sg, ep, func() { unlock(&amp;c.lock) }, 3)<br>   return true<br>}</p><p>func send(c *hchan, sg *sudog, ep unsafe.Pointer, unlockf func(), skip int) {<br>   ………<br>   if sg.elem != nil {<br>      sendDirect(c.elemtype, sg, ep)<br>      sg.elem = nil<br>   }<br>   gp := sg.g<br>   unlockf()<br>   gp.param = unsafe.Pointer(sg)<br>   if sg.releasetime != 0 {<br>      sg.releasetime = cputicks()<br>   }<br>   goready(gp, skip+1)<br>}</p><p>先说下send函数的参数，c表示某个channel，sg表示某个goroutine接收者，ep表示要发送的数据，unlockf表示一个解锁channel的函数，skip字面意思是跳跃，具体不清楚，个人感觉是跟内存偏移量之类的相关。 具体流程大致为，先判断sg.elem是否为nil，如果不为nil的话，就sendDirect（重定向）到sg的指定位置，这里很好理解，因此sg代表的是一个goroutine，其在堆栈里面必然含有一定的数据，因此要重定向到其堆栈的空内存块存储。之后就通过goready函数将其唤醒，加入到go的调度中。 5、向缓冲区添加数据</p><p>if c.qcount &lt; c.dataqsiz {<br>   qp := chanbuf(c, c.sendx)<br>   if raceenabled {<br>      raceacquire(qp)<br>      racerelease(qp)<br>   }<br>   typedmemmove(c.elemtype, qp, ep)<br>   c.sendx++<br>   if c.sendx == c.dataqsiz {<br>      c.sendx = 0<br>   }<br>   c.qcount++<br>   unlock(&amp;c.lock)<br>   return true<br>}</p><p>6、当缓冲区满时 对于非阻塞channel，直接返回false</p><p>if !block {<br>   unlock(&amp;c.lock)<br>   return false<br>}</p><p>对于阻塞channel，挂起goroutine并将其抽象成sudog放进发送队列中</p><p>gp := getg()<br>mysg := acquireSudog()<br>mysg.releasetime = 0<br>if t0 != 0 {<br>   mysg.releasetime = -1<br>}<br>mysg.elem = ep<br>mysg.waitlink = nil<br>mysg.g = gp<br>mysg.isSelect = false<br>mysg.c = c<br>gp.waiting = mysg<br>gp.param = nil<br><strong>c.sendq.enqueue(mysg)</strong><br>goparkunlock(&amp;c.lock, waitReasonChanSend, traceEvGoBlockSend, 3)</p><h4 id="标记可达"><a href="#标记可达" class="headerlink" title="标记可达"></a>标记可达</h4><p>7、通过keepAlive函数把发送数据ep标记为可达，防止gc。同时清理工作现场。</p><p>KeepAlive(ep)</p><p>// someone woke us up.<br>if mysg != gp.waiting {<br>   throw(“G waiting list is corrupted”)<br>}<br>gp.waiting = nil<br>if gp.param == nil {<br>   if c.closed == 0 {<br>      throw(“chansend: spurious wakeup”)<br>   }<br>   panic(plainError(“send on closed channel”))<br>}<br>gp.param = nil<br>if mysg.releasetime &gt; 0 {<br>   blockevent(mysg.releasetime-t0, 2)<br>}<br>mysg.c = nil<br>releaseSudog(mysg)<br>return true</p><h3 id="chan-recv"><a href="#chan-recv" class="headerlink" title="chan recv"></a>chan recv</h3><p>代码与chan send流程大致相同但具体细节方面不同，不再多述。</p><h3 id="chan-close"><a href="#chan-close" class="headerlink" title="chan close"></a>chan close</h3><p>主要是对reader和wirter进行关闭</p><p>// release all readers<br>//glist就是存放g的列表<br>for {<br>   sg := c.recvq.dequeue()<br>   if sg == nil {<br>      break<br>   }<br>   if sg.elem != nil {<br>      typedmemclr(c.elemtype, sg.elem)//这里可能就是对channel还存放的数据进行操作<br>      sg.elem = nil<br>   }<br>   if sg.releasetime != 0 {<br>      sg.releasetime = cputicks()<br>   }<br>   gp := sg.g<br>   gp.param = nil<br>   glist.push(gp)<br>}</p><p>// release all writers (they will panic)<br>for {<br>   sg := c.sendq.dequeue()<br>   if sg == nil {<br>      break<br>   }<br>   sg.elem = nil<br>   if sg.releasetime != 0 {<br>      sg.releasetime = cputicks()<br>   }<br>   gp := sg.g<br>   gp.param = nil<br>   glist.push(gp)<br>}</p><p> </p><h3 id="race0-go与race-go"><a href="#race0-go与race-go" class="headerlink" title="race0.go与race.go"></a>race0.go与race.go</h3><p>在channel的代码上出现了很多调用race0.go里面的方法，个人百度了一下从官网上找到了相关的解释为这是一个go tool chain。详情请移步<a href="https://blog.golang.org/race-detector">这里</a>。一般情况下由于raceenabled为false其不会执行里面的函数。</p><h3 id="写屏障"><a href="#写屏障" class="headerlink" title="写屏障"></a>写屏障</h3><p>在channel分别出现了2个不同的写屏障方法分别是typeBitsBulkBarrier()和bulkBarrierPreWrite()。 typeBitsBulkBarrier()：出现在recvDirect()和sendDirect()中，是对每个指针复制到另外一个指针执行写屏障(这方面理解不太清楚，正确理解请自行Google)。个人理解是当接受/发送数据时，当前goroutine正在运行，而GC已经把所用到的对象已经关联起来，如果这时不执行写屏障，那么在下一次GC中所接收/发送的数据就会被清除。 bulkBarrierPreWrite()：出现在closechan()中，对在一定范围的内存中的每个指针执行写屏障。个人理解为当在关闭channel时，如果在channel中还有数据，那么就把它复制到另一块内存中。这也是当关闭管道之后，还能读取数据。</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总的来说channel内部结构是一个环形链表和一个接收者/发送者队列所组成。当对其发送或者接收数据时，都触发写屏障将数据复制到对应的goroutine中或者将数据写进channel中。而当channel中的buffer满时或者没有数据给goroutine接收时，这时候会将g抽象成sudog类存放在revc/send队列中，这里面会涉及到goroutine的暂停和唤醒操作。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>LC第192周</title>
+      <link href="2020/06/12/lc%E7%AC%AC192%E5%91%A8/"/>
+      <url>2020/06/12/lc%E7%AC%AC192%E5%91%A8/</url>
+      
+        <content type="html"><![CDATA[<p>战果2/4，还有一题超时</p><a id="more"></a><h4 id="重新排列数组"><a href="#重新排列数组" class="headerlink" title="重新排列数组"></a>重新排列数组</h4><p>这题是easy，通过对i%2==0来判断是添加start或者mid</p><p>func shuffle(nums []int, n int) []int {<br>   length := len(nums)<br>   mid := length/2<br>   start := 0<br>   res := make([]int, 0)<br>   for i := 0 ; i &lt; length ; i++ {<br>      if i % 2 == 0  i == 0 {<br>         res = append(res, nums[start])<br>         start++<br>      }else {<br>         res = append(res, nums[mid])<br>         mid++<br>      }<br>   }<br>   return res<br>}</p><h4 id="数组中的-k-个最强值"><a href="#数组中的-k-个最强值" class="headerlink" title="数组中的 k 个最强值"></a>数组中的 k 个最强值</h4><p>首先题目给我们重新定义一个排序的方法，因此这道题实际上是考我们排序，所以这题可以用的排序方法有很多种，在一开始做这道题时，我使用了冒泡排序结果超时了，后来转为使用快慢指针的方法来进行排序。</p><p>func getStrongest(arr []int, k int) []int {<br>   var ans = make([]int, k)<br>   sort.Ints(arr)<br>   n := len(arr)<br>   mid := arr[(n-1)/2]<br>   left, right := 0, n - 1<br>   for i := 0; i &lt; k; i++ {<br>      hdiff, ldiff := arr[right]-mid, mid-arr[left]<br>      if hdiff &gt;= ldiff {<br>         ans[i] = arr[right]<br>         right–<br>      } else {<br>         ans[i] = arr[left]<br>         left++<br>      }<br>   }<br>   return ans<br>}</p><h4 id="设计浏览器历史记录"><a href="#设计浏览器历史记录" class="headerlink" title="设计浏览器历史记录"></a>设计浏览器历史记录</h4><p>这一题一定要清楚流程图，如下图： <img src="/2020/06/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6-3.png"><img src="http://www.hizjlhi.com/2020/06/20200608140020927.png"> 因此我第一时间就想到了这应该是跟链表的那种形式，但更好的办法是使用数组的方式来进行类似链表的操作，代码由于过长，感兴趣的可以去<a href="https://github.com/MrVWY/LeetCode-Study">我的GitHub</a>查看  </p><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>仍需加油！！！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>夜谈sync.Map</title>
+      <link href="2020/06/10/%E5%A4%9C%E8%B0%88sync-map/"/>
+      <url>2020/06/10/%E5%A4%9C%E8%B0%88sync-map/</url>
+      
+        <content type="html"><![CDATA[<p>总所周知，当多个goroutine同时操作一个map是不安全的，因此Go提供一个用于并发模型的map。</p><a id="more"></a><h3 id="sync-Map的主要结构"><a href="#sync-Map的主要结构" class="headerlink" title="sync.Map的主要结构"></a>sync.Map的主要结构</h3><h4 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h4><p>type Map struct {<br>   mu Mutex  //锁<br>   read atomic.Value // readOnly 只读数据<br>   dirty map[interface{}]***entry ** //存储数据，允许读写，但要用锁<br>   //未命中次数，主要记录read读取不到数据，加锁去读取dirty中数据的次数<br>   //到达一定次数时，dirty中的数据就会复制到read中，并且会重新再创建一个dirty<br>   misses int<br>}</p><h4 id="readOnly"><a href="#readOnly" class="headerlink" title="readOnly"></a>readOnly</h4><p>// readOnly是用于存储，通过原子操作在map中的read字段<br>type readOnly struct {<br>   m       map[interface{}]*<strong>entry</strong><br>   // 如果为true则表示some key在dirty存在，而readOnly这没有<br>   amended bool<br>}</p><h4 id="entry"><a href="#entry" class="headerlink" title="entry"></a>entry</h4><p>type entry struct {<br>   // 如果p==nil，表示已经被删除，并且m.dirty=nil<br>   // 如果p==expunged，表示已经被删除，但是该键已经不在dirty map中<br>   // 其他情况，表示在m.read和m.dirty都存有数据<br>   p unsafe.Pointer // *interface{}<br>}</p><h3 id="Map结构主要函数"><a href="#Map结构主要函数" class="headerlink" title="Map结构主要函数"></a>Map结构主要函数</h3><h4 id="Load"><a href="#Load" class="headerlink" title="Load()"></a>Load()</h4><p>该函数首先会从read map 中取出数据，如果read中没有所需要的数据就去dirty map 中读取数据</p><p>func (m *Map) Load(key interface{}) (value interface{}, ok bool) {<br>   read, _ := m.read.Load().(readOnly)<br>   e, ok := read.m[key]<br>   if !ok &amp;&amp; read.amended {<br>      m.mu.Lock()<br>      //防止第一次从read取数据时碰上数据正从dirty复制到read中<br>      //因此这里还需再读取一次<br>      read, _ = m.read.Load().(readOnly)<br>      e, ok = read.m[key]<br>      if !ok &amp;&amp; read.amended {<br>         e, ok = m.dirty[key]<br>         //未命中次数+1<br>         m.missLocked()<br>      }<br>      m.mu.Unlock()<br>   }<br>   if !ok {<br>      return nil, false<br>   }<br>   return e.load()//调取entry类所定义的load方法<br>}</p><h4 id="store"><a href="#store" class="headerlink" title="store()"></a>store()</h4><p>该函数主要用于存储数据。具体流程是： 1、先从read map中看看能找到key/value，如果找到通过e.tryStore函数更新数据 2、当从read map中没有找到数据，上锁，对dirty map进行操作。首先先check一下read map状态，如果在read map中找到，但仍是expunged状态，就通过e.unexpungeLocked()将expunged标记为nil，最后再把数据存储到entry中。 3、如果在read map 和dirty map 都没有找到数据，那么就判断read.amended是否为false，如果为false那么就说明在dirty map中没有该数据，因此就通过m.dirtyLocked去新建dirty map。</p><p>func (m *Map) Store(key, value interface{}) {<br>   read, _ := m.read.Load().(readOnly)<br>   if e, ok := read.m[key]; ok &amp;&amp; e.tryStore(&amp;value) {<br>      return<br>   }</p><p>   m.mu.Lock()<br>   read, _ = m.read.Load().(readOnly)<br>   <strong>if e, ok := read.m[key]; ok {<br>      if e.unexpungeLocked() {<br>         m.dirty[key] = e<br>      }<br>      e.storeLocked(&amp;value)</strong><br>   <strong>}</strong> else if e, ok := m.dirty[key]; ok {<br>      e.storeLocked(&amp;value)<br>   } else {<br>      if !read.amended {<br>         m.dirtyLocked()<br>         m.read.Store(readOnly{m: read.m, amended: true})<br>      }<br>      m.dirty[key] = newEntry(value)<br>   }<br>   m.mu.Unlock()<br>}</p><p>另外在源码中，有一处地方需要我们关注一下，请看上面加粗代码，通过观察我们可以发现从read.m[key]取出来的e，居然赋值给了m.dirty[key]，由此可以推测在底层中read map 和dirty map使用的是不同的指针，但是它们指向的都是同一个值。</p><h4 id="Delete"><a href="#Delete" class="headerlink" title="Delete()"></a>Delete()</h4><p>这个函数的代码流程就十分清晰了，首先它是先check一下read map中是否含有该数据如果没有而且read.amended为true，那么就上锁去dirty map中删除该数据，如果在read map中找到就直接删除即可。</p><p>func (m *Map) Delete(key interface{}) {<br>   read, _ := m.read.Load().(readOnly)<br>   e, ok := read.m[key]<br>   if !ok &amp;&amp; read.amended {<br>      m.mu.Lock()<br>      read, _ = m.read.Load().(readOnly)<br>      e, ok = read.m[key]<br>      if !ok &amp;&amp; read.amended {<br>         delete(m.dirty, key)<br>      }<br>      m.mu.Unlock()<br>   }<br>   if ok {<br>      e.delete()<br>   }<br>}</p><h4 id="Range"><a href="#Range" class="headerlink" title="Range()"></a>Range()</h4><p>这个主要用于遍历，通过检查read.amended是否为true，然后去dirty map或者read map遍历，在这就不多述了。</p><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>sync.map原理也不难，主要思想是空间换时间的思路，使用两个map来进行操作实现对锁的操作，一个read map主要用于并发中的读取和**已经存在的写(请看store函数中加粗的部分)**，一个dirty map主要用于读写。但有几个关键的状态还需注意一下分别是read.amended和expunded，其中read.amended状态量决定了是对哪个map。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>夜谈Go中Context</title>
+      <link href="2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/"/>
+      <url>2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/</url>
+      
+        <content type="html"><![CDATA[<p>context称作“上下文”，是environment的snapshot。</p><a id="more"></a><p><img src="http://www.hizjlhi.com/2020/06/20200609041455723.png"></p><h3 id="Context-Interface"><a href="#Context-Interface" class="headerlink" title="Context Interface"></a>Context Interface</h3><p>type Context interface {<br>  //超过时间，该context便死亡<br>  Deadline() (deadline time.Time, ok bool)<br>  //当context结束时，返回一个channel<br>  Done() &lt;-chan struct{}<br>  //context错误<br>  Err() error<br>  //返回上下文所关联的key/value值<br>  Value(key interface{}) interface{}<br>}</p><h3 id="emptyCtx"><a href="#emptyCtx" class="headerlink" title="emptyCtx"></a>emptyCtx</h3><p>这个emptyCtx是一个int类型，它实现了Context Interface里面的所有方法，但是都返回空值，只有一个String()方法来判断其类型来进行相应输出。</p><p>type emptyCtx int</p><p>func (*emptyCtx) Deadline() (deadline time.Time, ok bool) {<br>   return<br>}</p><p>func (*emptyCtx) Done() &lt;-chan struct{} {<br>   return nil<br>}</p><p>func (*emptyCtx) Err() error {<br>   return nil<br>}</p><p>func (*emptyCtx) Value(key interface{}) interface{} {<br>   return nil<br>}</p><p>func (e *emptyCtx) String() string {<br>   switch e {<br>   case background:<br>      return “context.Background”<br>   case todo:<br>      return “context.TODO”<br>   }<br>   return “unknown empty Context”<br>}</p><p>同时background和todo也是基于这个emptyCtx类new出来的，了解过background的都知道，在使用context时都是先context.Background()一个context来进行后继操作。</p><p>var (<br>   background = new(emptyCtx)<br>   todo       = new(emptyCtx)<br>)</p><p>而background和todo的区别在于，todo是用于你不清楚要使用哪个上下文的情况下。而background通常是由main函数使用，说白了background就是所有context的root，不能被cancel。</p><h3 id="CancelFunc"><a href="#CancelFunc" class="headerlink" title="CancelFunc"></a>CancelFunc</h3><p>这个类定义了一个可以返回的cancel函数，它可以cancel当前的context和它的子context，并且把自己从父类的context删除。它提供三个可以cancel的方法。</p><h4 id="WithCancel"><a href="#WithCancel" class="headerlink" title="WithCancel"></a>WithCancel</h4><p>这个方法主要是当上下文操作完成时立即调用结束该context链。当调用父类的cancel时，父类和其子节点就会一起Done()。</p><p>func WithCancel(parent Context) (ctx Context, cancel CancelFunc) {<br>   //创建一个新context节点<br>   c := newCancelCtx(parent)<br>   //创建context的链路，其主要是创建一个map来存储context的子节点<br>   propagateCancel(parent, &amp;c)<br>   return &amp;c, func() { c.cancel(true, Canceled) }<br>}</p><p>但是不同的context子类是分布在不同的goroutine，那么它是如何实现当父类Done()，子节点接着Done()。通常首先想到的方法时子类监听一个channel传过来的关闭信号，然后子类收到这个关闭信号之后就结束自身。但具体如何实现的，请看下图。 <img src="http://www.hizjlhi.com/2020/06/20200609041008165.png"></p><h4 id="WithDeadline"><a href="#WithDeadline" class="headerlink" title="WithDeadline"></a>WithDeadline</h4><p>这个方法主要是当超过一定时间后，context就自行结束自己和其子节点。同时它也返回一个可以主动cancel的方法</p><p>func WithDeadline(parent Context, d time.Time) (Context, CancelFunc) {<br>   ……..<br>   c := &amp;timerCtx{<br>      cancelCtx: newCancelCtx(parent),<br>      deadline:  d,<br>   }<br>   //创建context的链路，其主要是创建一个map来存储context的子节点<br>   propagateCancel(parent, c)<br>   dur := time.Until(d)<br>   if dur &lt;= 0 {<br>      c.cancel(true, DeadlineExceeded) // deadline has already passed<br>      return c, func() { c.cancel(false, Canceled) }<br>   }<br>   c.mu.Lock()<br>   defer c.mu.Unlock()<br>   if c.err == nil {<br>      c.timer = time.AfterFunc(dur, func() {<br>         c.cancel(true, DeadlineExceeded)<br>      })<br>   }<br>   return c, func() { c.cancel(true, Canceled) }<br>}</p><h4 id="WithTimeout"><a href="#WithTimeout" class="headerlink" title="WithTimeout"></a>WithTimeout</h4><p>这个方法也是一个超时控制，内部其实是引用了WithDeadline方法</p><p>func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc) {<br>   return WithDeadline(parent, time.Now().Add(timeout))<br>}</p><h3 id="canceler"><a href="#canceler" class="headerlink" title="canceler"></a>canceler</h3><p>canceler是一个具有类似于取消器的接口（A canceler is a context type that can be canceled directly），它定义了二个方法。</p><p>type canceler interface {<br>   cancel(removeFromParent bool, err error)<br>   Done() &lt;-chan struct{}<br>}</p><h3 id="cancelCtx"><a href="#cancelCtx" class="headerlink" title="cancelCtx"></a>cancelCtx</h3><p>首先cancelCtx定义了一个结构体，其继承context接口，同时重点注意加粗部分。</p><p>type cancelCtx struct {<br>   Context</p><p>   mu       sync.Mutex            // protects following fields<br>   done     chan struct{}         // created lazily, closed by first cancel call<br>  ** children map[canceler]struct{}** // set to nil by the first cancel call<br>   err      error                 // set to non-nil by the first cancel call<br>}</p><p>重点关注cancel()函数和加粗部分，具体代码解释就不说了，源码写的很清楚。</p><p>func (c *cancelCtx) cancel(removeFromParent bool, err error) {<br>   if err == nil {<br>      panic(“context: internal error: missing cancel error”)<br>   }<br>   c.mu.Lock()<br>   if c.err != nil {<br>      c.mu.Unlock()<br>      return // already canceled<br>   }<br>   c.err = err<br>   if c.done == nil {<br>      c.done = closedchan<br>   } else {<br>      close(c.done)<br>   }<br>   <strong>for child := range c.children {</strong><br> <strong>// NOTE: acquiring the child’s lock while holding parent’s lock.</strong><br> <strong>child.cancel(false, err)</strong><br> <strong>}</strong><br>   c.children = nil<br>   c.mu.Unlock()</p><p>   <strong>if removeFromParent {</strong><br> <strong>removeChild(c.Context, c)</strong><br> <strong>}</strong><br>}</p><h3 id="timerCtx"><a href="#timerCtx" class="headerlink" title="timerCtx"></a>timerCtx</h3><p>首先timerCtx定义了一个结构体，其继承cancelCtx结构</p><p>type timerCtx struct {<br>   cancelCtx<br>   timer *time.Timer // 计时器，A Timer must be created with NewTimer or AfterFunc.<br>   deadline time.Time //结束时间<br>}</p><p>同时其定义了三个方法分别为Deadline()、String()、cancel()。重点关注cancel()函数</p><p>func (c *timerCtx) cancel(removeFromParent bool, err error) {<br>   c.cancelCtx.cancel(false, err) //cancel当前context和其子节点<br>   if removeFromParent {<br>      // Remove this timerCtx from its parent cancelCtx’s children.<br>      removeChild(c.cancelCtx.Context, c)<br>   }<br>   c.mu.Lock()<br>   //将计时器重置<br>   if c.timer != nil {<br>      c.timer.Stop()<br>      c.timer = nil<br>   }<br>   c.mu.Unlock()<br>}</p><h3 id="valueCtx"><a href="#valueCtx" class="headerlink" title="valueCtx"></a>valueCtx</h3><p>首先valueCtx定义了一个结构体，其继承context接口</p><p>type valueCtx struct {<br>   Context<br>   key, val interface{}<br>}</p><p>其定义了二个方法分别为String()、Value()。它们主要的作用是输出打印和输出key所对应的value。重点关注WithValue()函数。</p><p>func WithValue(parent Context, key, val interface{}) Context {<br>   if key == nil {<br>      panic(“nil key”)<br>   }<br>   if !reflectlite.TypeOf(key).Comparable() {<br>      panic(“key is not comparable”)<br>   }<br>   return &amp;valueCtx{parent, key, val}<br>}</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>context包在平常运用的很多，尤其是在http方面居多，因此熟悉和了解其内部实现是很重要的事情。最后文章虽然写完了，但是总觉得还是有点懵，主要是关于父类和其子节点的Done()操作还有些细枝末节仍未摸清。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>记一次wordpress安装插件出现致命错误</title>
+      <link href="2020/06/08/%E8%AE%B0%E4%B8%80%E6%AC%A1wordpress%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6%E5%87%BA%E7%8E%B0%E8%87%B4%E5%91%BD%E9%94%99%E8%AF%AF/"/>
+      <url>2020/06/08/%E8%AE%B0%E4%B8%80%E6%AC%A1wordpress%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6%E5%87%BA%E7%8E%B0%E8%87%B4%E5%91%BD%E9%94%99%E8%AF%AF/</url>
+      
+        <content type="html"><![CDATA[<p>一天，我在安装一个wordpress插件时，发现了什么插件都安装不成功，一直提示安装失败：您的站点遇到了致命错误..</p><a id="more"></a><p>在网上查找许多帖子之后，我决定开启wordpress的DEBUG模式，显示详细的错误信息。 首先找到wordpress目录下的wp-config.php，在其后面添加一串代码：</p><p>define( ‘WP_DEBUG’, true ); <br>define( ‘WP_DEBUG_LOG’, true );<br>define( ‘WP_DEBUG_DISPLAY’, true );<br>@ini_set( ‘display_errors’, ‘On’ );</p><p>Tip: 最后别忘了结束之后要把DEBUG模式关掉 最后在显示的错误信息中，我发现了一丝蛛丝马迹，如下图： <img src="/2020/06/15916002881.png"><img src="http://www.hizjlhi.com/2020/06/20200608135933443.png"> 原来是因为我的一个插件所导致的，最后我把这插件禁用了，解决问题，收工。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 部署 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>链表的反转</title>
+      <link href="2020/06/05/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/"/>
+      <url>2020/06/05/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/</url>
+      
+        <content type="html"><![CDATA[<p>链表的反转的类型，就我目前做题的经历和情况来看，目前我一共遇到2种类型的链表反转，第一类是最简单的把整条链表反转，第二类就是把链表中的某一段进行反转，但每次遇到这第二类题总感觉堵在那，因此很有必要自己画个流程图手推一波。</p><a id="more"></a><h2 id="第一类：将整条链表反转"><a href="#第一类：将整条链表反转" class="headerlink" title="第一类：将整条链表反转"></a>第一类：将整条链表反转</h2><p>这一类很简单，便不再讲述，请看图</p><p><img src="http://www.hizjlhi.com/2020/06/20200608140325319.png"></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">循环体 &#123;</span><br><span class="line"> mid :&#x3D; cur.Next</span><br><span class="line"> cur.Next &#x3D; prev</span><br><span class="line"> prev &#x3D; cur</span><br><span class="line"> cur &#x3D; mid</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>第二类：将链表中的某一部分反转</p><p>这一类你要先找到要反转的区间，然后用head和tail标记，接着就按照第一类反转链表的方法反转这一段区间的链表，最后你会得到三段链表：原链表的未反转首部，已经被反转的链表，原链表的未反转尾部，你只要把这三段连接起来即可。</p><p><img src="http://www.hizjlhi.com/2020/06/20200608140351604.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>夜谈Go中的defer</title>
+      <link href="2020/06/04/%E5%A4%9C%E8%B0%88go%E4%B8%AD%E7%9A%84defer/"/>
+      <url>2020/06/04/%E5%A4%9C%E8%B0%88go%E4%B8%AD%E7%9A%84defer/</url>
+      
+        <content type="html"><![CDATA[<p>收集了几个defer的例子，听说一眼看过去就能做对的………</p><a id="more"></a><p>先猜猜以下例子会return什么值</p><p>例子1：</p><p>func increaseA() int {<br>var i int<br>defer func() {<br>i++<br>}()<br>return i<br>//注意这是个匿名返回值<br>}</p><p>func increaseB() (r int) {<br>defer func() {<br>r++<br>}()<br>return r<br>}</p><p>例子2：</p><p>func f1() (r int) {<br>defer func() {<br>r++<br>}()<br>return 0<br>}</p><p>func f2() (r int) {<br>t := 5<br>defer func() {<br>t = t + 5<br>}()<br>return t<br>}</p><p>func f3() (r int) {<br>defer func(r int) {<br>r = r + 5<br>}(r)<br>return 1<br>}</p><p>例子3：</p><p>func main() {<br>defer func() {<br>fmt.Print(recover())<br>}()<br>defer func() {<br>defer func() {<br>fmt.Print(recover())<br>}()<br>panic(1)<br>}()<br>defer recover()<br>panic(2)<br>}</p><p>跳坑关键：return ×× 这句话在编译过后会变为一下三条指令 1、返回值 = ×× 2、调用defer function 3、空的return</p><p>因此例子2的结果显而易见，分别为：1、5、1， 而例子3的结果为12，例子1的结果为0、1</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>夜谈 goroutine Stack</title>
+      <link href="2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/"/>
+      <url>2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/</url>
+      
+        <content type="html"><![CDATA[<p>goroutine是Go的一大利器，而goroutine的一大特点便是所占的资源较少，那么goroutine又是如何管理自己所占的空间来减少所占的内存空间呢？因此本文从源码来分析goroutine stack。</p><a id="more"></a><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>goroutine需要自己的栈才能够运行。假如每个goroutine分配的栈固定，那么这个栈太小则会导致溢出，太大又会浪费空间，因此如果这样的gorouting有成千上万个，那么系统是无法容纳众多的goroutine的。 因此在当前Go版本中， goroutine就已经在使用连续栈的形式来为其分配内存空间，该形式可以让goroutine尽可能的把内存空间最大化利用同时，也能正常运行。</p><h2 id="Goroutine-Stack-的结构体定义"><a href="#Goroutine-Stack-的结构体定义" class="headerlink" title="Goroutine Stack 的结构体定义"></a>Goroutine Stack 的结构体定义</h2><p>首先我们来看一下在Go的源码中对 Goroutine Stack 的结构体定义：</p><p>type stack struct {<br>   lo uintptr  栈空间的低地址<br>   hi uintptr  栈空间的高地址<br>}<br>// uintptr is an integer type that is large enough to hold the bit pattern of<br>// any pointer.</p><p>每当我们起一个 goroutine 时，Go会给这个 goroutine 分配一个内存空间，其大小基于所使用的平台，在源码的定义如下：</p><p>// Number of orders that get caching. Order 0 is FixedStack<br>// and each successive order is twice as large.<br>// We want to cache 2KB, 4KB, 8KB, and 16KB stacks. Larger stacks<br>// will be allocated directly.<br>// Since FixedStack is different on different systems, we<br>// must vary NumStackOrders to keep the same maximum cached size.<br>//   OS                FixedStack  NumStackOrders<br>//   —————–+————+—————<br>//   linux/darwin/bsd  2KB         4<br>//   windows/32        4KB         3<br>//   windows/64        8KB         2<br>//   plan9             4KB         3</p><h2 id="栈的初始化"><a href="#栈的初始化" class="headerlink" title="栈的初始化"></a>栈的初始化</h2><p>首先是对栈的初始化：</p><p>func stackinit() {</p><p>if _StackCacheSize&amp;_PageMask != 0 {<br>throw(“cache size must be a multiple of page size”)<br>}<br>        //从栈池中取出一个栈来init()相当对mSpanList初始化<br>for i := range stackpool {<br>stackpool[i].init()<br>}<br>for i := range stackLarge.free {<br>stackLarge.free[i].init()<br>}<br>}</p><p>其中对于stackpool栈池，它的定义是一个 <code>[_NumStackOrders]mSpanList</code> ,而 <code>mSpanList</code> 涉及到Go的内存管理，在这里先不展开。而<code>stackLarge（// Global pool of large stack spans.）</code>个人理解是是最大栈空间全局池。spans可以理解为一块内存。</p><h2 id="栈的增大"><a href="#栈的增大" class="headerlink" title="栈的增大"></a>栈的增大</h2><p>接下来我们看看当 Goroutine 在运行时栈空间需要增加是如何操作的。</p><p>func newstack() {<br>        //获取当前的goroutine<br>thisg := getg()<br>// TODO: double check all gp. shouldn’t be getg().</p><p>………..中间代码省略…………….</p><p>// Allocate a bigger segment and move the stack.<br>oldsize := gp.stack.hi - gp.stack.lo<br>newsize := oldsize * 2<br>if newsize &gt; maxstacksize {<br>print(“runtime: goroutine stack exceeds “, maxstacksize, “-byte limit\n”)<br>throw(“stack overflow”)<br>}</p><p>//修改该协程的状态 由_Grunning 变成_Gcopystack<br>casgstatus(gp, _Grunning, _Gcopystack)</p><p>// The concurrent GC will not scan the stack while we are doing the copy since   将当前栈的数据复制到新的栈中<br>// the gp is in a Gcopystack status.<br>copystack(gp, newsize, true)</p><p>if stackDebug &gt;= 1 {<br>print(“stack grow done\n”)<br>}</p><pre><code>    //修改该协程的状态 由\_Gcopystack变成 \_Grunning</code></pre><p>casgstatus(gp, _Gcopystack, _Grunning)<br>gogo(&amp;gp.sched)<br>}</p><p>从源码来看，一个 Goroutine 栈空间增大的过程为，先获取当前的goroutine，更新syscallsp和syscallpc，应该是防止在增大栈空间时系统又回调了这个 Goroutine ，然后中间的代码（看的我一脸懵）和注解，个人的见解为，在 Goroutine 增大栈的过程中，会令 Goroutine 的状态发生改变，这时候GC的什么写屏障和 Goroutine 抢占的问题就会出现，因此这不详细说明。接着就计算新栈的空间，其等于旧栈空间的一倍（<code>newsize := oldsize * 2</code>）然后把该协程g的状态由 _Grunning 变 _Gcopystack，复制数据到新栈，把 该协程g 恢复原状，进而完成栈增大操作。</p><h2 id="栈的复制"><a href="#栈的复制" class="headerlink" title="栈的复制"></a>栈的复制</h2><p>接着上述我们看看copystack()是如何操作的。</p><p>func copystack(gp *g, newsize uintptr, sync bool) {<br>…….<br>old := gp.stack<br>…….<br>used := old.hi - gp.sched.sp</p><p>// 分配新堆栈<br>new := stackalloc(uint32(newsize))<br>……….</p><p>// Compute adjustment. 这一步应该是调整旧栈指针<br>var adjinfo adjustinfo<br>adjinfo.old = old<br>adjinfo.delta = new.hi - old.hi</p><p>……….</p><p>// 将旧栈复制到新位置<br>memmove(unsafe.Pointer(new.hi-ncopy), unsafe.Pointer(old.hi-ncopy), ncopy)</p><p>// Adjust remaining structures that have pointers into stacks.<br>// We have to do most of these before we traceback the new<br>// stack because gentraceback uses them.<br>adjustctxt(gp, &amp;adjinfo)<br>adjustdefers(gp, &amp;adjinfo)<br>adjustpanics(gp, &amp;adjinfo)<br>if adjinfo.sghi != 0 {<br>adjinfo.sghi += adjinfo.delta<br>}</p><p>// Swap out old stack for new one<br>gp.stack = new<br>gp.stackguard0 = new.lo + _StackGuard // NOTE: might clobber a preempt request<br>gp.sched.sp = new.hi - used<br>gp.stktopsp += adjinfo.delta</p><p>// 调整新栈中的指针<br>gentraceback(^uintptr(0), ^uintptr(0), 0, gp, 0, nil, 0x7fffffff, adjustframe, noescape(unsafe.Pointer(&amp;adjinfo)), 0)</p><p>// 释放旧栈<br>if stackPoisonCopy != 0 {<br>fillstack(old, 0xfc)<br>}<br>stackfree(old)<br>}</p><p>从源码来看，一个 Goroutine 栈的复制的过程大致为，先计算调整旧栈的指针，然后再把旧栈复制到新栈中，最后调整新栈的指针(<strong>gentraceback</strong>)和释放旧栈。注意复制栈的过程需要的条件为：当前栈的状态一定是 _Gcopystack 。</p><h2 id="栈的缩小"><a href="#栈的缩小" class="headerlink" title="栈的缩小"></a>栈的缩小</h2><p>既然有 Goroutine的增栈，那么必然有 Goroutine 的缩栈，下面我们来看一下缩栈的操作。</p><p>// Maybe shrink the stack being used by gp.<br>// Called at garbage collection time.<br>// gp must be stopped, but the world need not be.<br>由上面的注释可以知道,缩栈是在垃圾回收时间做的<br>func shrinkstack(gp *g) {<br>        //获取当前g的状态<br>gstatus := readgstatus(gp)<br>if gp.stack.lo == 0 {<br>throw(“missing stack in shrinkstack”)<br>}<br>if gstatus&amp;_Gscan == 0 {<br>throw(“bad status in shrinkstack”)<br>}</p><p>…………</p><pre><code>    计算新栈的newsize,从这里可以看出Go缩栈是缩小到原来的一半</code></pre><p>oldsize := gp.stack.hi - gp.stack.lo<br>newsize := oldsize / 2<br>// Don’t shrink the allocation below the minimum-sized stack<br>// allocation.<br>if newsize &lt; _FixedStack {<br>return<br>}<br>// Compute how much of the stack is currently in use and only<br>// shrink the stack if gp is using less than a quarter of its<br>// current stack. The currently used stack includes everything<br>// down to the SP plus the stack guard space that ensures<br>// there’s room for nosplit functions.</p><pre><code>    当已使用的栈占不到总栈的1/4 进行缩容</code></pre><p>avail := gp.stack.hi - gp.stack.lo<br>if used := gp.stack.hi - gp.sched.sp + _StackLimit; used &gt;= avail/4 {<br>return<br>}</p><p>// We can’t copy the stack if we’re in a syscall.<br>// The syscall might have pointers into the stack.</p><pre><code> 判断当前栈是否在被系统调用,如果正在被调用那么syscall可以有指针在当前栈里面</code></pre><p>if gp.syscallsp != 0 {<br>return<br>}<br>if sys.GoosWindows != 0 &amp;&amp; gp.m != nil &amp;&amp; gp.m.libcallsp != 0 {<br>return<br>}</p><p>if stackDebug &gt; 0 {<br>print(“shrinking stack “, oldsize, “-&gt;”, newsize, “\n”)<br>}</p><pre><code>    最后把数据复制到新栈中</code></pre><p>copystack(gp, newsize, false)<br>}</p><p>从 Goroutine 缩栈的源码来看，缩栈的大致过程为，先获取当前goroutine的状态进来判断，然后计算newsize，另外如果gp使用少于其四分之一的空间，则缩小堆栈 。检查当前g是否正在被系统调用， 如果当前g正在被系统调用就直接return回去然后等待系统调用结束，最后把数据复制到新栈中。</p><h2 id="Goroutine-Stack-Frame"><a href="#Goroutine-Stack-Frame" class="headerlink" title="Goroutine Stack Frame"></a>Goroutine Stack Frame</h2><p>建议先了解 Stack Frame</p><h3 id="FP，SP，PC-，LR"><a href="#FP，SP，PC-，LR" class="headerlink" title="FP，SP，PC ，LR"></a>FP，SP，PC ，LR</h3><p>PC： 程序计数器 SP： 保存栈顶的地址 FP ： 保存栈底的地址 LR ： 连接寄存器的程序计数器</p><h3 id="Stack-frame-layout"><a href="#Stack-frame-layout" class="headerlink" title="Stack frame layout"></a>Stack frame layout</h3><p>从Go的源码可以得知Stack frame 的设计如下：</p><p>// (x86)<br>// +——————+<br>//  args from caller   //调用者的args<br>// +——————+ &lt;- frame-&gt;argp<br>//   return address<br>// +——————+<br>//   caller’s BP (*)  (*) if framepointer_enabled &amp;&amp; varp &lt; sp<br>// +——————+ &lt;- frame-&gt;varp<br>//      locals<br>// +——————+<br>//   args to callee    //被调用者的args<br>// +——————+ &lt;- frame-&gt;sp<br>//<br>// (arm)<br>// +——————+<br>//  args from caller<br>// +——————+ &lt;- frame-&gt;argp<br>//  caller’s retaddr<br>// +——————+ &lt;- frame-&gt;varp<br>//      locals<br>// +——————+<br>//   args to callee<br>// +——————+<br>//   return address<br>// +——————+ &lt;- frame-&gt;sp</p><p>同时还要关注一下这个 结构体 stack traces（栈的跟踪）</p><p>type stkframe struct {<br>   fn       funcInfo   // function being run<br>   pc       uintptr    // program counter within fn<br>   continpc uintptr    // program counter where execution can continue, or 0 if not<br>   lr       uintptr    // program counter at caller aka link register<br>   sp       uintptr    // stack pointer at pc<br>   fp       uintptr    // stack pointer at caller aka frame pointer<br>   varp     uintptr    // top of local variables<br>   argp     uintptr    // pointer to function arguments<br>   arglen   uintptr    // number of bytes at argp<br>   argmap   *bitvector // force use of this argmap<br>}</p><h2 id="关于调整新旧栈的指针"><a href="#关于调整新旧栈的指针" class="headerlink" title="关于调整新旧栈的指针"></a>关于调整新旧栈的指针</h2><p>从函数gentraceback()开始，由于 gentraceback() 代码量过于庞大，这里我们只关注 PC，SP，FP，LR 和与stkframe 相关 的代码部分。</p><p>……<br>var frame stkframe<br>frame.pc = pc0<br>frame.sp = sp0</p><p>……<br>//findfunc-&gt;findmoduledatap ,他返回时一个moduledata对象，其记录有关可执行文件布局的信息<br>f := findfunc(frame.pc)<br>……<br>frame.fn = f</p><p>for n &lt; max {<br>        ……<br>        f = frame.fn<br>        if f.pcsp == 0 {<br>            // No frame information, must be external function, like race support.<br>            // See golang.org/issue/13568.<br>            break<br>        }<br>        ……<br>        if frame.fp == 0 {<br>            sp := frame.sp<br>            ……<br>            //计算FP<br>            frame.fp = sp + uintptr(funcspdelta(f, frame.pc, &amp;cache))<br>            if !usesLR {<br>  // On x86, call instruction pushes return PC before entering new function.<br>                frame.fp += sys.RegSize<br>            }<br>        }<br>        var flr funcInfo<br>        if topofstack(f, gp.m != nil &amp;&amp; gp == gp.m.g0) {<br>            ……<br>        } else if usesLR &amp;&amp; f.funcID == funcID_jmpdefer {<br>            ……<br>        } else {<br>            var lrPtr uintptr<br>            if usesLR {<br>                ……<br>            } else {<br>                if frame.lr == 0 {<br>                    lrPtr = frame.fp - sys.RegSize<br>                    frame.lr = uintptr(*(*sys.Uintreg)(unsafe.Pointer(lrPtr)))<br>                }<br>            }<br>            flr = findfunc(frame.lr)<br>            ……<br>        }</p><pre><code>    //top of local variables    frame.varp = frame.fp     if !usesLR &#123;        // On x86, call instruction pushes return PC before entering new function.        frame.varp -= sys.RegSize    &#125;    ......    if framepointer\_enabled &amp;&amp; GOARCH == &quot;amd64&quot; &amp;&amp; frame.varp &gt; frame.sp &#123;        frame.varp -= sys.RegSize    &#125;    ......    if callback != nil  printing &#123;        frame.argp = frame.fp + sys.MinFrameSize        ......    &#125;    ......    // Unwind to next frame. 退至下一帧    frame.fn = flr    frame.pc = frame.lr    frame.lr = 0    frame.sp = frame.fp    frame.fp = 0    frame.argmap = nil    ......&#125;......</code></pre><p>到这 goroutine Stack 也说的差不多了</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从 Goroutine 栈的实现方式上可以知道，不管栈扩大还是缩小，都会重新申请一块新栈（新的一块内存），然后把旧栈的数据复制到新栈，相当于完整替换了Goroutine使用的物理内存，再借助指针重新指向新栈，便完成了栈大小改变过程。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Go </category>
+          
+      </categories>
       
       
     </entry>

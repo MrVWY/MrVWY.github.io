@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过函数计算搭建wordpress(一)">
+<meta property="og:url" content="http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/index.html">
+<meta property="og:site_name" content="Bit">
+<meta property="og:description" content="最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-24T08:02:58.000Z">
+<meta property="article:modified_time" content="2021-01-28T08:07:49.354Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>通过函数计算搭建wordpress(一)</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/09/15/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&text=通过函数计算搭建wordpress(一)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&is_video=false&description=通过函数计算搭建wordpress(一)"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=通过函数计算搭建wordpress(一)&body=Check out this article: http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&name=通过函数计算搭建wordpress(一)&description=&lt;p&gt;最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&t=通过函数计算搭建wordpress(一)"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%80%E9%9C%80%E5%B7%A5%E5%85%B7"><span class="toc-number">1.</span> <span class="toc-text">所需工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81clone%E5%B7%A5%E7%A8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">1、clone工程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E9%80%89%E6%8B%A9%E4%BD%A0%E6%89%80%E8%A6%81%E9%83%A8%E7%BD%B2%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.2.</span> <span class="toc-text">2、选择你所要部署的数据库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E4%B8%80%E6%AD%A5-%E6%9C%89%E5%9D%91"><span class="toc-number">2.3.</span> <span class="toc-text">最后一步(有坑)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">3.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-%E5%9D%91"><span class="toc-number">4.</span> <span class="toc-text">注意事项(坑)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%89%8D%E7%8A%B6%E5%86%B5%E5%92%8C%E6%B5%8B%E8%AF%95"><span class="toc-number">5.</span> <span class="toc-text">目前状况和测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        通过函数计算搭建wordpress(一)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-09-24T08:02:58.000Z" itemprop="datePublished">2020-09-24</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E9%83%A8%E7%BD%B2/">部署</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。</p>
+<a id="more"></a>
+<h3 id="所需工具"><a href="#所需工具" class="headerlink" title="所需工具"></a>所需工具</h3><ol>
+<li> nodejs和fun工具(阿里巴巴自创)，同时建议nodejs要安装最新版，把nodejs安装好之后就可以通过npm install @alicloud/fun -g来安装fun工具，文档链接为<a target="_blank" rel="noopener" href="https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md?spm=a2c4g.11186623.2.45.4616fc78j3Sr6U&file=installation-zh.md">fun</a></li>
+<li> 在阿里云上设置你的AccessKey(如果有这步自行跳过)</li>
+<li> 准备好你的域名，然后解析到阿里云的<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/52984.html?spm=5176.11065259.1996646101.searchclickresult.1c642ae2Kdcg3k">计算节点域名</a>上。</li>
+<li> 准备php环境。</li>
+<li> 准备git工具</li>
+</ol>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="1、clone工程"><a href="#1、clone工程" class="headerlink" title="1、clone工程"></a>1、clone工程</h4><p>git clone <a target="_blank" rel="noopener" href="https://github.com/awesome-fc/fc-wordpress.git">https://github.com/awesome-fc/fc-wordpress.git</a></p>
+<h4 id="2、选择你所要部署的数据库"><a href="#2、选择你所要部署的数据库" class="headerlink" title="2、选择你所要部署的数据库"></a>2、选择你所要部署的数据库</h4><p>通过解压fc-wordpress之后会有2种数据库给你选择，分别是sqlite和mysql(自行决定)，在此本人选择了mysql进行操作。 .env文件：使用命令cp .env_example .env，查看ls -a。配置解析：</p>
+<p>DEFAULT_REGION=cn-qingdao(这里本人选择青岛的计算节点)<br>ACCOUNT_ID=你阿里云的账户ID<br>ENDPOINT=http://你阿里云的账户ID.cn-qingdao.fc.aliyuncs.com<br>ACCESS_KEY_ID=你阿里云的AccessKey ID<br>ACCESS_KEY_SECRET=你阿里云的AccessKey Secret</p>
+<p>初始化：</p>
+<p>fun nas init<br>fun nas info</p>
+<p>接着通过上面步骤之后就会自动创建一个文件目录/fc-wordpress/fc-web-mysql/.fun/nas/auto-default/fc-wp-mysql/wordpress，你可以通过php -S 0.0.0.0：80来测试一下是否出错，同时要自行创建一个管理员。 把wordpress上传到nas</p>
+<p>func nas sync<br>fun nas ls nas:///mnt/auto/  #检查是否同步成功</p>
+<h4 id="最后一步-有坑"><a href="#最后一步-有坑" class="headerlink" title="最后一步(有坑)"></a>最后一步(有坑)</h4><ol>
+<li> 修改fc-web-mysql下的index.php文件中的$host参数中的值为你的域名。</li>
+<li> 修改fc-web-mysql下的template.yml文件中的字段fc-wp-demo(名字要独一无二)，注意这一步(本人当时就卡在这，因为官方的文件说的是修改 template.yml LogConfig 中的 Project, 任意取一个不会重复的名字即可)。</li>
+<li> 修改fc-web-mysql下的template.yml文件中的 fc-wordpress-domain-&gt;Properties-&gt;DomainName中的值为你的域名</li>
+<li> 其他的应该只是一些注释和描述，本人没细看，主要还是下面打红字的地方</li>
+</ol>
+<p>Transform: ‘Aliyun::Serverless-2018-04-03’<br>Resources:<br>  fc-wp-mysql:<br>    Type: ‘Aliyun::Serverless::Service’<br>    Properties:<br>      Description: ‘run wordpress on FC’<br>      NasConfig: Auto<br>      LogConfig:<br>        Project: fc-wp-demo<br>        Logstore: mysql-log<br>…………..<br>fc-wp-demo:<br>  Type: ‘Aliyun::Serverless::Log’<br>  Properties:<br>    Description: ‘fc web log project’<br>  mysql-log:<br>    Type: ‘Aliyun::Serverless::Log::Logstore’<br>    Properties:<br>      TTL: 10<br>      ShardCount: 1<br>fc-wordpress-domain:<br>  Type: ‘Aliyun::Serverless::CustomDomain’<br>  Properties:<br>     DomainName: 你的域名<br>     Protocol: HTTP<br>     RouteConfig:<br>        Routes:<br>           ‘/*‘:<br>           ServiceName: fc-wp-mysql<br>           FunctionName: wp-func</p>
+<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><p>fun deploy</p>
+<p>部署成功之后，在你的阿里云上面就会相应的服务与函数。比如说_FUN_NAS_fc-wp-mysql服务、fc-web-mysql服务和一个fun-generated-default-service服务(确保远端nas目录存在)。</p>
+<h3 id="注意事项-坑"><a href="#注意事项-坑" class="headerlink" title="注意事项(坑)"></a>注意事项(坑)</h3><p>在func nas sync之前，建议访问后台把WordPress地址和站点地址全给出你的域名，不然在部署成功之后你访问网址就会导致有一些样式资源会走你所部署wordpress的服务器ip去获取资源，就不会走你的域名到达nas获取资源，这时就会出现404错误。</p>
+<h3 id="目前状况和测试"><a href="#目前状况和测试" class="headerlink" title="目前状况和测试"></a>目前状况和测试</h3><p>目前本人另外申请了一个域名还在备案，之后性能和测试再更新。  </p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ol>
+<li> <a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/146729.html?spm=a2c4g.11186623.6.744.790dfc78XNX0RF#h2-3-3-9">十分钟搭建基于 Wordpress 的 Serverless Web 应用</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%80%E9%9C%80%E5%B7%A5%E5%85%B7"><span class="toc-number">1.</span> <span class="toc-text">所需工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81clone%E5%B7%A5%E7%A8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">1、clone工程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E9%80%89%E6%8B%A9%E4%BD%A0%E6%89%80%E8%A6%81%E9%83%A8%E7%BD%B2%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.2.</span> <span class="toc-text">2、选择你所要部署的数据库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E4%B8%80%E6%AD%A5-%E6%9C%89%E5%9D%91"><span class="toc-number">2.3.</span> <span class="toc-text">最后一步(有坑)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">3.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-%E5%9D%91"><span class="toc-number">4.</span> <span class="toc-text">注意事项(坑)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%89%8D%E7%8A%B6%E5%86%B5%E5%92%8C%E6%B5%8B%E8%AF%95"><span class="toc-number">5.</span> <span class="toc-text">目前状况和测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&text=通过函数计算搭建wordpress(一)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&is_video=false&description=通过函数计算搭建wordpress(一)"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=通过函数计算搭建wordpress(一)&body=Check out this article: http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&name=通过函数计算搭建wordpress(一)&description=&lt;p&gt;最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&t=通过函数计算搭建wordpress(一)"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    2021
+	<a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/">豫ICP备190号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

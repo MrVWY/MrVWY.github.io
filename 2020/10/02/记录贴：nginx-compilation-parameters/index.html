@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="记录一下一些常见的nginx Compilation parameters。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录贴：nginx Compilation parameters">
+<meta property="og:url" content="http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/index.html">
+<meta property="og:site_name" content="Bit">
+<meta property="og:description" content="记录一下一些常见的nginx Compilation parameters。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-02T08:44:52.000Z">
+<meta property="article:modified_time" content="2021-01-28T08:07:49.385Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>记录贴：nginx Compilation parameters</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/01/26/hello-world/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/09/28/%E9%80%9A%E8%BF%87%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress%E4%BA%8C/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&text=记录贴：nginx Compilation parameters"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&is_video=false&description=记录贴：nginx Compilation parameters"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=记录贴：nginx Compilation parameters&body=Check out this article: http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&name=记录贴：nginx Compilation parameters&description=&lt;p&gt;记录一下一些常见的nginx Compilation parameters。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&t=记录贴：nginx Compilation parameters"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">基础配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">模块配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%B6%E6%95%A3"><span class="toc-number">2.1.</span> <span class="toc-text">零散</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fastcgi%E3%80%81uwsgi%E3%80%81scgi%E6%A8%A1%E5%9D%97%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="toc-number">2.2.</span> <span class="toc-text">fastcgi、uwsgi、scgi模块临时文件路径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stream%E6%A8%A1%E5%9D%97"><span class="toc-number">2.3.</span> <span class="toc-text">stream模块</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pcre"><span class="toc-number">2.4.</span> <span class="toc-text">pcre</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#zlib"><span class="toc-number">2.5.</span> <span class="toc-text">zlib</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#openssl"><span class="toc-number">2.6.</span> <span class="toc-text">openssl</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Perl%E8%AF%AD%E8%A8%80%E7%9B%B8%E5%85%B3"><span class="toc-number">2.7.</span> <span class="toc-text">Perl语言相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E7%9B%B8%E5%85%B3"><span class="toc-number">2.8.</span> <span class="toc-text">邮件服务相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E6%B7%BB%E5%8A%A0"><span class="toc-number">2.9.</span> <span class="toc-text">第三方模块添加</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">编译安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        记录贴：nginx Compilation parameters
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-10-02T08:44:52.000Z" itemprop="datePublished">2020-10-02</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>记录一下一些常见的nginx Compilation parameters。</p>
+<a id="more"></a>
+<h3 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h3><p><code>--prefix=_path_</code></p>
+<p>设置nginx安装目录路径</p>
+<p><code>--sbin-path=_path_</code></p>
+<p>设置nginx可执行程序文件目录路径</p>
+<p><code>--modules-path=_path_</code></p>
+<p>设置nginx模块目录路径</p>
+<p><code>--conf-path=_path_</code></p>
+<p>设置 <code>nginx.conf</code> 配置文件路径</p>
+<p><code>--error-log-path=_path_</code></p>
+<p>设置nginx 错误日志文件路径</p>
+<p><code>--pid-path=_path_</code></p>
+<p>设置 <code>nginx.pid</code> 文件路径</p>
+<p><code>--lock-path=_path_</code> </p>
+<p> 设置 <code>nginx.lock</code> 文件路径</p>
+<p><code>--user=_name_</code></p>
+<p>设置用户</p>
+<p><code>--group=_name_</code></p>
+<p>设置用户组</p>
+<h3 id="模块配置"><a href="#模块配置" class="headerlink" title="模块配置"></a>模块配置</h3><h4 id="零散"><a href="#零散" class="headerlink" title="零散"></a>零散</h4><p><code>--with-select_module 、``--without-select_module</code></p>
+<p>是否使用IO多路复用中的select()。</p>
+<p><code>--with-poll_module、``--without-poll_module</code></p>
+<p>是否使用IO多路复用中的poll()。</p>
+<p><code>--with-threads</code></p>
+<p>开启线程池。</p>
+<p><code>--with-http_ssl_module</code></p>
+<p>开启HTTPS，具体配置请看<a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html">HTTPS protocol support</a> ，依赖于openssl。</p>
+<p><code>--with-http_v2_module</code></p>
+<p>开启并支持HTTP/2。</p>
+<p><code>--with-http_realip_module</code></p>
+<p>  <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_realip_module.html">ngx_http_realip_module</a>  模块，ngx_http_realip_module模块可以在反向代理中，返回真实用户IP给真实服务器，否则返回的是nginx服务器IP。</p>
+<p><code>--with-http_addition_module</code></p>
+<p> <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_addition_module.html">ngx_http_addition_module</a> 模块。作用在响应前后增加或者删除一些字段。</p>
+<p><code>--with-http_image_filter_module</code> <code>--with-http_image_filter_module=dynamic</code></p>
+<p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_image_filter_module.html">ngx_http_image_filter_module</a> 模块。用于不同格式的图片转换。</p>
+<p><code>--with-http_sub_module</code></p>
+<p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_sub_module.html">ngx_http_sub_module</a> 模块，可修改指定字符串。</p>
+<p><code>--with-http_dav_module</code></p>
+<p>官方文档翻译过来说是使用webdav对文件管理自动化，具体用法不清楚。</p>
+<p><code>--with-http_flv_module</code></p>
+<p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_flv_module.html">ngx_http_flv_module</a> 模块，为Flash视频（FLV）文件提供伪流服务器端支持。</p>
+<p><code>--with-http_mp4_module</code></p>
+<p> <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_mp4_module.html">ngx_http_mp4_module</a> module。提供对mp4文件的流式服务的支持。</p>
+<p><code>--with-http_gunzip_module</code></p>
+<p>enables building the <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_gunzip_module.html">ngx_http_gunzip_module</a> 模块。为那些不支持gzip压缩的用户提供类似于gzip的服务，有助于减少数据传输量。</p>
+<p><code>--with-http_gzip_static_module</code></p>
+<p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html">ngx_http_gzip_static_module</a> 模块。使用“gzip”方法压缩响应的过滤器。这通常有助于将传输数据的大小减少一半甚至更多。依赖于zlib</p>
+<p><code>--with-http_auth_request_module</code></p>
+<p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_auth_request_module.html">ngx_http_auth_request_module</a> 模块。提供对于请求的访问控制和Auth认证协议。</p>
+<p><code>--with-http_random_index_module</code></p>
+<p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_random_index_module.html">ngx_http_random_index_module</a> 模块，选取设定目录中的随机文件作为索引文件。玩法：同一网站不同主页。</p>
+<p><code>--with-http_secure_link_module</code></p>
+<p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_secure_link_module.html">ngx_http_secure_link_module</a> 模块.，用于检查请求的链接的真实性，保护资源免受未经授权的访问并限制链接的寿命。</p>
+<p><code>--with-http_stub_status_module</code></p>
+<p> <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_stub_status_module.html">ngx_http_stub_status_module</a> 模块，提供了基本访问信息的查询。</p>
+<h4 id="fastcgi、uwsgi、scgi模块临时文件路径"><a href="#fastcgi、uwsgi、scgi模块临时文件路径" class="headerlink" title="fastcgi、uwsgi、scgi模块临时文件路径"></a><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html">fastcgi</a>、<a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_uwsgi_module.html">uwsgi</a>、<a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_scgi_module.html">scgi</a>模块临时文件路径</h4><p><code>--http-fastcgi-temp-path=_path、_``--http-uwsgi-temp-path=_path、_``--http-scgi-temp-path=_path_</code></p>
+<p><code>--without-http_fastcgi_module、``--without-http_uwsgi_module、``--without-http_scgi_module</code></p>
+<h4 id="stream模块"><a href="#stream模块" class="headerlink" title="stream模块"></a>stream模块</h4><p>用来实现四层协议的转发、代理或者负载均衡</p>
+<p>--with-stream</p>
+<p><code>--with-stream=dynamic</code></p>
+<p><code>--with-stream_ssl_module</code></p>
+<p><code>--with-stream_realip_module</code></p>
+<p><code>--with-stream_geoip_module</code> <code>--with-stream_geoip_module=dynamic</code></p>
+<p><code>--with-stream_ssl_preread_module</code></p>
+<h4 id="pcre"><a href="#pcre" class="headerlink" title="pcre"></a>pcre</h4><p>The library is required for regular expressions support in the <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location">location</a> directive and for the <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_rewrite_module.html">ngx_http_rewrite_module</a> module.</p>
+<p><code>--without-pcre、``--with-pcre、``--with-pcre=_path、_``--with-pcre-opt=_parameters、_``--with-pcre-jit</code></p>
+<h4 id="zlib"><a href="#zlib" class="headerlink" title="zlib"></a>zlib</h4><p>The library is required for the <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_gzip_module.html">ngx_http_gzip_module</a> module.</p>
+<p><code>--with-zlib=_path_</code></p>
+<p><code>--with-zlib-opt=_parameters_</code></p>
+<p><code>--with-zlib-asm=_cpu_</code></p>
+<p>enables the use of the zlib assembler sources optimized for one of the specified CPUs: <code>pentium</code>, <code>pentiumpro</code>.</p>
+<h4 id="openssl"><a href="#openssl" class="headerlink" title="openssl"></a>openssl</h4><p><code>--with-openssl=_path、_``--with-openssl-opt=_parameters_</code></p>
+<h4 id="Perl语言相关"><a href="#Perl语言相关" class="headerlink" title="Perl语言相关"></a>Perl语言相关</h4><p><code>--with-http_perl_module、``--with-http_perl_module=dynamic、``--with-perl_modules_path=_path、_``--with-perl=_path_</code></p>
+<h4 id="邮件服务相关"><a href="#邮件服务相关" class="headerlink" title="邮件服务相关"></a>邮件服务相关</h4><p><code>--with-mail、``--with-mail=dynamic、``--with-mail_ssl_module、``--without-mail_pop3_module、``--without-mail_imap_module、``--without-mail_smtp_module</code></p>
+<h4 id="第三方模块添加"><a href="#第三方模块添加" class="headerlink" title="第三方模块添加"></a>第三方模块添加</h4><p><code>--add-module=_path、_``--add-dynamic-module=_path_</code></p>
+<h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h3><p>输出下面命令，选择你所需要的模块</p>
+<p>./configure –prefix…………</p>
+<p>接着就make &amp;&amp; make install。注意make install 会把原来安装nginx的路径全部覆盖，建议先进行备份。</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li>  <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/configure.html">http://nginx.org/en/docs/configure.html</a></li>
+<li>  <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/doc/1158">https://cloud.tencent.com/developer/doc/1158</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">基础配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">模块配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%B6%E6%95%A3"><span class="toc-number">2.1.</span> <span class="toc-text">零散</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fastcgi%E3%80%81uwsgi%E3%80%81scgi%E6%A8%A1%E5%9D%97%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="toc-number">2.2.</span> <span class="toc-text">fastcgi、uwsgi、scgi模块临时文件路径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stream%E6%A8%A1%E5%9D%97"><span class="toc-number">2.3.</span> <span class="toc-text">stream模块</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pcre"><span class="toc-number">2.4.</span> <span class="toc-text">pcre</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#zlib"><span class="toc-number">2.5.</span> <span class="toc-text">zlib</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#openssl"><span class="toc-number">2.6.</span> <span class="toc-text">openssl</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Perl%E8%AF%AD%E8%A8%80%E7%9B%B8%E5%85%B3"><span class="toc-number">2.7.</span> <span class="toc-text">Perl语言相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E7%9B%B8%E5%85%B3"><span class="toc-number">2.8.</span> <span class="toc-text">邮件服务相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E6%B7%BB%E5%8A%A0"><span class="toc-number">2.9.</span> <span class="toc-text">第三方模块添加</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">编译安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&text=记录贴：nginx Compilation parameters"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&is_video=false&description=记录贴：nginx Compilation parameters"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=记录贴：nginx Compilation parameters&body=Check out this article: http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&title=记录贴：nginx Compilation parameters"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&name=记录贴：nginx Compilation parameters&description=&lt;p&gt;记录一下一些常见的nginx Compilation parameters。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/&t=记录贴：nginx Compilation parameters"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    2021
+	<a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/">豫ICP备190号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

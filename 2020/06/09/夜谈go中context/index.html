@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="context称作“上下文”，是environment的snapshot。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="夜谈Go中Context">
+<meta property="og:url" content="http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/index.html">
+<meta property="og:site_name" content="Bit">
+<meta property="og:description" content="context称作“上下文”，是environment的snapshot。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/06/20200609041455723.png">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/06/20200609041008165.png">
+<meta property="article:published_time" content="2020-06-09T04:15:38.000Z">
+<meta property="article:modified_time" content="2021-01-28T08:07:49.006Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.hizjlhi.com/2020/06/20200609041455723.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>夜谈Go中Context</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/06/10/%E5%A4%9C%E8%B0%88sync-map/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/06/08/%E8%AE%B0%E4%B8%80%E6%AC%A1wordpress%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6%E5%87%BA%E7%8E%B0%E8%87%B4%E5%91%BD%E9%94%99%E8%AF%AF/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&text=夜谈Go中Context"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&is_video=false&description=夜谈Go中Context"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=夜谈Go中Context&body=Check out this article: http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&name=夜谈Go中Context&description=&lt;p&gt;context称作“上下文”，是environment的snapshot。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&t=夜谈Go中Context"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Context-Interface"><span class="toc-number">1.</span> <span class="toc-text">Context Interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emptyCtx"><span class="toc-number">2.</span> <span class="toc-text">emptyCtx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CancelFunc"><span class="toc-number">3.</span> <span class="toc-text">CancelFunc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#WithCancel"><span class="toc-number">3.1.</span> <span class="toc-text">WithCancel</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WithDeadline"><span class="toc-number">3.2.</span> <span class="toc-text">WithDeadline</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WithTimeout"><span class="toc-number">3.3.</span> <span class="toc-text">WithTimeout</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#canceler"><span class="toc-number">4.</span> <span class="toc-text">canceler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cancelCtx"><span class="toc-number">5.</span> <span class="toc-text">cancelCtx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#timerCtx"><span class="toc-number">6.</span> <span class="toc-text">timerCtx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#valueCtx"><span class="toc-number">7.</span> <span class="toc-text">valueCtx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        夜谈Go中Context
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-06-09T04:15:38.000Z" itemprop="datePublished">2020-06-09</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Go/">Go</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>context称作“上下文”，是environment的snapshot。</p>
+<a id="more"></a>
+<p><img src="http://www.hizjlhi.com/2020/06/20200609041455723.png"></p>
+<h3 id="Context-Interface"><a href="#Context-Interface" class="headerlink" title="Context Interface"></a>Context Interface</h3><p>type Context interface {<br>  //超过时间，该context便死亡<br>  Deadline() (deadline time.Time, ok bool)<br>  //当context结束时，返回一个channel<br>  Done() &lt;-chan struct{}<br>  //context错误<br>  Err() error<br>  //返回上下文所关联的key/value值<br>  Value(key interface{}) interface{}<br>}</p>
+<h3 id="emptyCtx"><a href="#emptyCtx" class="headerlink" title="emptyCtx"></a>emptyCtx</h3><p>这个emptyCtx是一个int类型，它实现了Context Interface里面的所有方法，但是都返回空值，只有一个String()方法来判断其类型来进行相应输出。</p>
+<p>type emptyCtx int</p>
+<p>func (*emptyCtx) Deadline() (deadline time.Time, ok bool) {<br>   return<br>}</p>
+<p>func (*emptyCtx) Done() &lt;-chan struct{} {<br>   return nil<br>}</p>
+<p>func (*emptyCtx) Err() error {<br>   return nil<br>}</p>
+<p>func (*emptyCtx) Value(key interface{}) interface{} {<br>   return nil<br>}</p>
+<p>func (e *emptyCtx) String() string {<br>   switch e {<br>   case background:<br>      return “context.Background”<br>   case todo:<br>      return “context.TODO”<br>   }<br>   return “unknown empty Context”<br>}</p>
+<p>同时background和todo也是基于这个emptyCtx类new出来的，了解过background的都知道，在使用context时都是先context.Background()一个context来进行后继操作。</p>
+<p>var (<br>   background = new(emptyCtx)<br>   todo       = new(emptyCtx)<br>)</p>
+<p>而background和todo的区别在于，todo是用于你不清楚要使用哪个上下文的情况下。而background通常是由main函数使用，说白了background就是所有context的root，不能被cancel。</p>
+<h3 id="CancelFunc"><a href="#CancelFunc" class="headerlink" title="CancelFunc"></a>CancelFunc</h3><p>这个类定义了一个可以返回的cancel函数，它可以cancel当前的context和它的子context，并且把自己从父类的context删除。它提供三个可以cancel的方法。</p>
+<h4 id="WithCancel"><a href="#WithCancel" class="headerlink" title="WithCancel"></a>WithCancel</h4><p>这个方法主要是当上下文操作完成时立即调用结束该context链。当调用父类的cancel时，父类和其子节点就会一起Done()。</p>
+<p>func WithCancel(parent Context) (ctx Context, cancel CancelFunc) {<br>   //创建一个新context节点<br>   c := newCancelCtx(parent)<br>   //创建context的链路，其主要是创建一个map来存储context的子节点<br>   propagateCancel(parent, &amp;c)<br>   return &amp;c, func() { c.cancel(true, Canceled) }<br>}</p>
+<p>但是不同的context子类是分布在不同的goroutine，那么它是如何实现当父类Done()，子节点接着Done()。通常首先想到的方法时子类监听一个channel传过来的关闭信号，然后子类收到这个关闭信号之后就结束自身。但具体如何实现的，请看下图。 <img src="http://www.hizjlhi.com/2020/06/20200609041008165.png"></p>
+<h4 id="WithDeadline"><a href="#WithDeadline" class="headerlink" title="WithDeadline"></a>WithDeadline</h4><p>这个方法主要是当超过一定时间后，context就自行结束自己和其子节点。同时它也返回一个可以主动cancel的方法</p>
+<p>func WithDeadline(parent Context, d time.Time) (Context, CancelFunc) {<br>   ……..<br>   c := &amp;timerCtx{<br>      cancelCtx: newCancelCtx(parent),<br>      deadline:  d,<br>   }<br>   //创建context的链路，其主要是创建一个map来存储context的子节点<br>   propagateCancel(parent, c)<br>   dur := time.Until(d)<br>   if dur &lt;= 0 {<br>      c.cancel(true, DeadlineExceeded) // deadline has already passed<br>      return c, func() { c.cancel(false, Canceled) }<br>   }<br>   c.mu.Lock()<br>   defer c.mu.Unlock()<br>   if c.err == nil {<br>      c.timer = time.AfterFunc(dur, func() {<br>         c.cancel(true, DeadlineExceeded)<br>      })<br>   }<br>   return c, func() { c.cancel(true, Canceled) }<br>}</p>
+<h4 id="WithTimeout"><a href="#WithTimeout" class="headerlink" title="WithTimeout"></a>WithTimeout</h4><p>这个方法也是一个超时控制，内部其实是引用了WithDeadline方法</p>
+<p>func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc) {<br>   return WithDeadline(parent, time.Now().Add(timeout))<br>}</p>
+<h3 id="canceler"><a href="#canceler" class="headerlink" title="canceler"></a>canceler</h3><p>canceler是一个具有类似于取消器的接口（A canceler is a context type that can be canceled directly），它定义了二个方法。</p>
+<p>type canceler interface {<br>   cancel(removeFromParent bool, err error)<br>   Done() &lt;-chan struct{}<br>}</p>
+<h3 id="cancelCtx"><a href="#cancelCtx" class="headerlink" title="cancelCtx"></a>cancelCtx</h3><p>首先cancelCtx定义了一个结构体，其继承context接口，同时重点注意加粗部分。</p>
+<p>type cancelCtx struct {<br>   Context</p>
+<p>   mu       sync.Mutex            // protects following fields<br>   done     chan struct{}         // created lazily, closed by first cancel call<br>  ** children map[canceler]struct{}** // set to nil by the first cancel call<br>   err      error                 // set to non-nil by the first cancel call<br>}</p>
+<p>重点关注cancel()函数和加粗部分，具体代码解释就不说了，源码写的很清楚。</p>
+<p>func (c *cancelCtx) cancel(removeFromParent bool, err error) {<br>   if err == nil {<br>      panic(“context: internal error: missing cancel error”)<br>   }<br>   c.mu.Lock()<br>   if c.err != nil {<br>      c.mu.Unlock()<br>      return // already canceled<br>   }<br>   c.err = err<br>   if c.done == nil {<br>      c.done = closedchan<br>   } else {<br>      close(c.done)<br>   }<br>   <strong>for child := range c.children {</strong><br> <strong>// NOTE: acquiring the child’s lock while holding parent’s lock.</strong><br> <strong>child.cancel(false, err)</strong><br> <strong>}</strong><br>   c.children = nil<br>   c.mu.Unlock()</p>
+<p>   <strong>if removeFromParent {</strong><br> <strong>removeChild(c.Context, c)</strong><br> <strong>}</strong><br>}</p>
+<h3 id="timerCtx"><a href="#timerCtx" class="headerlink" title="timerCtx"></a>timerCtx</h3><p>首先timerCtx定义了一个结构体，其继承cancelCtx结构</p>
+<p>type timerCtx struct {<br>   cancelCtx<br>   timer *time.Timer // 计时器，A Timer must be created with NewTimer or AfterFunc.<br>   deadline time.Time //结束时间<br>}</p>
+<p>同时其定义了三个方法分别为Deadline()、String()、cancel()。重点关注cancel()函数</p>
+<p>func (c *timerCtx) cancel(removeFromParent bool, err error) {<br>   c.cancelCtx.cancel(false, err) //cancel当前context和其子节点<br>   if removeFromParent {<br>      // Remove this timerCtx from its parent cancelCtx’s children.<br>      removeChild(c.cancelCtx.Context, c)<br>   }<br>   c.mu.Lock()<br>   //将计时器重置<br>   if c.timer != nil {<br>      c.timer.Stop()<br>      c.timer = nil<br>   }<br>   c.mu.Unlock()<br>}</p>
+<h3 id="valueCtx"><a href="#valueCtx" class="headerlink" title="valueCtx"></a>valueCtx</h3><p>首先valueCtx定义了一个结构体，其继承context接口</p>
+<p>type valueCtx struct {<br>   Context<br>   key, val interface{}<br>}</p>
+<p>其定义了二个方法分别为String()、Value()。它们主要的作用是输出打印和输出key所对应的value。重点关注WithValue()函数。</p>
+<p>func WithValue(parent Context, key, val interface{}) Context {<br>   if key == nil {<br>      panic(“nil key”)<br>   }<br>   if !reflectlite.TypeOf(key).Comparable() {<br>      panic(“key is not comparable”)<br>   }<br>   return &amp;valueCtx{parent, key, val}<br>}</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>context包在平常运用的很多，尤其是在http方面居多，因此熟悉和了解其内部实现是很重要的事情。最后文章虽然写完了，但是总觉得还是有点懵，主要是关于父类和其子节点的Done()操作还有些细枝末节仍未摸清。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Context-Interface"><span class="toc-number">1.</span> <span class="toc-text">Context Interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emptyCtx"><span class="toc-number">2.</span> <span class="toc-text">emptyCtx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CancelFunc"><span class="toc-number">3.</span> <span class="toc-text">CancelFunc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#WithCancel"><span class="toc-number">3.1.</span> <span class="toc-text">WithCancel</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WithDeadline"><span class="toc-number">3.2.</span> <span class="toc-text">WithDeadline</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WithTimeout"><span class="toc-number">3.3.</span> <span class="toc-text">WithTimeout</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#canceler"><span class="toc-number">4.</span> <span class="toc-text">canceler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cancelCtx"><span class="toc-number">5.</span> <span class="toc-text">cancelCtx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#timerCtx"><span class="toc-number">6.</span> <span class="toc-text">timerCtx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#valueCtx"><span class="toc-number">7.</span> <span class="toc-text">valueCtx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&text=夜谈Go中Context"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&is_video=false&description=夜谈Go中Context"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=夜谈Go中Context&body=Check out this article: http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&title=夜谈Go中Context"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&name=夜谈Go中Context&description=&lt;p&gt;context称作“上下文”，是environment的snapshot。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/06/09/%E5%A4%9C%E8%B0%88go%E4%B8%ADcontext/&t=夜谈Go中Context"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    2021
+	<a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/">豫ICP备190号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

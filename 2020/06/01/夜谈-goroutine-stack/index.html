@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="goroutine是Go的一大利器，而goroutine的一大特点便是所占的资源较少，那么goroutine又是如何管理自己所占的空间来减少所占的内存空间呢？因此本文从源码来分析goroutine stack。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="夜谈 goroutine Stack">
+<meta property="og:url" content="http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/index.html">
+<meta property="og:site_name" content="Bit">
+<meta property="og:description" content="goroutine是Go的一大利器，而goroutine的一大特点便是所占的资源较少，那么goroutine又是如何管理自己所占的空间来减少所占的内存空间呢？因此本文从源码来分析goroutine stack。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-01T14:56:00.000Z">
+<meta property="article:modified_time" content="2021-01-28T08:07:48.975Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>夜谈 goroutine Stack</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/06/04/%E5%A4%9C%E8%B0%88go%E4%B8%AD%E7%9A%84defer/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&text=夜谈 goroutine Stack"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&is_video=false&description=夜谈 goroutine Stack"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=夜谈 goroutine Stack&body=Check out this article: http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&name=夜谈 goroutine Stack&description=&lt;p&gt;goroutine是Go的一大利器，而goroutine的一大特点便是所占的资源较少，那么goroutine又是如何管理自己所占的空间来减少所占的内存空间呢？因此本文从源码来分析goroutine stack。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&t=夜谈 goroutine Stack"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Goroutine-Stack-%E7%9A%84%E7%BB%93%E6%9E%84%E4%BD%93%E5%AE%9A%E4%B9%89"><span class="toc-number">2.</span> <span class="toc-text">Goroutine Stack 的结构体定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">栈的初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E5%A2%9E%E5%A4%A7"><span class="toc-number">4.</span> <span class="toc-text">栈的增大</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E5%A4%8D%E5%88%B6"><span class="toc-number">5.</span> <span class="toc-text">栈的复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E7%BC%A9%E5%B0%8F"><span class="toc-number">6.</span> <span class="toc-text">栈的缩小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Goroutine-Stack-Frame"><span class="toc-number">7.</span> <span class="toc-text">Goroutine Stack Frame</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FP%EF%BC%8CSP%EF%BC%8CPC-%EF%BC%8CLR"><span class="toc-number">7.1.</span> <span class="toc-text">FP，SP，PC ，LR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stack-frame-layout"><span class="toc-number">7.2.</span> <span class="toc-text">Stack frame layout</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E8%B0%83%E6%95%B4%E6%96%B0%E6%97%A7%E6%A0%88%E7%9A%84%E6%8C%87%E9%92%88"><span class="toc-number">8.</span> <span class="toc-text">关于调整新旧栈的指针</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        夜谈 goroutine Stack
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-06-01T14:56:00.000Z" itemprop="datePublished">2020-06-01</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Go/">Go</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>goroutine是Go的一大利器，而goroutine的一大特点便是所占的资源较少，那么goroutine又是如何管理自己所占的空间来减少所占的内存空间呢？因此本文从源码来分析goroutine stack。</p>
+<a id="more"></a>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>goroutine需要自己的栈才能够运行。假如每个goroutine分配的栈固定，那么这个栈太小则会导致溢出，太大又会浪费空间，因此如果这样的gorouting有成千上万个，那么系统是无法容纳众多的goroutine的。 因此在当前Go版本中， goroutine就已经在使用连续栈的形式来为其分配内存空间，该形式可以让goroutine尽可能的把内存空间最大化利用同时，也能正常运行。</p>
+<h2 id="Goroutine-Stack-的结构体定义"><a href="#Goroutine-Stack-的结构体定义" class="headerlink" title="Goroutine Stack 的结构体定义"></a>Goroutine Stack 的结构体定义</h2><p>首先我们来看一下在Go的源码中对 Goroutine Stack 的结构体定义：</p>
+<p>type stack struct {<br>   lo uintptr  栈空间的低地址<br>   hi uintptr  栈空间的高地址<br>}<br>// uintptr is an integer type that is large enough to hold the bit pattern of<br>// any pointer.</p>
+<p>每当我们起一个 goroutine 时，Go会给这个 goroutine 分配一个内存空间，其大小基于所使用的平台，在源码的定义如下：</p>
+<p>// Number of orders that get caching. Order 0 is FixedStack<br>// and each successive order is twice as large.<br>// We want to cache 2KB, 4KB, 8KB, and 16KB stacks. Larger stacks<br>// will be allocated directly.<br>// Since FixedStack is different on different systems, we<br>// must vary NumStackOrders to keep the same maximum cached size.<br>//   OS                FixedStack  NumStackOrders<br>//   —————–+————+—————<br>//   linux/darwin/bsd  2KB         4<br>//   windows/32        4KB         3<br>//   windows/64        8KB         2<br>//   plan9             4KB         3</p>
+<h2 id="栈的初始化"><a href="#栈的初始化" class="headerlink" title="栈的初始化"></a>栈的初始化</h2><p>首先是对栈的初始化：</p>
+<p>func stackinit() {</p>
+<p>if _StackCacheSize&amp;_PageMask != 0 {<br>throw(“cache size must be a multiple of page size”)<br>}<br>        //从栈池中取出一个栈来init()相当对mSpanList初始化<br>for i := range stackpool {<br>stackpool[i].init()<br>}<br>for i := range stackLarge.free {<br>stackLarge.free[i].init()<br>}<br>}</p>
+<p>其中对于stackpool栈池，它的定义是一个 <code>[_NumStackOrders]mSpanList</code> ,而 <code>mSpanList</code> 涉及到Go的内存管理，在这里先不展开。而<code>stackLarge（// Global pool of large stack spans.）</code>个人理解是是最大栈空间全局池。spans可以理解为一块内存。</p>
+<h2 id="栈的增大"><a href="#栈的增大" class="headerlink" title="栈的增大"></a>栈的增大</h2><p>接下来我们看看当 Goroutine 在运行时栈空间需要增加是如何操作的。</p>
+<p>func newstack() {<br>        //获取当前的goroutine<br>thisg := getg()<br>// TODO: double check all gp. shouldn’t be getg().</p>
+<p>………..中间代码省略…………….</p>
+<p>// Allocate a bigger segment and move the stack.<br>oldsize := gp.stack.hi - gp.stack.lo<br>newsize := oldsize * 2<br>if newsize &gt; maxstacksize {<br>print(“runtime: goroutine stack exceeds “, maxstacksize, “-byte limit\n”)<br>throw(“stack overflow”)<br>}</p>
+<p>//修改该协程的状态 由_Grunning 变成_Gcopystack<br>casgstatus(gp, _Grunning, _Gcopystack)</p>
+<p>// The concurrent GC will not scan the stack while we are doing the copy since   将当前栈的数据复制到新的栈中<br>// the gp is in a Gcopystack status.<br>copystack(gp, newsize, true)</p>
+<p>if stackDebug &gt;= 1 {<br>print(“stack grow done\n”)<br>}</p>
+<pre><code>    //修改该协程的状态 由\_Gcopystack变成 \_Grunning</code></pre>
+<p>casgstatus(gp, _Gcopystack, _Grunning)<br>gogo(&amp;gp.sched)<br>}</p>
+<p>从源码来看，一个 Goroutine 栈空间增大的过程为，先获取当前的goroutine，更新syscallsp和syscallpc，应该是防止在增大栈空间时系统又回调了这个 Goroutine ，然后中间的代码（看的我一脸懵）和注解，个人的见解为，在 Goroutine 增大栈的过程中，会令 Goroutine 的状态发生改变，这时候GC的什么写屏障和 Goroutine 抢占的问题就会出现，因此这不详细说明。接着就计算新栈的空间，其等于旧栈空间的一倍（<code>newsize := oldsize * 2</code>）然后把该协程g的状态由 _Grunning 变 _Gcopystack，复制数据到新栈，把 该协程g 恢复原状，进而完成栈增大操作。</p>
+<h2 id="栈的复制"><a href="#栈的复制" class="headerlink" title="栈的复制"></a>栈的复制</h2><p>接着上述我们看看copystack()是如何操作的。</p>
+<p>func copystack(gp *g, newsize uintptr, sync bool) {<br>…….<br>old := gp.stack<br>…….<br>used := old.hi - gp.sched.sp</p>
+<p>// 分配新堆栈<br>new := stackalloc(uint32(newsize))<br>……….</p>
+<p>// Compute adjustment. 这一步应该是调整旧栈指针<br>var adjinfo adjustinfo<br>adjinfo.old = old<br>adjinfo.delta = new.hi - old.hi</p>
+<p>……….</p>
+<p>// 将旧栈复制到新位置<br>memmove(unsafe.Pointer(new.hi-ncopy), unsafe.Pointer(old.hi-ncopy), ncopy)</p>
+<p>// Adjust remaining structures that have pointers into stacks.<br>// We have to do most of these before we traceback the new<br>// stack because gentraceback uses them.<br>adjustctxt(gp, &amp;adjinfo)<br>adjustdefers(gp, &amp;adjinfo)<br>adjustpanics(gp, &amp;adjinfo)<br>if adjinfo.sghi != 0 {<br>adjinfo.sghi += adjinfo.delta<br>}</p>
+<p>// Swap out old stack for new one<br>gp.stack = new<br>gp.stackguard0 = new.lo + _StackGuard // NOTE: might clobber a preempt request<br>gp.sched.sp = new.hi - used<br>gp.stktopsp += adjinfo.delta</p>
+<p>// 调整新栈中的指针<br>gentraceback(^uintptr(0), ^uintptr(0), 0, gp, 0, nil, 0x7fffffff, adjustframe, noescape(unsafe.Pointer(&amp;adjinfo)), 0)</p>
+<p>// 释放旧栈<br>if stackPoisonCopy != 0 {<br>fillstack(old, 0xfc)<br>}<br>stackfree(old)<br>}</p>
+<p>从源码来看，一个 Goroutine 栈的复制的过程大致为，先计算调整旧栈的指针，然后再把旧栈复制到新栈中，最后调整新栈的指针(<strong>gentraceback</strong>)和释放旧栈。注意复制栈的过程需要的条件为：当前栈的状态一定是 _Gcopystack 。</p>
+<h2 id="栈的缩小"><a href="#栈的缩小" class="headerlink" title="栈的缩小"></a>栈的缩小</h2><p>既然有 Goroutine的增栈，那么必然有 Goroutine 的缩栈，下面我们来看一下缩栈的操作。</p>
+<p>// Maybe shrink the stack being used by gp.<br>// Called at garbage collection time.<br>// gp must be stopped, but the world need not be.<br>由上面的注释可以知道,缩栈是在垃圾回收时间做的<br>func shrinkstack(gp *g) {<br>        //获取当前g的状态<br>gstatus := readgstatus(gp)<br>if gp.stack.lo == 0 {<br>throw(“missing stack in shrinkstack”)<br>}<br>if gstatus&amp;_Gscan == 0 {<br>throw(“bad status in shrinkstack”)<br>}</p>
+<p>…………</p>
+<pre><code>    计算新栈的newsize,从这里可以看出Go缩栈是缩小到原来的一半</code></pre>
+<p>oldsize := gp.stack.hi - gp.stack.lo<br>newsize := oldsize / 2<br>// Don’t shrink the allocation below the minimum-sized stack<br>// allocation.<br>if newsize &lt; _FixedStack {<br>return<br>}<br>// Compute how much of the stack is currently in use and only<br>// shrink the stack if gp is using less than a quarter of its<br>// current stack. The currently used stack includes everything<br>// down to the SP plus the stack guard space that ensures<br>// there’s room for nosplit functions.</p>
+<pre><code>    当已使用的栈占不到总栈的1/4 进行缩容</code></pre>
+<p>avail := gp.stack.hi - gp.stack.lo<br>if used := gp.stack.hi - gp.sched.sp + _StackLimit; used &gt;= avail/4 {<br>return<br>}</p>
+<p>// We can’t copy the stack if we’re in a syscall.<br>// The syscall might have pointers into the stack.</p>
+<pre><code> 判断当前栈是否在被系统调用,如果正在被调用那么syscall可以有指针在当前栈里面</code></pre>
+<p>if gp.syscallsp != 0 {<br>return<br>}<br>if sys.GoosWindows != 0 &amp;&amp; gp.m != nil &amp;&amp; gp.m.libcallsp != 0 {<br>return<br>}</p>
+<p>if stackDebug &gt; 0 {<br>print(“shrinking stack “, oldsize, “-&gt;”, newsize, “\n”)<br>}</p>
+<pre><code>    最后把数据复制到新栈中</code></pre>
+<p>copystack(gp, newsize, false)<br>}</p>
+<p>从 Goroutine 缩栈的源码来看，缩栈的大致过程为，先获取当前goroutine的状态进来判断，然后计算newsize，另外如果gp使用少于其四分之一的空间，则缩小堆栈 。检查当前g是否正在被系统调用， 如果当前g正在被系统调用就直接return回去然后等待系统调用结束，最后把数据复制到新栈中。</p>
+<h2 id="Goroutine-Stack-Frame"><a href="#Goroutine-Stack-Frame" class="headerlink" title="Goroutine Stack Frame"></a>Goroutine Stack Frame</h2><p>建议先了解 Stack Frame</p>
+<h3 id="FP，SP，PC-，LR"><a href="#FP，SP，PC-，LR" class="headerlink" title="FP，SP，PC ，LR"></a>FP，SP，PC ，LR</h3><p>PC： 程序计数器 SP： 保存栈顶的地址 FP ： 保存栈底的地址 LR ： 连接寄存器的程序计数器</p>
+<h3 id="Stack-frame-layout"><a href="#Stack-frame-layout" class="headerlink" title="Stack frame layout"></a>Stack frame layout</h3><p>从Go的源码可以得知Stack frame 的设计如下：</p>
+<p>// (x86)<br>// +——————+<br>//  args from caller   //调用者的args<br>// +——————+ &lt;- frame-&gt;argp<br>//   return address<br>// +——————+<br>//   caller’s BP (*)  (*) if framepointer_enabled &amp;&amp; varp &lt; sp<br>// +——————+ &lt;- frame-&gt;varp<br>//      locals<br>// +——————+<br>//   args to callee    //被调用者的args<br>// +——————+ &lt;- frame-&gt;sp<br>//<br>// (arm)<br>// +——————+<br>//  args from caller<br>// +——————+ &lt;- frame-&gt;argp<br>//  caller’s retaddr<br>// +——————+ &lt;- frame-&gt;varp<br>//      locals<br>// +——————+<br>//   args to callee<br>// +——————+<br>//   return address<br>// +——————+ &lt;- frame-&gt;sp</p>
+<p>同时还要关注一下这个 结构体 stack traces（栈的跟踪）</p>
+<p>type stkframe struct {<br>   fn       funcInfo   // function being run<br>   pc       uintptr    // program counter within fn<br>   continpc uintptr    // program counter where execution can continue, or 0 if not<br>   lr       uintptr    // program counter at caller aka link register<br>   sp       uintptr    // stack pointer at pc<br>   fp       uintptr    // stack pointer at caller aka frame pointer<br>   varp     uintptr    // top of local variables<br>   argp     uintptr    // pointer to function arguments<br>   arglen   uintptr    // number of bytes at argp<br>   argmap   *bitvector // force use of this argmap<br>}</p>
+<h2 id="关于调整新旧栈的指针"><a href="#关于调整新旧栈的指针" class="headerlink" title="关于调整新旧栈的指针"></a>关于调整新旧栈的指针</h2><p>从函数gentraceback()开始，由于 gentraceback() 代码量过于庞大，这里我们只关注 PC，SP，FP，LR 和与stkframe 相关 的代码部分。</p>
+<p>……<br>var frame stkframe<br>frame.pc = pc0<br>frame.sp = sp0</p>
+<p>……<br>//findfunc-&gt;findmoduledatap ,他返回时一个moduledata对象，其记录有关可执行文件布局的信息<br>f := findfunc(frame.pc)<br>……<br>frame.fn = f</p>
+<p>for n &lt; max {<br>        ……<br>        f = frame.fn<br>        if f.pcsp == 0 {<br>            // No frame information, must be external function, like race support.<br>            // See golang.org/issue/13568.<br>            break<br>        }<br>        ……<br>        if frame.fp == 0 {<br>            sp := frame.sp<br>            ……<br>            //计算FP<br>            frame.fp = sp + uintptr(funcspdelta(f, frame.pc, &amp;cache))<br>            if !usesLR {<br>  // On x86, call instruction pushes return PC before entering new function.<br>                frame.fp += sys.RegSize<br>            }<br>        }<br>        var flr funcInfo<br>        if topofstack(f, gp.m != nil &amp;&amp; gp == gp.m.g0) {<br>            ……<br>        } else if usesLR &amp;&amp; f.funcID == funcID_jmpdefer {<br>            ……<br>        } else {<br>            var lrPtr uintptr<br>            if usesLR {<br>                ……<br>            } else {<br>                if frame.lr == 0 {<br>                    lrPtr = frame.fp - sys.RegSize<br>                    frame.lr = uintptr(*(*sys.Uintreg)(unsafe.Pointer(lrPtr)))<br>                }<br>            }<br>            flr = findfunc(frame.lr)<br>            ……<br>        }</p>
+<pre><code>    //top of local variables
+    frame.varp = frame.fp 
+
+    if !usesLR &#123;
+        // On x86, call instruction pushes return PC before entering new function.
+        frame.varp -= sys.RegSize
+    &#125;
+    ......
+    if framepointer\_enabled &amp;&amp; GOARCH == &quot;amd64&quot; &amp;&amp; frame.varp &gt; frame.sp &#123;
+        frame.varp -= sys.RegSize
+    &#125;
+    ......
+    if callback != nil  printing &#123;
+        frame.argp = frame.fp + sys.MinFrameSize
+        ......
+    &#125;
+    ......
+    // Unwind to next frame. 退至下一帧
+    frame.fn = flr
+    frame.pc = frame.lr
+    frame.lr = 0
+    frame.sp = frame.fp
+    frame.fp = 0
+    frame.argmap = nil
+    ......
+&#125;
+......</code></pre>
+<p>到这 goroutine Stack 也说的差不多了</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从 Goroutine 栈的实现方式上可以知道，不管栈扩大还是缩小，都会重新申请一块新栈（新的一块内存），然后把旧栈的数据复制到新栈，相当于完整替换了Goroutine使用的物理内存，再借助指针重新指向新栈，便完成了栈大小改变过程。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Goroutine-Stack-%E7%9A%84%E7%BB%93%E6%9E%84%E4%BD%93%E5%AE%9A%E4%B9%89"><span class="toc-number">2.</span> <span class="toc-text">Goroutine Stack 的结构体定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">栈的初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E5%A2%9E%E5%A4%A7"><span class="toc-number">4.</span> <span class="toc-text">栈的增大</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E5%A4%8D%E5%88%B6"><span class="toc-number">5.</span> <span class="toc-text">栈的复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E7%9A%84%E7%BC%A9%E5%B0%8F"><span class="toc-number">6.</span> <span class="toc-text">栈的缩小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Goroutine-Stack-Frame"><span class="toc-number">7.</span> <span class="toc-text">Goroutine Stack Frame</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FP%EF%BC%8CSP%EF%BC%8CPC-%EF%BC%8CLR"><span class="toc-number">7.1.</span> <span class="toc-text">FP，SP，PC ，LR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stack-frame-layout"><span class="toc-number">7.2.</span> <span class="toc-text">Stack frame layout</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E8%B0%83%E6%95%B4%E6%96%B0%E6%97%A7%E6%A0%88%E7%9A%84%E6%8C%87%E9%92%88"><span class="toc-number">8.</span> <span class="toc-text">关于调整新旧栈的指针</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&text=夜谈 goroutine Stack"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&is_video=false&description=夜谈 goroutine Stack"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=夜谈 goroutine Stack&body=Check out this article: http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&title=夜谈 goroutine Stack"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&name=夜谈 goroutine Stack&description=&lt;p&gt;goroutine是Go的一大利器，而goroutine的一大特点便是所占的资源较少，那么goroutine又是如何管理自己所占的空间来减少所占的内存空间呢？因此本文从源码来分析goroutine stack。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/06/01/%E5%A4%9C%E8%B0%88-goroutine-stack/&t=夜谈 goroutine Stack"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    2021
+	<a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/">豫ICP备190号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

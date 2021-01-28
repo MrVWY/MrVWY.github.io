@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="哈希表是几乎所有语言都会有的一个数据结构，而Go中也有着map的数据结构，但是在遍历map却是无序的，而且在其里面涉及了内存对齐、哈希冲突等知识点，这是值得去了解。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="夜谈map">
+<meta property="og:url" content="http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/index.html">
+<meta property="og:site_name" content="Bit">
+<meta property="og:description" content="哈希表是几乎所有语言都会有的一个数据结构，而Go中也有着map的数据结构，但是在遍历map却是无序的，而且在其里面涉及了内存对齐、哈希冲突等知识点，这是值得去了解。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/06/20200622172122708.png">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/06/20200626082230923.png">
+<meta property="article:published_time" content="2020-06-16T02:08:19.000Z">
+<meta property="article:modified_time" content="2021-01-28T08:07:49.101Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.hizjlhi.com/2020/06/20200622172122708.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>夜谈map</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/06/17/%E5%A4%9C%E8%B0%88sync-mutex%E4%B8%8Esync-rwmutex/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/06/15/%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&text=夜谈map"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&is_video=false&description=夜谈map"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=夜谈map&body=Check out this article: http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&name=夜谈map&description=&lt;p&gt;哈希表是几乎所有语言都会有的一个数据结构，而Go中也有着map的数据结构，但是在遍历map却是无序的，而且在其里面涉及了内存对齐、哈希冲突等知识点，这是值得去了解。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&t=夜谈map"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#map%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">map结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hmap"><span class="toc-number">1.1.</span> <span class="toc-text">hmap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mapextra"><span class="toc-number">1.2.</span> <span class="toc-text">mapextra</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bmap"><span class="toc-number">1.3.</span> <span class="toc-text">bmap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hiter"><span class="toc-number">1.4.</span> <span class="toc-text">hiter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9B%BE"><span class="toc-number">1.5.</span> <span class="toc-text">结构图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E5%86%99%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">读写操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE"><span class="toc-number">3.1.</span> <span class="toc-text">访问</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%99%E5%85%A5"><span class="toc-number">3.2.</span> <span class="toc-text">写入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%AE%B9"><span class="toc-number">3.3.</span> <span class="toc-text">扩容</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%89%A9%E5%AE%B9%E6%9D%A1%E4%BB%B6"><span class="toc-number">3.3.1.</span> <span class="toc-text">扩容条件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#buckets%E7%9A%84%E6%90%AC%E8%BF%81"><span class="toc-number">3.3.2.</span> <span class="toc-text">buckets的搬迁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#evacDst"><span class="toc-number">3.3.3.</span> <span class="toc-text">evacDst</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#evacuate"><span class="toc-number">3.3.4.</span> <span class="toc-text">evacuate</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4"><span class="toc-number">3.4.</span> <span class="toc-text">删除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        夜谈map
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-06-16T02:08:19.000Z" itemprop="datePublished">2020-06-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Go/">Go</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>哈希表是几乎所有语言都会有的一个数据结构，而Go中也有着map的数据结构，但是在遍历map却是无序的，而且在其里面涉及了内存对齐、哈希冲突等知识点，这是值得去了解。</p>
+<a id="more"></a>
+<h3 id="map结构"><a href="#map结构" class="headerlink" title="map结构"></a>map结构</h3><h4 id="hmap"><a href="#hmap" class="headerlink" title="hmap"></a>hmap</h4><p>在Go中hmap是map的主要结构体，在这主要关注字段B、buckets、oldbuckets。</p>
+<p>type hmap struct {<br>   count     int // 元素个数，len()<br>   flags     uint8<br>   B         uint8  //  2^B = 桶的个数<br>   noverflow uint16 // 溢出桶的大概数量<br>   hash0     uint32 // hash seed 哈希函数的”种子“，</p>
+<p>   buckets    unsafe.Pointer // 指向buckets数组，大小为2^B<br>   oldbuckets unsafe.Pointer // 旧buckets，发生在bucket需要增大的情况下<br>   nevacuate  uintptr //已经搬迁了的桶数–搬迁进度<br>   extra *mapextra<br>}</p>
+<p>flag标记位</p>
+<p>// flags<br>iterator     = 1 // 当前有迭代器在使用buckets<br>oldIterator  = 2 // 当前有迭代器在使用oldbuckets<br>hashWriting  = 4 //当前有goroutine在对map进行写操作<br>sameSizeGrow = 8 //等量增长</p>
+<h4 id="mapextra"><a href="#mapextra" class="headerlink" title="mapextra"></a>mapextra</h4><p>type mapextra struct {<br>   overflow    *[]*bmap<br>   oldoverflow *[]*bmap</p>
+<p>   // nextOverflow holds a pointer to a free overflow bucket.<br>   nextOverflow *bmap<br>}</p>
+<h4 id="bmap"><a href="#bmap" class="headerlink" title="bmap"></a>bmap</h4><p>在hmap中的buckets字段是个指针，其指向了bmap，buckerCnt = 1&lt;&lt;3 = 8。另外bmap结构中存放的是tophash（高位哈希）,它包括此存储桶的每个键的哈希值的最高位。 Tip:在bmap中8个key-value的排序，是8个key紧接着8个value这样的排序，这里就引出了一个<strong>内存对齐</strong>的概念，如果有兴趣请移步此<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Ja4y1i7AF">视频</a>了解。</p>
+<p>const {<br>   // Maximum number of key/elem pairs a bucket can hold.<br>   bucketCntBits = 3<br>   bucketCnt     = 1 &lt;&lt; bucketCntBits<br>}</p>
+<p>type bmap struct {<br>   tophash [bucketCnt]uint8<br>}</p>
+<p>但是在查阅Google之后，Go在编译期间会给这个bmap加料，这便解决了我的一个疑惑：它里面的overflow字段哪来的。 加料之后的bmap：</p>
+<p>type bmap struct {<br>   topbits  [8]uint8<br>   keys     [8]keytype<br>   values   [8]valuetype<br>   pad      uintptr<br>   overflow uintptr<br>}</p>
+<h4 id="hiter"><a href="#hiter" class="headerlink" title="hiter"></a>hiter</h4><p>哈希迭代器，从字段和Google查询中，不难判断，这个hiter应该时与在hmap扩容时，对map的遍历相关联的。</p>
+<p>type hiter struct {<br>   key         unsafe.Pointer // key字段<br>   elem        unsafe.Pointer  //value字段<br>   t           *maptype<br>   h           *hmap<br>   buckets     unsafe.Pointer // 初始化时指向的buckets<br>   bptr        *bmap          // 当前指向的buckets<br>   overflow    *[]*bmap<br>   oldoverflow *[]*bmap<br>   startBucket uintptr        // 开始遍历时的编号<br>   offset      uint8          // 偏移量<br>   wrapped     bool           // 是否已经从头开始遍历<br>   B           uint8          //hmap中的B<br>   i           uint8<br>   bucket      uintptr<br>   checkBucket uintptr<br>}</p>
+<h4 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h4><p><img src="http://www.hizjlhi.com/2020/06/20200622172122708.png">  </p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>在处理哈希函数时，一定会遇到哈希冲突的问题，一般的解决方法是开放地址法和拉链法。而这里Go中就采用了拉链法，在编译期间给bmap后面增加了一个字段overflow来连接着产生哈希冲突的bmap。另外bmap中key和value的排放位置也十分讲究，这里就引出了这个内存对齐的概念就不详细讲述。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>makemap返回的也是一个*hmap</p>
+<p>func makemap(t *maptype, hint int, h *hmap) *hmap {<br>   mem, overflow := math.MulUintptr(uintptr(hint), t.bucket.size)<br>   if overflow  mem &gt; maxAlloc {<br>      hint = 0<br>   }</p>
+<p>   // 初始化 Hmap<br>   if h == nil {<br>      h = new(hmap)<br>   }<br>   // 获取一个随机哈希种子<br>   h.hash0 = fastrand()</p>
+<p>   // 根据hint，计算B<br>   B := uint8(0)<br>   for overLoadFactor(hint, B) {<br>      B++<br>   }<br>   h.B = B</p>
+<p>   // 创建buckets<br>   if h.B != 0 {<br>      var nextOverflow *bmap<br>      h.buckets, nextOverflow = <strong>makeBucketArray</strong>(t, h.B, nil)<br>      if nextOverflow != nil {<br>         h.extra = new(mapextra)<br>         h.extra.nextOverflow = nextOverflow<br>      }<br>   }</p>
+<p>   return h<br>}</p>
+<h3 id="读写操作"><a href="#读写操作" class="headerlink" title="读写操作"></a>读写操作</h3><h4 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h4><p>访问操作主要有2种函数分别是：mapaccess1和mapaccess2。俩者的区别是前一个是不到bool类型的返回，后一个是带bool类型的返回。</p>
+<p>a := A[‘A’] //mapaccess1<br>a, ok := A[‘A’] //mapaccess2</p>
+<p>流程：先根据key计算hash，然后计算获得所对应的桶地址b。接着对桶进行遍历。</p>
+<p>func mapaccess1(t *maptype, h *hmap, key unsafe.Pointer) unsafe.Pointer {<br>   ………<br>   alg := t.key.alg<br>   hash := alg.hash(key, uintptr(h.hash0)) // 计算hash<br>   m := bucketMask(h.B) //返回 1&lt;&lt;B - 1<br>   //计算桶的地址<br>   b := (*bmap)(add(h.buckets, *<em>(hash &amp; m)**\</em>uintptr(t.bucketsize)))<br>   top := tophash(hash) //计算高位的哈希值(tophash)</p>
+<p>bucketloop:<br>   //先从正常桶遍历，再从溢出桶遍历<br>   for ; b != nil; b = b.overflow(t) {<br>      //bucketCnt = 8<br>      for i := uintptr(0); i &lt; bucketCnt; i++ {<br>         if b.tophash[i] != top {<br>            if b.tophash[i] == emptyRest {<br>               break bucketloop<br>            }<br>            continue<br>         }<br>         k := add(unsafe.Pointer(b), dataOffset+i*uintptr(t.keysize))<br>         // 判断是否符合<br>         if alg.equal(key, k) {<br>            // 计算k对于的value地址<br>            e := add(unsafe.Pointer(b), dataOffset+bucketCnt*uintptr(t.keysize)+i*uintptr(t.elemsize))<br>            return e<br>         }<br>      }<br>   }<br>   // 找不到输出nil<br>   return unsafe.Pointer(&amp;zeroVal[0])<br>}</p>
+<p>代码整体来说算是直接。</p>
+<h4 id="写入"><a href="#写入" class="headerlink" title="写入"></a>写入</h4><p>func mapassign(t *maptype, h *hmap, key unsafe.Pointer) unsafe.Pointer {<br>   //计算哈希值和桶的位置<br>   alg := t.key.alg<br>   hash := alg.hash(key, uintptr(h.hash0))<br>   h.flags ^= hashWriting</p>
+<p>again:<br>   bucket := hash &amp; bucketMask(h.B)<br>   if h.growing() { // 判断当前map是否在扩容<br>      growWork(t, h, bucket)<br>   }<br>   b := (*bmap)(unsafe.Pointer(uintptr(h.buckets) + bucket*uintptr(t.bucketsize)))<br>   top := tophash(hash)</p>
+<p>遍历比较桶的hash和key，查找对应的key</p>
+<p>   var inserti *uint8   //索引<br>   var insertk unsafe.Pointer //键<br>   var elem unsafe.Pointer  //值<br>bucketloop:<br>   for {<br>      for i := uintptr(0); i &lt; bucketCnt; i++ {<br>         //判断tophash是否相等<br>         if b.tophash[i] != top {<br>            if isEmpty(b.tophash[i]) &amp;&amp; inserti == nil {<br>               inserti = &amp;b.tophash[i]<br>               insertk = add(unsafe.Pointer(b), dataOffset+i*uintptr(t.keysize))<br>               elem = add(unsafe.Pointer(b), dataOffset+bucketCnt*uintptr(t.keysize)+i*uintptr(t.elemsize))<br>            }<br>            if b.tophash[i] == emptyRest {<br>               break bucketloop<br>            }<br>            continue<br>         }<br>         k := add(unsafe.Pointer(b), dataOffset+i*uintptr(t.keysize))</p>
+<pre><code>     //判断key是否相等
+     if !alg.equal(key, k) &#123;
+        continue
+     &#125;
+     // 如果当前key已经存在value，则更新
+     if t.needkeyupdate() &#123;
+        typedmemmove(t.key, k, key)
+     &#125;
+     elem = add(unsafe.Pointer(b), dataOffset+bucketCnt\*uintptr(t.keysize)+i\*uintptr(t.elemsize))
+     goto done //转到done流程
+  &#125;
+  //切换到溢出桶遍历
+  ovf := b.overflow(t)
+  if ovf == nil &#123;
+     break
+  &#125;
+  b = ovf</code></pre>
+<p>   }</p>
+<p>如果当前桶满了，就会创建一个newoverflow</p>
+<p>if inserti == nil {<br>   newb := h.newoverflow(t, b)<br>   inserti = &amp;newb.tophash[0]<br>   insertk = add(unsafe.Pointer(newb), dataOffset)<br>   elem = add(insertk, bucketCnt*uintptr(t.keysize))<br>}<br>typedmemmove(t.key, insertk, key)<br>*inserti = top<br>h.count++</p>
+<h4 id="扩容"><a href="#扩容" class="headerlink" title="扩容"></a>扩容</h4><p>由于Go中的map是由哈希表构成，当查找key时，它先定位到某个buckets再定位到其中的key。涉及到哈希表，那么必定会牵扯到哈希表的装载因子。在这里Go是这样定义装载因子。</p>
+<h5 id="扩容条件"><a href="#扩容条件" class="headerlink" title="扩容条件"></a>扩容条件</h5><p>mapassign函数触发扩容条件：</p>
+<ol>
+<li> 当装载因子超过6.5</li>
+<li> 当溢出桶过多时</li>
+</ol>
+<p>触发扩容相关的函数</p>
+<p>//判断装载因子是否超过6.5<br>func overLoadFactor(count int, B uint8) bool {<br>   return count &gt; bucketCnt &amp;&amp; uintptr(count) &gt; loadFactorNum*(bucketShift(B)/loadFactorDen)<br>}</p>
+<p>//溢出桶过多<br>func tooManyOverflowBuckets(noverflow uint16, B uint8) bool {<br>   if B &gt; 15 {<br>      B = 15<br>   }<br>   return noverflow &gt;= uint16(1)&lt;&lt;(B&amp;15)<br>}</p>
+<p>根据触发条件的不同所对应的扩容条件，扩容方式也会不同。第一种是因为元素多，桶少。第二种是因为元素少，桶多，例如当向map不断的插入数据并把他们删除，这会造成溢出桶不断增加，而到了最后溢出桶太多但是元素却很少的情况。</p>
+<h5 id="buckets的搬迁"><a href="#buckets的搬迁" class="headerlink" title="buckets的搬迁"></a>buckets的搬迁</h5><p>hashGrow函数主要是对创建一些溢出桶，具体的搬迁操作位于growWork() 和 evacuate()</p>
+<p>func hashGrow(t *maptype, h *hmap) {<br>   bigger := uint8(1)<br>   if !overLoadFactor(h.count+1, h.B) {<br>      bigger = 0<br>      h.flags = sameSizeGrow<br>   }<br>   //将旧的buckets挂到oldbuckets<br>   oldbuckets := h.buckets<br>   //创建溢出桶<br>   newbuckets, nextOverflow := makeBucketArray(t, h.B+bigger, nil)<br>   //更新标记位<br>   flags := h.flags &amp;^ (iterator  oldIterator)<br>   if h.flags&amp;iterator != 0 {<br>      flags = oldIterator<br>   }</p>
+<p>   h.B += bigger<br>   h.flags = flags<br>   h.oldbuckets = oldbuckets<br>   h.buckets = newbuckets<br>   //更新进度<br>   h.nevacuate = 0<br>   h.noverflow = 0</p>
+<p>   ………<br>}</p>
+<h5 id="evacDst"><a href="#evacDst" class="headerlink" title="evacDst"></a>evacDst</h5><p>evacDst是表示搬迁后的目的地址的一个结构体</p>
+<p>type evacDst struct {<br>   b *bmap          //当前目的buckets<br>   i int            // 指向当前key/value的index b<br>   k unsafe.Pointer // 指向当前key<br>   e unsafe.Pointer // 指向当前value<br>}</p>
+<h5 id="evacuate"><a href="#evacuate" class="headerlink" title="evacuate"></a>evacuate</h5><p>func evacuate(t *maptype, h *hmap, oldbucket uintptr) {<br>   //找出旧的buckets<br>   b := (*bmap)(add(h.oldbuckets, oldbucket*uintptr(t.bucketsize)))<br>   newbit := h.noldbuckets() //计算当前map的存储桶的数量<br>   if !evacuated(b) {</p>
+<pre><code>  //搬迁地址
+  **var xy \[2\]evacDst**
+  x := &amp;xy\[0\]
+  x.b = (\*bmap)(add(h.buckets, oldbucket\*uintptr(t.bucketsize)))
+  x.k = add(unsafe.Pointer(x.b), dataOffset)
+  x.e = add(x.k, bucketCnt\*uintptr(t.keysize))
+
+  //判断当前是否是增加相等的map大小
+  if !h.sameSizeGrow() &#123;
+     y := &amp;xy\[1\]
+     y.b = (\*bmap)(add(h.buckets, (oldbucket+newbit)\*uintptr(t.bucketsize)))
+     y.k = add(unsafe.Pointer(y.b), dataOffset)
+     y.e = add(y.k, bucketCnt\*uintptr(t.keysize))
+  &#125;
+  //遍历所有的buckets
+  for ; b != nil; b = b.overflow(t) &#123;
+     k := add(unsafe.Pointer(b), dataOffset)   //原key
+     e := add(k, bucketCnt\*uintptr(t.keysize)) //原value
+     for i := 0; i &lt; bucketCnt; i, k, e = i+1, add(k, uintptr(t.keysize)), add(e, uintptr(t.elemsize)) &#123;
+        top := b.tophash\[i\]
+        //判断当前cell是否为空
+        if isEmpty(top) &#123;
+           b.tophash\[i\] = evacuatedEmpty //标志为已经被搬空
+           continue
+        &#125;
+        if top &lt; minTopHash &#123;
+           throw(&quot;bad map state&quot;)
+        &#125;
+        k2 := k
+        if t.indirectkey() &#123;
+           k2 = \*((\*unsafe.Pointer)(k2))
+        &#125;
+        var useY uint8
+        if !h.sameSizeGrow() &#123;
+           //通过计算hash来确认目的地址是前半部分x或者是后半部分y
+           hash := t.key.alg.hash(k2, uintptr(h.hash0))
+           if h.flags&amp;iterator != 0 &amp;&amp; !t.reflexivekey() &amp;&amp; !t.key.alg.equal(k2, k2) &#123;
+              useY = top &amp; 1
+              top = tophash(hash)
+           &#125; else &#123;
+              if hash&amp;newbit != 0 &#123;
+                 useY = 1
+              &#125;
+           &#125;
+        &#125;
+        //这里不太理解具体意思
+       ** b.tophash\[i\] = evacuatedX + useY // evacuatedX + 1 == evacuatedY**
+        dst := &amp;xy\[useY\]                 // 目的地址
+
+        if dst.i == bucketCnt &#123;
+           dst.b = h.newoverflow(t, dst.b)
+           dst.i = 0
+           dst.k = add(unsafe.Pointer(dst.b), dataOffset)
+           dst.e = add(dst.k, bucketCnt\*uintptr(t.keysize))
+        &#125;
+        dst.b.tophash\[dst.i&amp;(bucketCnt-1)\] = top
+        //迁移key
+        if t.indirectkey() &#123;
+           \*(\*unsafe.Pointer)(dst.k) = k2
+        &#125; else &#123;
+           typedmemmove(t.key, dst.k, k)
+        &#125;
+        //迁移value
+        if t.indirectelem() &#123;
+           \*(\*unsafe.Pointer)(dst.e) = \*(\*unsafe.Pointer)(e)
+        &#125; else &#123;
+           typedmemmove(t.elem, dst.e, e)
+        &#125;
+        dst.i++
+        dst.k = add(dst.k, uintptr(t.keysize))
+        dst.e = add(dst.e, uintptr(t.elemsize))
+     &#125;
+  &#125;</code></pre>
+<p>   if oldbucket == h.nevacuate {<br>      advanceEvacuationMark(h, t, newbit) //更新搬迁进度<br>   }<br>}</p>
+<p>这里有一个点需要注意，在上述evacuated函数加粗的代码，它定义了xy [2]evacDst，里面只含2个evacDst，同时结合上面所定义的cell的状态，可以推测在搬迁过程中，把原来的buckets看出X，而后来等量扩容的部分看成Y，如下图所示。 <img src="http://www.hizjlhi.com/2020/06/20200626082230923.png"> 正因为如此，在搬迁的过程中，由于所计算的地址可能会跟原来的不同，map的遍历是按顺序遍历的，扩容之后有的key就可能被迁移到溢出桶那边，因此map的遍历是无序的。</p>
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p>map的删除是由mapdelete函数来完成，也是两层循环，从正常桶到溢出桶查找对应的key（查找过程和访问过程类似），删除时先删除key再删除value。如果当前map正在扩容那么删除操作会在扩容之后执行。</p>
+<p>if h.growing() {<br>   growWork(t, h, bucket)<br>}<br>……<br>//将key清零<br>if t.indirectkey() {<br>  *(*unsafe.Pointer)(k) = nil<br>} else if t.key.ptrdata != 0 {<br>  memclrHasPointers(k, t.key.size)<br>}</p>
+<p>e := add(unsafe.Pointer(b), dataOffset+bucketCnt*uintptr(t.keysize)+i*uintptr(t.elemsize))<br>//对value清零<br>if t.indirectelem() {<br>  *(*unsafe.Pointer)(e) = nil<br>} else if t.elem.ptrdata != 0 {<br>  memclrHasPointers(e, t.elem.size)<br>} else {<br>  memclrNoHeapPointers(e, t.elem.size)<br>}<br>……..</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Go使用拉链法来解决哈希碰撞来实现哈希表。哈希值在每一个桶中存储对应的哈希值的前8位，每一个桶只能存放8个key/value，一旦超过，新的key/value会被存储到溢出桶中。之后随着key/value的增加，溢出桶的数量和装载因子也会升高，这时候就会触发扩容机制，对key/value迁移到不同的桶中。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#map%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">map结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hmap"><span class="toc-number">1.1.</span> <span class="toc-text">hmap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mapextra"><span class="toc-number">1.2.</span> <span class="toc-text">mapextra</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bmap"><span class="toc-number">1.3.</span> <span class="toc-text">bmap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hiter"><span class="toc-number">1.4.</span> <span class="toc-text">hiter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9B%BE"><span class="toc-number">1.5.</span> <span class="toc-text">结构图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BB%E5%86%99%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">读写操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE"><span class="toc-number">3.1.</span> <span class="toc-text">访问</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%99%E5%85%A5"><span class="toc-number">3.2.</span> <span class="toc-text">写入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%AE%B9"><span class="toc-number">3.3.</span> <span class="toc-text">扩容</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%89%A9%E5%AE%B9%E6%9D%A1%E4%BB%B6"><span class="toc-number">3.3.1.</span> <span class="toc-text">扩容条件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#buckets%E7%9A%84%E6%90%AC%E8%BF%81"><span class="toc-number">3.3.2.</span> <span class="toc-text">buckets的搬迁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#evacDst"><span class="toc-number">3.3.3.</span> <span class="toc-text">evacDst</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#evacuate"><span class="toc-number">3.3.4.</span> <span class="toc-text">evacuate</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4"><span class="toc-number">3.4.</span> <span class="toc-text">删除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&text=夜谈map"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&is_video=false&description=夜谈map"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=夜谈map&body=Check out this article: http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&title=夜谈map"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&name=夜谈map&description=&lt;p&gt;哈希表是几乎所有语言都会有的一个数据结构，而Go中也有着map的数据结构，但是在遍历map却是无序的，而且在其里面涉及了内存对齐、哈希冲突等知识点，这是值得去了解。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/06/16/%E5%A4%9C%E8%B0%88map/&t=夜谈map"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    2021
+	<a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/">豫ICP备190号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
