@@ -10,7 +10,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="夜谈channel中的自旋锁">
 <meta property="og:url" content="http://example.com/2020/06/15/%E5%A4%9C%E8%B0%88channel%E4%B8%AD%E7%9A%84%E8%87%AA%E6%97%8B%E9%94%81/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Bit">
 <meta property="og:description" content="在上一篇channel的文章中，关于channel的基本流程和源码都看了一遍。最近在学习中，忽然发现了一种自旋锁。这让我想到了在channel中是否存在这种原理，使得当一个接收goroutine在当前时刻发现channel中没有数据，此时恰好有个goroutine G1开始向channel中推送数据，那么这个接收goroutine能不能在这等待一个极短的时间，然后G1向channel推送完数据呢。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-06-15T07:34:17.000Z">
