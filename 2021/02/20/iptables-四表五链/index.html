@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="前言iptables只是一个工具，实际上内部核心是基于Netfilter框架去实现其功能的一个命令行工具。 四表和五链四表首先表这概念主要是把相同功能的规则集中在一起。而不是每条规则都散落和重复的出现在每个不同的链中。 raw表raw表主要用来决定是否跟踪连接和配置notrack目标。优先级最高。用法：可以配置该表来决定哪一条连接可以被跟踪。其提供两条调用链来供使用：prerouting、outp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iptables 四表五链">
+<meta property="og:url" content="http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/index.html">
+<meta property="og:site_name" content="Bit">
+<meta property="og:description" content="前言iptables只是一个工具，实际上内部核心是基于Netfilter框架去实现其功能的一个命令行工具。 四表和五链四表首先表这概念主要是把相同功能的规则集中在一起。而不是每条规则都散落和重复的出现在每个不同的链中。 raw表raw表主要用来决定是否跟踪连接和配置notrack目标。优先级最高。用法：可以配置该表来决定哪一条连接可以被跟踪。其提供两条调用链来供使用：prerouting、outp">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/09/20200914163440890.png">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/09/20200915105245370.png">
+<meta property="og:image" content="http://www.hizjlhi.com/2020/09/20200914163703653.png">
+<meta property="article:published_time" content="2021-02-19T16:37:21.000Z">
+<meta property="article:modified_time" content="2021-02-22T07:51:32.005Z">
+<meta property="article:author" content="Bit">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.hizjlhi.com/2020/09/20200914163440890.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>iptables 四表五链</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2021/02/02/Disjoint-set/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&text=iptables 四表五链"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&is_video=false&description=iptables 四表五链"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=iptables 四表五链&body=Check out this article: http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&name=iptables 四表五链&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&t=iptables 四表五链"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E8%A1%A8%E5%92%8C%E4%BA%94%E9%93%BE"><span class="toc-number">2.</span> <span class="toc-text">四表和五链</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E8%A1%A8"><span class="toc-number">2.1.</span> <span class="toc-text">四表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#raw%E8%A1%A8"><span class="toc-number">2.1.1.</span> <span class="toc-text">raw表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#mangle%E8%A1%A8"><span class="toc-number">2.1.2.</span> <span class="toc-text">mangle表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#nat%E8%A1%A8"><span class="toc-number">2.1.3.</span> <span class="toc-text">nat表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#filter%E8%A1%A8"><span class="toc-number">2.1.4.</span> <span class="toc-text">filter表</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%94%E4%B8%AA%E8%A7%84%E5%88%99%E9%93%BE"><span class="toc-number">2.2.</span> <span class="toc-text">五个规则链</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#prerouting%E9%93%BE"><span class="toc-number">2.2.1.</span> <span class="toc-text">prerouting链</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#foward%E9%93%BE"><span class="toc-number">2.2.2.</span> <span class="toc-text">foward链</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#postrouting%E9%93%BE"><span class="toc-number">2.2.3.</span> <span class="toc-text">postrouting链</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#input%E9%93%BE"><span class="toc-number">2.2.4.</span> <span class="toc-text">input链</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#output%E9%93%BE"><span class="toc-number">2.2.5.</span> <span class="toc-text">output链</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%9D%E7%BB%B4%E5%9B%BE"><span class="toc-number">2.3.</span> <span class="toc-text">思维图</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E5%BC%A0%E8%A1%A8%E2%80%94security%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text">第五张表—security表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%88%E9%87%8D%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">工作流程（重）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#extend-module"><span class="toc-number">5.</span> <span class="toc-text">extend module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cmd-and-example"><span class="toc-number">6.</span> <span class="toc-text">cmd  and example</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#parameter"><span class="toc-number">6.1.</span> <span class="toc-text">parameter</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">7.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        iptables 四表五链
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Bit</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-02-19T16:37:21.000Z" itemprop="datePublished">2021-02-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>iptables只是一个工具，实际上内部核心是基于<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Netfilter">Netfilter</a>框架去实现其功能的一个命令行工具。</p>
+<h3 id="四表和五链"><a href="#四表和五链" class="headerlink" title="四表和五链"></a>四表和五链</h3><h4 id="四表"><a href="#四表" class="headerlink" title="四表"></a>四表</h4><p>首先表这概念主要是把相同功能的规则集中在一起。而不是每条规则都散落和重复的出现在每个不同的链中。</p>
+<h5 id="raw表"><a href="#raw表" class="headerlink" title="raw表"></a>raw表</h5><p>raw表主要用来决定是否跟踪连接和配置notrack目标。优先级最高。用法：可以配置该表来决定哪一条连接可以被跟踪。其提供两条调用链来供使用：prerouting、output。 例子：</p>
+<p>//对来自于ip为192.168.10.117的所有数据包不进行追踪<br>iptables -t raw -A PREROUTING -s 192.168.10.117 -j NOTRACK<br>//对来自于ip为192.168.10.117的所有数据包进行追踪<br>iptables -t raw -A PREROUTING -s 192.168.10.117 -j TRACK</p>
+<h5 id="mangle表"><a href="#mangle表" class="headerlink" title="mangle表"></a>mangle表</h5><p>该表主要用于数据包的修改，例如：TTL，IP数据包首部，给数据包打上标签(–set-mask)。其提供五条调用链来供使用：prerouting、foward、postrouting、input、output。 参考：<a target="_blank" rel="noopener" href="https://serverfault.com/questions/467756/what-is-the-mangle-table-in-iptables">what-is-the-mangle-table-in-iptables</a></p>
+<h5 id="nat表"><a href="#nat表" class="headerlink" title="nat表"></a>nat表</h5><p>该表主要用于网络地址转换。其提供4条调用链来供使用：prerouting、postrouting、input、output。</p>
+<h5 id="filter表"><a href="#filter表" class="headerlink" title="filter表"></a>filter表</h5><p>该表是用来过滤网络上的数据包，决定数据包是否可以进入上层协议栈进行处理。其提供3条调用链来供使用：input、output、foward。</p>
+<h4 id="五个规则链"><a href="#五个规则链" class="headerlink" title="五个规则链"></a>五个规则链</h4><p>链可以看出一道道的“关卡”</p>
+<h5 id="prerouting链"><a href="#prerouting链" class="headerlink" title="prerouting链"></a>prerouting链</h5><p>路由前链，处理刚到达本机的数据包，进行路由决策。可以使用的表：raw、mangle、nat。</p>
+<h5 id="foward链"><a href="#foward链" class="headerlink" title="foward链"></a>foward链</h5><p>转发链，当prerouting链判断目的地不是本机时，会经过该链并执行规则。可以使用的表：mangle、filter。</p>
+<h5 id="postrouting链"><a href="#postrouting链" class="headerlink" title="postrouting链"></a>postrouting链</h5><p>数据包经过处理后，在网卡前，再对其进行规则匹配和修改。可以使用的表：mangle、nat。</p>
+<h5 id="input链"><a href="#input链" class="headerlink" title="input链"></a>input链</h5><p>经prerouting链进行路由决策之后，进入本机所要匹配的规则和修改。可以使用的表：mangle、nat、filter。</p>
+<h5 id="output链"><a href="#output链" class="headerlink" title="output链"></a>output链</h5><p>经过本机处理好的数据并需要向外发送，经该关卡所要匹配的规则和修改。可以使用的表：raw、mangle、nat、filter。</p>
+<h4 id="思维图"><a href="#思维图" class="headerlink" title="思维图"></a>思维图</h4><p><img src="http://www.hizjlhi.com/2020/09/20200914163440890.png"></p>
+<h3 id="第五张表—security表"><a href="#第五张表—security表" class="headerlink" title="第五张表—security表"></a>第五张表—security表</h3><p>该表是用来强制性访问控制(Mandatory Access Control,MAC)，通过设置内核中SElinux来实现。其提供2条调用链来供使用：input、output。不过我记得在某些场景下，这个SElinux通常需要给关闭。因此该表可能在平常用的不多。 <img src="http://www.hizjlhi.com/2020/09/20200915105245370.png"></p>
+<h3 id="工作流程（重）"><a href="#工作流程（重）" class="headerlink" title="工作流程（重）"></a>工作流程（重）</h3><p><img src="http://www.hizjlhi.com/2020/09/20200914163703653.png">  </p>
+<h3 id="extend-module"><a href="#extend-module" class="headerlink" title="extend module"></a>extend module</h3><ul>
+<li><p>connlimit module</p>
+<p>限制每个IP地址同时链接到server端的数量</p>
+<p><code>iptables -t filter -I INPUT -p tcp --dprot 22 -m connlimit --connlimit-above 2 -j REJECT </code></p>
+<p><code>iptables -t filter -I INPUT -p tcp --dprot 22 -m connlimit ! --connlimit-above 2 -j REJECT </code></p>
+</li>
+<li><p>limit module</p>
+<p>限速</p>
+<p><code>iptables -t filter -I INPUT -p icmp -m limit --limit 10/minite -j ACCEPT</code></p>
+</li>
+<li><p>iprange module</p>
+<p>指定一段连续的IP地址范围，用于匹配package src or des</p>
+<p><code>iptables -t filter -I INPUT -m iprange --src-range 192.168.1.127-192.168.1.146 -j DROP</code></p>
+</li>
+</ul>
+<h3 id="cmd-and-example"><a href="#cmd-and-example" class="headerlink" title="cmd  and example"></a>cmd  and example</h3><ol>
+<li><p>forward packages</p>
+<p>查看server 是否开启转发</p>
+<p>​    <code>sysctl net.ipv4.ip_forward</code></p>
+<p>​    已开启：<code>net.ipv4.ip_forward = 1</code></p>
+<p>加入规则：<code>iptables -t nat -A PREROUTING -p tcp -m tcp --dport 8080 -j DNAT --to-destination [destination IP]</code></p>
+</li>
+</ol>
+<h4 id="parameter"><a href="#parameter" class="headerlink" title="parameter"></a>parameter</h4><ul>
+<li><code>-t</code>：select iptables tables</li>
+<li><code>-I</code>：select iptables lists</li>
+<li><code>-o</code>：use to select which network adapter to out</li>
+<li><code>-p</code>：use to match the type of package </li>
+<li><code>-m</code>：use tcp extend module</li>
+<li><code>-s</code>：match  src ip</li>
+<li><code>-sport -dport</code>：src and des ip match</li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li>  <a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Iptables_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E6%A8%A1%E5%9D%97_%EF%BC%88Modules%EF%BC%89">iptables-Aarchlinux</a></li>
+<li>  <a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/243079/netfilter-iptables-why-not-using-the-raw-table">netfilter/iptables: why not using the raw table?</a></li>
+<li>  <a target="_blank" rel="noopener" href="https://linux.die.net/man/8/iptables">iptables(8) - Linux man page</a></li>
+<li>  <a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture">A Deep Dive into Iptables and Netfilter Architecture</a></li>
+<li>  <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Netfilter">Netfilter</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E8%A1%A8%E5%92%8C%E4%BA%94%E9%93%BE"><span class="toc-number">2.</span> <span class="toc-text">四表和五链</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E8%A1%A8"><span class="toc-number">2.1.</span> <span class="toc-text">四表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#raw%E8%A1%A8"><span class="toc-number">2.1.1.</span> <span class="toc-text">raw表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#mangle%E8%A1%A8"><span class="toc-number">2.1.2.</span> <span class="toc-text">mangle表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#nat%E8%A1%A8"><span class="toc-number">2.1.3.</span> <span class="toc-text">nat表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#filter%E8%A1%A8"><span class="toc-number">2.1.4.</span> <span class="toc-text">filter表</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%94%E4%B8%AA%E8%A7%84%E5%88%99%E9%93%BE"><span class="toc-number">2.2.</span> <span class="toc-text">五个规则链</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#prerouting%E9%93%BE"><span class="toc-number">2.2.1.</span> <span class="toc-text">prerouting链</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#foward%E9%93%BE"><span class="toc-number">2.2.2.</span> <span class="toc-text">foward链</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#postrouting%E9%93%BE"><span class="toc-number">2.2.3.</span> <span class="toc-text">postrouting链</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#input%E9%93%BE"><span class="toc-number">2.2.4.</span> <span class="toc-text">input链</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#output%E9%93%BE"><span class="toc-number">2.2.5.</span> <span class="toc-text">output链</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%9D%E7%BB%B4%E5%9B%BE"><span class="toc-number">2.3.</span> <span class="toc-text">思维图</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E5%BC%A0%E8%A1%A8%E2%80%94security%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text">第五张表—security表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%88%E9%87%8D%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">工作流程（重）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#extend-module"><span class="toc-number">5.</span> <span class="toc-text">extend module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cmd-and-example"><span class="toc-number">6.</span> <span class="toc-text">cmd  and example</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#parameter"><span class="toc-number">6.1.</span> <span class="toc-text">parameter</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">7.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&text=iptables 四表五链"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&is_video=false&description=iptables 四表五链"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=iptables 四表五链&body=Check out this article: http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&title=iptables 四表五链"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&name=iptables 四表五链&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/02/20/iptables-%E5%9B%9B%E8%A1%A8%E4%BA%94%E9%93%BE/&t=iptables 四表五链"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    2021
+	<a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/">豫ICP备190号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
