@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。">
+    <meta name="description" content="所需工具  nodejs和fun工具(阿里巴巴自创)，同时建议nodejs要安装最新版，把nodejs安装好之后就可以通过npm install @alicloud&#x2F;fun -g来安装fun工具，文档链接为fun  在阿里云上设置你的AccessKey(如果有这步自行跳过)  准备好你的域名，然后解析到阿里云的计算节点域名上。  准备php环境。  准备git工具  配置1、clone工程git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="通过函数计算搭建wordpress(一)">
 <meta property="og:url" content="http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/index.html">
 <meta property="og:site_name" content="Bit">
-<meta property="og:description" content="最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。">
+<meta property="og:description" content="所需工具  nodejs和fun工具(阿里巴巴自创)，同时建议nodejs要安装最新版，把nodejs安装好之后就可以通过npm install @alicloud&#x2F;fun -g来安装fun工具，文档链接为fun  在阿里云上设置你的AccessKey(如果有这步自行跳过)  准备好你的域名，然后解析到阿里云的计算节点域名上。  准备php环境。  准备git工具  配置1、clone工程git">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-09-24T08:02:58.000Z">
-<meta property="article:modified_time" content="2021-01-28T08:07:49.354Z">
+<meta property="article:modified_time" content="2021-02-28T03:50:37.177Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
     
@@ -103,7 +103,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&name=通过函数计算搭建wordpress(一)&description=&lt;p&gt;最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&name=通过函数计算搭建wordpress(一)&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&t=通过函数计算搭建wordpress(一)"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
@@ -153,9 +153,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。</p>
-<a id="more"></a>
-<h3 id="所需工具"><a href="#所需工具" class="headerlink" title="所需工具"></a>所需工具</h3><ol>
+    <h3 id="所需工具"><a href="#所需工具" class="headerlink" title="所需工具"></a>所需工具</h3><ol>
 <li> nodejs和fun工具(阿里巴巴自创)，同时建议nodejs要安装最新版，把nodejs安装好之后就可以通过npm install @alicloud/fun -g来安装fun工具，文档链接为<a target="_blank" rel="noopener" href="https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md?spm=a2c4g.11186623.2.45.4616fc78j3Sr6U&file=installation-zh.md">fun</a></li>
 <li> 在阿里云上设置你的AccessKey(如果有这步自行跳过)</li>
 <li> 准备好你的域名，然后解析到阿里云的<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/52984.html?spm=5176.11065259.1996646101.searchclickresult.1c642ae2Kdcg3k">计算节点域名</a>上。</li>
@@ -164,19 +162,23 @@
 </ol>
 <h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="1、clone工程"><a href="#1、clone工程" class="headerlink" title="1、clone工程"></a>1、clone工程</h4><p>git clone <a target="_blank" rel="noopener" href="https://github.com/awesome-fc/fc-wordpress.git">https://github.com/awesome-fc/fc-wordpress.git</a></p>
 <h4 id="2、选择你所要部署的数据库"><a href="#2、选择你所要部署的数据库" class="headerlink" title="2、选择你所要部署的数据库"></a>2、选择你所要部署的数据库</h4><p>通过解压fc-wordpress之后会有2种数据库给你选择，分别是sqlite和mysql(自行决定)，在此本人选择了mysql进行操作。 .env文件：使用命令cp .env_example .env，查看ls -a。配置解析：</p>
-<p>DEFAULT_REGION=cn-qingdao(这里本人选择青岛的计算节点)<br>ACCOUNT_ID=你阿里云的账户ID<br>ENDPOINT=http://你阿里云的账户ID.cn-qingdao.fc.aliyuncs.com<br>ACCESS_KEY_ID=你阿里云的AccessKey ID<br>ACCESS_KEY_SECRET=你阿里云的AccessKey Secret</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DEFAULT_REGION&#x3D;cn-qingdao(这里本人选择青岛的计算节点)</span><br><span class="line">ACCOUNT_ID&#x3D;你阿里云的账户ID</span><br><span class="line">ENDPOINT&#x3D;http:&#x2F;&#x2F;你阿里云的账户ID.cn-qingdao.fc.aliyuncs.com</span><br><span class="line">ACCESS_KEY_ID&#x3D;你阿里云的AccessKey ID</span><br><span class="line">ACCESS_KEY_SECRET&#x3D;你阿里云的AccessKey Secret</span><br></pre></td></tr></table></figure>
 <p>初始化：</p>
-<p>fun nas init<br>fun nas info</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fun nas init</span><br><span class="line">fun nas info</span><br></pre></td></tr></table></figure>
 <p>接着通过上面步骤之后就会自动创建一个文件目录/fc-wordpress/fc-web-mysql/.fun/nas/auto-default/fc-wp-mysql/wordpress，你可以通过php -S 0.0.0.0：80来测试一下是否出错，同时要自行创建一个管理员。 把wordpress上传到nas</p>
-<p>func nas sync<br>fun nas ls nas:///mnt/auto/  #检查是否同步成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func nas sync</span><br><span class="line">fun nas ls nas:&#x2F;&#x2F;&#x2F;mnt&#x2F;auto&#x2F;  #检查是否同步成功</span><br></pre></td></tr></table></figure>
+
+
 <h4 id="最后一步-有坑"><a href="#最后一步-有坑" class="headerlink" title="最后一步(有坑)"></a>最后一步(有坑)</h4><ol>
 <li> 修改fc-web-mysql下的index.php文件中的$host参数中的值为你的域名。</li>
 <li> 修改fc-web-mysql下的template.yml文件中的字段fc-wp-demo(名字要独一无二)，注意这一步(本人当时就卡在这，因为官方的文件说的是修改 template.yml LogConfig 中的 Project, 任意取一个不会重复的名字即可)。</li>
 <li> 修改fc-web-mysql下的template.yml文件中的 fc-wordpress-domain-&gt;Properties-&gt;DomainName中的值为你的域名</li>
 <li> 其他的应该只是一些注释和描述，本人没细看，主要还是下面打红字的地方</li>
 </ol>
-<p>Transform: ‘Aliyun::Serverless-2018-04-03’<br>Resources:<br>  fc-wp-mysql:<br>    Type: ‘Aliyun::Serverless::Service’<br>    Properties:<br>      Description: ‘run wordpress on FC’<br>      NasConfig: Auto<br>      LogConfig:<br>        Project: fc-wp-demo<br>        Logstore: mysql-log<br>…………..<br>fc-wp-demo:<br>  Type: ‘Aliyun::Serverless::Log’<br>  Properties:<br>    Description: ‘fc web log project’<br>  mysql-log:<br>    Type: ‘Aliyun::Serverless::Log::Logstore’<br>    Properties:<br>      TTL: 10<br>      ShardCount: 1<br>fc-wordpress-domain:<br>  Type: ‘Aliyun::Serverless::CustomDomain’<br>  Properties:<br>     DomainName: 你的域名<br>     Protocol: HTTP<br>     RouteConfig:<br>        Routes:<br>           ‘/*‘:<br>           ServiceName: fc-wp-mysql<br>           FunctionName: wp-func</p>
-<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><p>fun deploy</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Transform: &#39;Aliyun::Serverless-2018-04-03&#39; </span><br><span class="line">Resources: </span><br><span class="line">  fc-wp-mysql: </span><br><span class="line">    Type: &#39;Aliyun::Serverless::Service&#39; </span><br><span class="line">    Properties: </span><br><span class="line">      Description: &#39;run wordpress on FC&#39; </span><br><span class="line">      NasConfig: Auto </span><br><span class="line">      LogConfig: </span><br><span class="line">        Project: fc-wp-demo</span><br><span class="line">        Logstore: mysql-log </span><br><span class="line">..............</span><br><span class="line">fc-wp-demo: </span><br><span class="line">  Type: &#39;Aliyun::Serverless::Log&#39; </span><br><span class="line">  Properties: </span><br><span class="line">    Description: &#39;fc web log project&#39; </span><br><span class="line">  mysql-log: </span><br><span class="line">    Type: &#39;Aliyun::Serverless::Log::Logstore&#39; </span><br><span class="line">    Properties: </span><br><span class="line">      TTL: 10 </span><br><span class="line">      ShardCount: 1 </span><br><span class="line">fc-wordpress-domain: </span><br><span class="line">  Type: &#39;Aliyun::Serverless::CustomDomain&#39; </span><br><span class="line">  Properties: </span><br><span class="line">     DomainName: 你的域名</span><br><span class="line">     Protocol: HTTP </span><br><span class="line">     RouteConfig: </span><br><span class="line">        Routes: </span><br><span class="line">           &#39;&#x2F;\*&#39;: </span><br><span class="line">           ServiceName: fc-wp-mysql </span><br><span class="line">           FunctionName: wp-func</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fun deploy</span><br></pre></td></tr></table></figure>
 <p>部署成功之后，在你的阿里云上面就会相应的服务与函数。比如说_FUN_NAS_fc-wp-mysql服务、fc-web-mysql服务和一个fun-generated-default-service服务(确保远端nas目录存在)。</p>
 <h3 id="注意事项-坑"><a href="#注意事项-坑" class="headerlink" title="注意事项(坑)"></a>注意事项(坑)</h3><p>在func nas sync之前，建议访问后台把WordPress地址和站点地址全给出你的域名，不然在部署成功之后你访问网址就会导致有一些样式资源会走你所部署wordpress的服务器ip去获取资源，就不会走你的域名到达nas获取资源，这时就会出现404错误。</p>
 <h3 id="目前状况和测试"><a href="#目前状况和测试" class="headerlink" title="目前状况和测试"></a>目前状况和测试</h3><p>目前本人另外申请了一个域名还在备案，之后性能和测试再更新。  </p>
@@ -224,7 +226,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&title=通过函数计算搭建wordpress(一)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&name=通过函数计算搭建wordpress(一)&description=&lt;p&gt;最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&name=通过函数计算搭建wordpress(一)&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/09/24/%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%97%E6%90%AD%E5%BB%BAwordpress/&t=通过函数计算搭建wordpress(一)"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 

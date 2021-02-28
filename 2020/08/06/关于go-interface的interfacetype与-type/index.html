@@ -6,19 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="好久没聊过Go了，今天无意中看到一篇文章是关于Go语言规范的，涉及到以前看过的interface内部构造，因此打算在这用写的形式总结一下，加深理解。">
+    <meta name="description" content="题目一1234567891011121314151617........type T interface&amp;#123;&amp;#125;type X stringtype Y &#x3D; stringfunc main() &amp;#123;   var t T &#x3D; &quot;abc&quot;   var x X &#x3D; &quot;abc&quot;   var y Y &#x3D; &quot;abc&quot;   fmt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于Go interface的interfacetype与_type">
 <meta property="og:url" content="http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/index.html">
 <meta property="og:site_name" content="Bit">
-<meta property="og:description" content="好久没聊过Go了，今天无意中看到一篇文章是关于Go语言规范的，涉及到以前看过的interface内部构造，因此打算在这用写的形式总结一下，加深理解。">
+<meta property="og:description" content="题目一1234567891011121314151617........type T interface&amp;#123;&amp;#125;type X stringtype Y &#x3D; stringfunc main() &amp;#123;   var t T &#x3D; &quot;abc&quot;   var x X &#x3D; &quot;abc&quot;   var y Y &#x3D; &quot;abc&quot;   fmt">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://www.hizjlhi.com/2020/08/20200804170130760.png">
+<meta property="og:image" content="http://example.com/2020/08/06/images/2020/08/20200804170130760.png">
 <meta property="article:published_time" content="2020-08-05T16:37:35.000Z">
-<meta property="article:modified_time" content="2021-01-28T08:07:49.281Z">
+<meta property="article:modified_time" content="2021-02-28T03:52:21.580Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.hizjlhi.com/2020/08/20200804170130760.png">
+<meta name="twitter:image" content="http://example.com/2020/08/06/images/2020/08/20200804170130760.png">
     
     
       
@@ -105,7 +105,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&title=关于Go interface的interfacetype与_type"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&title=关于Go interface的interfacetype与_type"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&title=关于Go interface的interfacetype与_type"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&name=关于Go interface的interfacetype与_type&description=&lt;p&gt;好久没聊过Go了，今天无意中看到一篇文章是关于Go语言规范的，涉及到以前看过的interface内部构造，因此打算在这用写的形式总结一下，加深理解。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&name=关于Go interface的interfacetype与_type&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&t=关于Go interface的interfacetype与_type"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
@@ -155,21 +155,14 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>好久没聊过Go了，今天无意中看到一篇文章是关于Go语言规范的，涉及到以前看过的interface内部构造，因此打算在这用写的形式总结一下，加深理解。</p>
-<a id="more"></a>
-<h3 id="题目一"><a href="#题目一" class="headerlink" title="题目一"></a>题目一</h3><p>注：题目来源会在下方参考写出。本文主要是对里面涉及到的知识进行个人总结。</p>
-<p>……..<br>type T interface{}<br>type X string<br>type Y = string</p>
-<p>func main() {<br>   var t T = “abc”<br>   var x X = “abc”<br>   var y Y = “abc”</p>
-<p>   fmt.Println(t == x)<br>   fmt.Println(t == string(x))</p>
-<p>   fmt.Println(t == y)<br>   fmt.Println(t == string(y))<br>}<br>// 输出false   true  true  true</p>
-<p>具体为什么可以自己先思考一下，主要涉及到Go里面的interface内部构造。</p>
+    <h3 id="题目一"><a href="#题目一" class="headerlink" title="题目一"></a>题目一</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">........</span><br><span class="line"><span class="keyword">type</span> T <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line"><span class="keyword">type</span> X <span class="keyword">string</span></span><br><span class="line"><span class="keyword">type</span> Y = <span class="keyword">string</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="keyword">var</span> t T = <span class="string">&quot;abc&quot;</span></span><br><span class="line">   <span class="keyword">var</span> x X = <span class="string">&quot;abc&quot;</span></span><br><span class="line">   <span class="keyword">var</span> y Y = <span class="string">&quot;abc&quot;</span></span><br><span class="line"></span><br><span class="line">   fmt.Println(t == x)</span><br><span class="line">   fmt.Println(t == <span class="keyword">string</span>(x))</span><br><span class="line"></span><br><span class="line">   fmt.Println(t == y)</span><br><span class="line">   fmt.Println(t == <span class="keyword">string</span>(y))</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 输出false   true  true  true</span></span><br></pre></td></tr></table></figure>
 <h3 id="interface的内部结构"><a href="#interface的内部结构" class="headerlink" title="interface的内部结构"></a>interface的内部结构</h3><p>总所周知，在Go里面任何类型都实现了空接口，而非空接口则必须要实现其里面的方法才算是实现了这个非空接口。 当比较t==x时，t的动态类型是string，而x的动态类型是</p>
-<h4 id="空接口结构"><a href="#空接口结构" class="headerlink" title="空接口结构"></a>空接口结构</h4><p>type eface struct {<br>   _type *_type<br>   data  unsafe.Pointer<br>}</p>
+<h4 id="空接口结构"><a href="#空接口结构" class="headerlink" title="空接口结构"></a>空接口结构</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> eface <span class="keyword">struct</span> &#123;</span><br><span class="line">   _type *_type</span><br><span class="line">   data  unsafe.Pointer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>空接口的结构也十分简单，_type是指向Go内部所定义的类型系统，在这就不展开述说，而data这指向接口的数据。</p>
-<h4 id="非空接口结构"><a href="#非空接口结构" class="headerlink" title="非空接口结构"></a>非空接口结构</h4><p>非空接口的构造相对复杂，这里就贴个本人画的图： <img src="http://www.hizjlhi.com/2020/08/20200804170130760.png"> 由此可见，在Go中的interface内部构造还是挺复杂的。</p>
+<h4 id="非空接口结构"><a href="#非空接口结构" class="headerlink" title="非空接口结构"></a>非空接口结构</h4><p>非空接口的构造相对复杂，这里就贴个本人画的图： <img src="../images/2020/08/20200804170130760.png"> 由此可见，在Go中的interface内部构造还是挺复杂的。</p>
 <h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><p>解决题目的关键是要理解Go interface。</p>
 <h4 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h4><p>比如说请看下面一题</p>
-<p>var rw io.ReadWriter<br>v, _ := os.Open(“test.txt”)<br>rw = v<br>fmt.Printf(“%T”, rw)<br>//*os.File</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> rw io.ReadWriter</span><br><span class="line">v, _ := os.Open(<span class="string">&quot;test.txt&quot;</span>)</span><br><span class="line">rw = v</span><br><span class="line">fmt.Printf(<span class="string">&quot;%T&quot;</span>, rw)</span><br><span class="line"><span class="comment">//*os.File</span></span><br></pre></td></tr></table></figure>
 <p>问题来了，我们用一个var定义了一个io.ReadWriter类型的rw，之后一系列操作结果显示rw的类型为*os.File 这里就涉及到iface结构里面的interfacetype与_type这俩个字段了。interfacetype字段是指向<strong>接口所定义的类型信息</strong>，也可以理解为一个静态类型。而_type字段则是<strong>接口实际指向的类型信息</strong>，也就是你人为的手动的赋值(也可称动态类型)。 由此这就可以解释清楚了，在Go里面所有类型都实现了空接口，而用var定义的rw初始的interfacetype指向了io.ReadWriter类型，之后通过os包打开了一个文件v，其类型为*os.File。但又赋给rw，这时rw的_type字段便指向了*os.File类型。因此最后结果就为*os.File。</p>
 <h4 id="题目一的解法"><a href="#题目一的解法" class="headerlink" title="题目一的解法"></a>题目一的解法</h4><p>首先分析一下三个type，type X string只是一个自定义类型，底层类型还是string，但X与string是不同类型的。而type Y = string，Y只是string的一个别名。 根据Go语言规范里面的一句话： A value <code>x</code> of non-interface type <code>X</code> and a value <code>t</code> of interface type <code>T</code> are comparable when values of type <code>X</code> are comparable and <code>X</code> implements <code>T</code>. They are equal if <code>t</code>‘s dynamic type is identical to <code>X</code> and <code>t</code>‘s dynamic value is equal to <code>x</code>. 再结合上述所说的interface内部构造，可以得知t的动态类型(_type)为string，动态值为abc，而x动态类型(_type)为X，动态值为abc，因此 t != x 。</p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
@@ -217,7 +210,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&title=关于Go interface的interfacetype与_type"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&title=关于Go interface的interfacetype与_type"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&title=关于Go interface的interfacetype与_type"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&name=关于Go interface的interfacetype与_type&description=&lt;p&gt;好久没聊过Go了，今天无意中看到一篇文章是关于Go语言规范的，涉及到以前看过的interface内部构造，因此打算在这用写的形式总结一下，加深理解。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&name=关于Go interface的interfacetype与_type&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/&t=关于Go interface的interfacetype与_type"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 

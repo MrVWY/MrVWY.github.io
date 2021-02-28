@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="最近看到一个Go的官方文档里面的一个标题Why is my nil error value not equal to nil? 想到以前有人问过但那是没往interface内部机制去想(即使关于go里面interface构造也有所了解)">
+    <meta name="description" content="先来看一段代码 12345678910func foo() error &amp;#123;    var err *os.PathError &#x3D; nil    return err&amp;#125;func main()&amp;#123;   err :&#x3D; foo()   fmt.Println(err &#x3D;&#x3D; nil) &#x2F;&#x2F;false   fmt.Println(err &#x3D;&#x3D; (*os.PathError)(nil">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Why is my nil error value not equal to nil?">
 <meta property="og:url" content="http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/index.html">
 <meta property="og:site_name" content="Bit">
-<meta property="og:description" content="最近看到一个Go的官方文档里面的一个标题Why is my nil error value not equal to nil? 想到以前有人问过但那是没往interface内部机制去想(即使关于go里面interface构造也有所了解)">
+<meta property="og:description" content="先来看一段代码 12345678910func foo() error &amp;#123;    var err *os.PathError &#x3D; nil    return err&amp;#125;func main()&amp;#123;   err :&#x3D; foo()   fmt.Println(err &#x3D;&#x3D; nil) &#x2F;&#x2F;false   fmt.Println(err &#x3D;&#x3D; (*os.PathError)(nil">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-09-25T11:15:30.000Z">
-<meta property="article:modified_time" content="2021-01-28T08:07:49.365Z">
+<meta property="article:modified_time" content="2021-02-28T03:53:59.711Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
     
@@ -103,7 +103,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&title=Why is my nil error value not equal to nil?"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&title=Why is my nil error value not equal to nil?"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&title=Why is my nil error value not equal to nil?"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&name=Why is my nil error value not equal to nil?&description=&lt;p&gt;最近看到一个Go的官方文档里面的一个标题Why is my nil error value not equal to nil? 想到以前有人问过但那是没往interface内部机制去想(即使关于go里面interface构造也有所了解)&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&name=Why is my nil error value not equal to nil?&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&t=Why is my nil error value not equal to nil?"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
@@ -142,7 +142,7 @@
       
     <div class="article-category">
         <i class="fas fa-archive"></i>
-        <a class="category-link" href="/categories/LeetCode/">LeetCode</a>
+        <a class="category-link" href="/categories/Go/">Go</a>
     </div>
 
 
@@ -153,11 +153,10 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>最近看到一个Go的官方文档里面的一个标题Why is my nil error value not equal to nil? 想到以前有人问过但那是没往interface内部机制去想(即使关于go里面interface构造也有所了解)</p>
-<a id="more"></a>
-<p>先来看一段代码</p>
-<p>func foo() error {<br>    var err *os.PathError = nil<br>    return err<br>}</p>
-<p>func main(){<br>   err := foo()<br>   fmt.Println(err == nil) //false<br>   fmt.Println(err == (*os.PathError)(nil)) //true<br>}</p>
+    <p>先来看一段代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">foo</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> err *os.PathError = <span class="literal">nil</span></span><br><span class="line">    <span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">   err := foo()</span><br><span class="line">   fmt.Println(err == <span class="literal">nil</span>) <span class="comment">//false</span></span><br><span class="line">   fmt.Println(err == (*os.PathError)(<span class="literal">nil</span>)) <span class="comment">//true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 <h3 id="why-nil-is-not-nil"><a href="#why-nil-is-not-nil" class="headerlink" title="why nil is not nil?"></a>why nil is not nil?</h3><p>前提：要了解go中的interface内部构造，分清楚空接口和非空接口。可以参考🔗<a target="_blank" rel="noopener" href="http://www.hizjlhi.com/archives/354">链接</a>。总的来说还是牵涉到interface的动静类型相关。 在上述代码中，通过foo函数返回的err值在非空接口中可以表示为[nil，*os.PathError]，其与nil([nil，nil])必然不相等。 而 (*os.PathError)(nil) 的写法实际上等于 var a *os.PathErrot = nil。这种 (*os.PathError)(nil) 写法就比较少见。主要还是interface的动静态类型要区分。</p>
 <h3 id="回想"><a href="#回想" class="headerlink" title="回想"></a>回想</h3><p>现在回想起来，当时问我两个nil比较是否相等，那时一脸懵逼。回想起来问题的本质应该是要从上述所讲的方面来出发来说明两个nil比较是否相等。</p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ol>
@@ -206,7 +205,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&title=Why is my nil error value not equal to nil?"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&title=Why is my nil error value not equal to nil?"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&title=Why is my nil error value not equal to nil?"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&name=Why is my nil error value not equal to nil?&description=&lt;p&gt;最近看到一个Go的官方文档里面的一个标题Why is my nil error value not equal to nil? 想到以前有人问过但那是没往interface内部机制去想(即使关于go里面interface构造也有所了解)&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&name=Why is my nil error value not equal to nil?&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/09/25/why-is-my-nil-error-value-not-equal-to-nil/&t=Why is my nil error value not equal to nil?"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 

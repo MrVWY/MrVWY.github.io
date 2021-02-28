@@ -13,12 +13,12 @@
 <meta property="og:site_name" content="Bit">
 <meta property="og:description" content="最近在TCP卷3中看到了一个time_wait状态截断，引起了我的注意。同时也注意到了TCP重置攻击方法。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://www.hizjlhi.com/2020/09/20200903160427835.png">
+<meta property="og:image" content="http://example.com/2020/09/04/images/2020/09/20200903160427835.png">
 <meta property="article:published_time" content="2020-09-04T00:59:55.000Z">
-<meta property="article:modified_time" content="2021-01-28T08:07:49.331Z">
+<meta property="article:modified_time" content="2021-02-28T03:11:03.946Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.hizjlhi.com/2020/09/20200903160427835.png">
+<meta name="twitter:image" content="http://example.com/2020/09/04/images/2020/09/20200903160427835.png">
     
     
       
@@ -157,7 +157,7 @@
   <div class="content" itemprop="articleBody">
     <p>最近在TCP卷3中看到了一个time_wait状态截断，引起了我的注意。同时也注意到了TCP重置攻击方法。</p>
 <a id="more"></a>
-<h3 id="time-wait状态截断"><a href="#time-wait状态截断" class="headerlink" title="time_wait状态截断"></a>time_wait状态截断</h3><p>目前time_wait状态截断只要是作用于T/TCP协议中。具体还是看图理解 <img src="http://www.hizjlhi.com/2020/09/20200903160427835.png"> 由上图可知在客户与服务器之间的交互的过程中，比较TCP/IP协议，其多发送了FIN。 这个time_wait状态截断主要发生在上图的新连接主动打开这块，可以明显看出time_wait直接被截。仔细观察结合卷3的解释，出现这情况是因此T/TCP新增的字段CC大于上一条连接(8&gt;6)，于是就导致了老的连接关闭，新的连接开始建立。</p>
+<h3 id="time-wait状态截断"><a href="#time-wait状态截断" class="headerlink" title="time_wait状态截断"></a>time_wait状态截断</h3><p>目前time_wait状态截断只要是作用于T/TCP协议中。具体还是看图理解 <img src="../images/2020/09/20200903160427835.png"> 由上图可知在客户与服务器之间的交互的过程中，比较TCP/IP协议，其多发送了FIN。 这个time_wait状态截断主要发生在上图的新连接主动打开这块，可以明显看出time_wait直接被截。仔细观察结合卷3的解释，出现这情况是因此T/TCP新增的字段CC大于上一条连接(8&gt;6)，于是就导致了老的连接关闭，新的连接开始建立。</p>
 <h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>作用通常是与性能或者内存所挂勾 根据卷3所知出现time_wait截断的目的是为了重用本地端口以减少对控制块内存的需求。但前提是连接的持续时间小于报文段最大生存时间MSL。 不过T/TCP目前并没有成为一个标准和被应用，因此time_wait状态的截断在平常是少见的。</p>
 <h3 id="Reset-attack"><a href="#Reset-attack" class="headerlink" title="Reset attack"></a>Reset attack</h3><p>Reset attack其实就是利用了TCP中的RST字段。当处于正常的TCP连接的双方，任何一方收到了一个RST位为1的包，就会立即重置当前TCP连接，丢弃接收到的该连接的所有数据包，相当于终止了该TCP连接。应用方面有好也有坏，可以伪造RST报文到任意一方以达到破坏TCP连接为目的，也可以利用RST报文来中断TCP连接</p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>

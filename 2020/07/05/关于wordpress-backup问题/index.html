@@ -13,12 +13,12 @@
 <meta property="og:site_name" content="Bit">
 <meta property="og:description" content="最近在研究关于wordpress备份的问题，目前稍有眉目已经在线上运行中，效果还不错，相应的解决方案请看下文。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://www.hizjlhi.com/2020/07/20200714133632307.png">
+<meta property="og:image" content="http://example.com/2020/07/05/images/2020/07/20200714133632307.png">
 <meta property="article:published_time" content="2020-07-04T16:58:49.000Z">
-<meta property="article:modified_time" content="2021-01-28T08:07:49.164Z">
+<meta property="article:modified_time" content="2021-02-28T03:12:08.685Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.hizjlhi.com/2020/07/20200714133632307.png">
+<meta name="twitter:image" content="http://example.com/2020/07/05/images/2020/07/20200714133632307.png">
     
     
       
@@ -162,7 +162,7 @@
 <h3 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h3><p>在操作wp export遇到了几个坑，第一点是当前目录是否存在wp-config.php，看过wordprss后台数据库的都知道，wordpress把文章都存在wp-post的表中，而数据库的连接是在wp-config.php中设置的，wordpress-importer应该就是找到wp-config.php从数据库中提取数据打包成xml文件。因此确保在执行wp export命令时当前目录要有wp-config.php文件。 第二点是关于执行wp export之后，报错信息为</p>
 <p>PHP Fatal error:  Uncaught Error: Class ‘DOMDocument’ not found in phar:///usr/local/bin/wp/vendor/nb/oxymel/Oxymel.php:147<br>Stack trace:</p>
 <p>这点首先确定问题为PHP的DOMDocument的事，具体相应的解决方法在<a target="_blank" rel="noopener" href="https://github.com/wp-cli/wp-cli/issues/3363">Github</a>上也找到了。</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>解决方法可以去我<a target="_blank" rel="noopener" href="https://github.com/MrVWY/wodpress-backup">GitHub</a>上面查看(注:上面的Go脚本是我随手编写的，在实际中我已经改成用shell编写了，可以无视！)，下面放一些效果图 <img src="http://www.hizjlhi.com/2020/07/20200714133632307.png"> 可以看到文章，分类标签等通过wp-cli导出来也就164KB(对应着目前本文章之前的文章等资料)，因此也十分让我满意。</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>解决方法可以去我<a target="_blank" rel="noopener" href="https://github.com/MrVWY/wodpress-backup">GitHub</a>上面查看(注:上面的Go脚本是我随手编写的，在实际中我已经改成用shell编写了，可以无视！)，下面放一些效果图 <img src="../images/2020/07/20200714133632307.png"> 可以看到文章，分类标签等通过wp-cli导出来也就164KB(对应着目前本文章之前的文章等资料)，因此也十分让我满意。</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于wordpress站点的备份目前的思路大概也比较清楚，主要是对于wp-cli的一些坑需要留意。</p>
 
   </div>
