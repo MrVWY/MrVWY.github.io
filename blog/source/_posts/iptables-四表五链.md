@@ -65,15 +65,15 @@ iptables -t raw -A PREROUTING -s 192.168.10.117 -j TRACK
 
 #### 思维图
 
-![](http://www.hizjlhi.com/2020/09/20200914163440890.png)
+![](../images/2020/09/20200914163440890.png)
 
 ### 第五张表---security表
 
-该表是用来强制性访问控制(Mandatory Access Control,MAC)，通过设置内核中SElinux来实现。其提供2条调用链来供使用：input、output。不过我记得在某些场景下，这个SElinux通常需要给关闭。因此该表可能在平常用的不多。 ![](http://www.hizjlhi.com/2020/09/20200915105245370.png)
+该表是用来强制性访问控制(Mandatory Access Control,MAC)，通过设置内核中SElinux来实现。其提供2条调用链来供使用：input、output。不过我记得在某些场景下，这个SElinux通常需要给关闭。因此该表可能在平常用的不多。 ![](../images/2020/09/20200915105245370.png)
 
 ### 工作流程（重）
 
-![](http://www.hizjlhi.com/2020/09/20200914163703653.png)  
+![](../images/2020/09/20200914163703653.png)  
 
 ### extend module
 

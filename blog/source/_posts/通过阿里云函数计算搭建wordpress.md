@@ -8,8 +8,6 @@ comments: false
 date: 2020-09-24 16:02:58
 ---
 
-最近为了节省博客的成本，打算在阿里云上部署个wordpress的函数计算为此来节省成本。
-<!-- more -->
 ### 所需工具
 
 1.  nodejs和fun工具(阿里巴巴自创)，同时建议nodejs要安装最新版，把nodejs安装好之后就可以通过npm install @alicloud/fun -g来安装fun工具，文档链接为[fun](https://github.com/alibaba/funcraft/blob/master/docs/usage/installation-zh.md?spm=a2c4g.11186623.2.45.4616fc78j3Sr6U&file=installation-zh.md)
@@ -28,21 +26,29 @@ git clone https://github.com/awesome-fc/fc-wordpress.git
 
 通过解压fc-wordpress之后会有2种数据库给你选择，分别是sqlite和mysql(自行决定)，在此本人选择了mysql进行操作。 .env文件：使用命令cp .env\_example .env，查看ls -a。配置解析：
 
-DEFAULT\_REGION=cn-qingdao(这里本人选择青岛的计算节点)
-ACCOUNT\_ID=你阿里云的账户ID
+```
+DEFAULT_REGION=cn-qingdao(这里本人选择青岛的计算节点)
+ACCOUNT_ID=你阿里云的账户ID
 ENDPOINT=http://你阿里云的账户ID.cn-qingdao.fc.aliyuncs.com
-ACCESS\_KEY\_ID=你阿里云的AccessKey ID
-ACCESS\_KEY\_SECRET=你阿里云的AccessKey Secret
+ACCESS_KEY_ID=你阿里云的AccessKey ID
+ACCESS_KEY_SECRET=你阿里云的AccessKey Secret
+```
 
 初始化：
 
+```
 fun nas init
 fun nas info
+```
 
 接着通过上面步骤之后就会自动创建一个文件目录/fc-wordpress/fc-web-mysql/.fun/nas/auto-default/fc-wp-mysql/wordpress，你可以通过php -S 0.0.0.0：80来测试一下是否出错，同时要自行创建一个管理员。 把wordpress上传到nas
 
+```
 func nas sync
 fun nas ls nas:///mnt/auto/  #检查是否同步成功
+```
+
+
 
 #### 最后一步(有坑)
 
@@ -51,6 +57,7 @@ fun nas ls nas:///mnt/auto/  #检查是否同步成功
 3.  修改fc-web-mysql下的template.yml文件中的 fc-wordpress-domain->Properties->DomainName中的值为你的域名
 4.  其他的应该只是一些注释和描述，本人没细看，主要还是下面打红字的地方
 
+```
 Transform: 'Aliyun::Serverless-2018-04-03' 
 Resources: 
   fc-wp-mysql: 
@@ -81,10 +88,15 @@ fc-wordpress-domain:
            '/\*': 
            ServiceName: fc-wp-mysql 
            FunctionName: wp-func
+```
+
+
 
 ### 部署
 
+```
 fun deploy
+```
 
 部署成功之后，在你的阿里云上面就会相应的服务与函数。比如说\_FUN\_NAS\_fc-wp-mysql服务、fc-web-mysql服务和一个fun-generated-default-service服务(确保远端nas目录存在)。
 

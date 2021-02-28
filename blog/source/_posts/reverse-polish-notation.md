@@ -18,7 +18,7 @@ Reverse Polish Notationye也称逆波兰表达式(后缀表达式)。
 
 a+b\*c
 
-根据上面的中缀表达式。首先我们把a、b\*c看成2个整体，这样就回到了一开始的a+b模式。a+b\*c就变为了ab\*c+，接着还剩b\*c这一部分思路一样，ab\*c+就变为了abc\*+。 ![](http://www.hizjlhi.com/2020/07/20200724043232386.png) 经过上面的例子，可以大致了解中缀变后缀的基本流程。
+根据上面的中缀表达式。首先我们把a、b\*c看成2个整体，这样就回到了一开始的a+b模式。a+b\*c就变为了ab\*c+，接着还剩b\*c这一部分思路一样，ab\*c+就变为了abc\*+。 ![](../images/2020/07/20200724043232386.png) 经过上面的例子，可以大致了解中缀变后缀的基本流程。
 
 #### 中缀变后缀例子2
 
@@ -40,6 +40,8 @@ a+b\*c
 #### 代码实现
 
 //比较运算符的优先级
+
+```go
 func getPriority(ch byte) int {
    priority := 0
    switch ch {
@@ -53,70 +55,76 @@ func getPriority(ch byte) int {
    }
    return priority
 }
+```
 
 //中缀变后缀
+
+```go
 func changeRPN(ch string) string {
-   nums := make(\[\]byte,0) //store number
-   stack := make(\[\]byte,0) //store operator
+   nums := make([]byte,0) //store number
+   stack := make([]byte,0) //store operator
    for i := 0 ; i < len(ch) ; i++ {
-      if ch\[i\] == ' ' {continue} //分隔符
-      if ch\[i\] >= '0' && ch\[i\] <= '9' {
+      if ch[i] == ' ' {continue} //分隔符
+      if ch[i] >= '0' && ch[i] <= '9' {
          //如果是二位数以上
-         for i < len(ch) && ch\[i\] >= '0' && ch\[i\] <= '9' {
-            nums = append(nums, ch\[i\])
+         for i < len(ch) && ch[i] >= '0' && ch[i] <= '9' {
+            nums = append(nums, ch[i])
             i++
          }
          nums = append(nums, ' ') //分隔符,不然会出现11\*2 -> 112\*
          i--
       }
 
-      if ch\[i\] == '(' {
-         //直接入栈
-         stack = append(stack, ch\[i\])
-      }else if ch\[i\] == ')' {
-         //将括号中间的符号输出到尾部
-         for len(stack) != 0 {
-            top := stack\[len(stack)-1\]
-            if top == '(' {
-               stack = stack\[:len(stack)-1\]
-               break
-            }
-            nums = append(nums, top)
-            nums = append(nums, ' ')
-            stack = stack\[:len(stack)-1\]
-         }
-      }
+  if ch[i] == '(' {
+     //直接入栈
+     stack = append(stack, ch[i])
+  }else if ch[i] == ')' {
+     //将括号中间的符号输出到尾部
+     for len(stack) != 0 {
+        top := stack[len(stack)-1]
+        if top == '(' {
+           stack = stack[:len(stack)-1]
+           break
+        }
+        nums = append(nums, top)
+        nums = append(nums, ' ')
+        stack = stack[:len(stack)-1]
+     }
+  }
 
-      if ch\[i\] == '+'  ch\[i\] == '-'  ch\[i\] == '\*'  ch\[i\] == '/' {
-         if len(stack) == 0 {
-            stack = append(stack, ch\[i\])
-         }else {
-            if getPriority(ch\[i\]) > getPriority(stack\[len(stack)-1\]) {
-               stack = append(stack, ch\[i\])
-            }else {
-               //如果当前运算符优先级比运算栈栈顶的运算符优先级小,将栈顶运算符输出到尾部
-               for len(stack) != 0 && getPriority(ch\[i\]) <= getPriority(stack\[len(stack)-1\]) && stack\[len(stack)-1\] != '(' {
-                  nums = append(nums, stack\[len(stack)-1\])
-                  nums = append(nums, ' ')
-                  stack = stack\[:len(stack)-1\]
-               }
-               stack = append(stack, ch\[i\])
-            }
-         }
-      }
-   }
+  if ch[i] == '+'  ch[i] == '-'  ch[i] == '\*'  ch[i] == '/' {
+     if len(stack) == 0 {
+        stack = append(stack, ch[i])
+     }else {
+        if getPriority(ch[i]) > getPriority(stack[len(stack)-1]) {
+           stack = append(stack, ch[i])
+        }else {
+           //如果当前运算符优先级比运算栈栈顶的运算符优先级小,将栈顶运算符输出到尾部
+           for len(stack) != 0 && getPriority(ch[i]) <= getPriority(stack[len(stack)-1]) && stack[len(stack)-1] != '(' {
+              nums = append(nums, stack[len(stack)-1])
+              nums = append(nums, ' ')
+              stack = stack[:len(stack)-1]
+           }
+           stack = append(stack, ch[i])
+        }
+     }
+  }
+ }
    for len(stack) != 0 {
-      nums = append(nums, stack\[len(stack)-1\])
+      nums = append(nums, stack[len(stack)-1])
       nums = append(nums, ' ')
-      stack = stack\[:len(stack)-1\]
+      stack = stack[:len(stack)-1]
    }
 
    result := ""
    for i := 0 ; i < len(nums) ; i++ {
-      result += string(nums\[i\])
+      result += string(nums[i])
    }
    return result
 }
+```
+
+
 
 ### 后缀表达式计算
 
@@ -126,35 +134,39 @@ func changeRPN(ch string) string {
 
 #### 代码实现
 
+```go
 func calculateRPN(ch string) int {
    length := len(ch)
    var value1, value2, result int
-   stack := make(\[\]int,0)
+   stack := make([]int,0)
    for i := 0 ; i < length ; i++ {
-      if ch\[i\] >= '0' && ch\[i\] <= '9' {
-         tmp := int(ch\[i\] - 48)
+      if ch[i] >= '0' && ch[i] <= '9' {
+         tmp := int(ch[i] - 48)
          j := i+1
-         for ch\[j\] >= '0' && ch\[j\] <= '9' {
-            tmp = tmp \* 10 + int(ch\[j\] - 48)
+         for ch[j] >= '0' && ch[j] <= '9' {
+            tmp = tmp * 10 + int(ch[j] - 48)
             j++
          }
          stack = append(stack, tmp)
          i = j-1
       }
-      if ch\[i\] == '+'  ch\[i\] == '-'  ch\[i\] == '\*'  ch\[i\] == '/' {
-         value2 = stack\[len(stack)-1\]
-         stack = stack\[:len(stack)-1\]
-         value1 = stack\[len(stack)-1\]
-         stack = stack\[:len(stack)-1\]
-         if ch\[i\] == '+' { result = value1+value2
-         }else if ch\[i\] == '-' {result = value1-value2
-         }else if ch\[i\] == '\*' {result = value1\*value2
-         }else if ch\[i\] == '/' {result = value1/value2}
+      if ch[i] == '+'  ch[i] == '-'  ch[i] == '*'  ch[i] == '/' {
+         value2 = stack[len(stack)-1]
+         stack = stack[:len(stack)-1]
+         value1 = stack[len(stack)-1]
+         stack = stack[:len(stack)-1]
+         if ch[i] == '+' { result = value1+value2
+         }else if ch[i] == '-' {result = value1-value2
+         }else if ch[i] == '\*' {result = value1*value2
+         }else if ch[i] == '/' {result = value1/value2}
          stack = append(stack, result)
       }
    }
-   return stack\[len(stack)-1\]
+   return stack[len(stack)-1]
 }
+```
+
+
 
 ### 总结
 

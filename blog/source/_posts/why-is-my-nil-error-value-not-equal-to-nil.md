@@ -3,25 +3,29 @@ title: Why is my nil error value not equal to nil?
 tags: []
 id: '501'
 categories:
-  - - LeetCode
+  - - Go
 comments: false
 date: 2020-09-25 19:15:30
 ---
 
-最近看到一个Go的官方文档里面的一个标题Why is my nil error value not equal to nil? 想到以前有人问过但那是没往interface内部机制去想(即使关于go里面interface构造也有所了解)
-<!-- more -->
+
+
 先来看一段代码
 
+```go
 func foo() error {
-    var err \*os.PathError = nil
+    var err *os.PathError = nil
     return err
 }
 
 func main(){
    err := foo()
    fmt.Println(err == nil) //false
-   fmt.Println(err == (\*os.PathError)(nil)) //true
+   fmt.Println(err == (*os.PathError)(nil)) //true
 }
+```
+
+
 
 ### why nil is not nil?
 

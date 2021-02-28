@@ -8,12 +8,9 @@ comments: false
 date: 2020-08-06 00:37:35
 ---
 
-好久没聊过Go了，今天无意中看到一篇文章是关于Go语言规范的，涉及到以前看过的interface内部构造，因此打算在这用写的形式总结一下，加深理解。
-<!-- more -->
 ### 题目一
 
-注：题目来源会在下方参考写出。本文主要是对里面涉及到的知识进行个人总结。
-
+```go
 ........
 type T interface{}
 type X string
@@ -31,8 +28,7 @@ func main() {
    fmt.Println(t == string(y))
 }
 // 输出false   true  true  true
-
-具体为什么可以自己先思考一下，主要涉及到Go里面的interface内部构造。
+```
 
 ### interface的内部结构
 
@@ -40,16 +36,18 @@ func main() {
 
 #### 空接口结构
 
+```go
 type eface struct {
-   \_type \*\_type
+   _type *_type
    data  unsafe.Pointer
 }
+```
 
 空接口的结构也十分简单，\_type是指向Go内部所定义的类型系统，在这就不展开述说，而data这指向接口的数据。
 
 #### 非空接口结构
 
-非空接口的构造相对复杂，这里就贴个本人画的图： ![](http://www.hizjlhi.com/2020/08/20200804170130760.png) 由此可见，在Go中的interface内部构造还是挺复杂的。
+非空接口的构造相对复杂，这里就贴个本人画的图： ![](../images/2020/08/20200804170130760.png) 由此可见，在Go中的interface内部构造还是挺复杂的。
 
 ### 解题
 
@@ -59,11 +57,13 @@ type eface struct {
 
 比如说请看下面一题
 
+```go
 var rw io.ReadWriter
-v, \_ := os.Open("test.txt")
+v, _ := os.Open("test.txt")
 rw = v
 fmt.Printf("%T", rw)
-//\*os.File
+//*os.File
+```
 
 问题来了，我们用一个var定义了一个io.ReadWriter类型的rw，之后一系列操作结果显示rw的类型为\*os.File 这里就涉及到iface结构里面的interfacetype与\_type这俩个字段了。interfacetype字段是指向**接口所定义的类型信息**，也可以理解为一个静态类型。而\_type字段则是**接口实际指向的类型信息**，也就是你人为的手动的赋值(也可称动态类型)。 由此这就可以解释清楚了，在Go里面所有类型都实现了空接口，而用var定义的rw初始的interfacetype指向了io.ReadWriter类型，之后通过os包打开了一个文件v，其类型为\*os.File。但又赋给rw，这时rw的\_type字段便指向了\*os.File类型。因此最后结果就为\*os.File。
 

@@ -39,12 +39,12 @@ Go与C家族的互调，Go的几种编译模式。
 4.  \-buildmode=c-archive （ C动态链接文件）
     *   原版文档解释：Build the listed main package, plus all packages it imports, into a **C archive file**. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.
     *   注意：在使用go文件编译成能让C/C++引用的文件时，要主要必须要有的2个要求：第一是要在头部加入import "C"。第二是要在你想让C/C++引用的函数上方加入  //export  你的函数名。
-    *   产生文件：.a 、.h。.h文件可以在C/C++引用![](http://www.hizjlhi.com/2020/08/20200826095638331.png)
+    *   产生文件：.a 、.h。.h文件可以在C/C++引用![](../images/2020/08/20200826095638331.png)
     *   参考链接-[stackoverflow](https://stackoverflow.com/questions/40573401/building-a-dll-with-go-1-7)
 5.  \-buildmode=c-shared
     *   原版文档解释：Build the listed main package, plus all packages it imports, into a **C shared library**. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.
     *   大体上和c-archive模式差不多，主要是C archive file和C shared library的区别。按字面意思是file和library的区别。
-    *   产生文件：一个文件(不知用来干啥)，.h文件供C/C++调用。![](http://www.hizjlhi.com/2020/08/20200826095532942.png)
+    *   产生文件：一个文件(不知用来干啥)，.h文件供C/C++调用。![](../images/2020/08/20200826095532942.png)
 
 关于buildmode的参数还有exe、pie、plugin，这些参数就不展开多说。可以通过go help buildmode查看文档解析。
 
@@ -73,7 +73,7 @@ int main()
     return 0;
 }
 
-编译C+运行：**_gcc -o main hello.c h.a -undefined reference to \`pthread\_create'_** 注：这里的-lpthread参数还需研究，就目前来看是能够调用成功。与其相关的还有一个-pthread参数，仍需自行查阅相关资料。 就目前来看-lpthread是与POSIX(可移植操作系统接口) thread相关 ![](http://www.hizjlhi.com/2020/08/20200828140739493.png) 注意：上述只是个简单的例子，具体更复杂的问题涉及到C与Go直接的值范围等到一些问题还需要注意，因此在调用中更应该注重两种语言之间的类型转换。
+编译C+运行：**_gcc -o main hello.c h.a -undefined reference to \`pthread\_create'_** 注：这里的-lpthread参数还需研究，就目前来看是能够调用成功。与其相关的还有一个-pthread参数，仍需自行查阅相关资料。 就目前来看-lpthread是与POSIX(可移植操作系统接口) thread相关 ![](../images/2020/08/20200828140739493.png) 注意：上述只是个简单的例子，具体更复杂的问题涉及到C与Go直接的值范围等到一些问题还需要注意，因此在调用中更应该注重两种语言之间的类型转换。
 
 #### Go调C
 
