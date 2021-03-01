@@ -6,13 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta property="og:type" content="article">
+    <meta name="description" content="IntsAreSorted1func IntsAreSorted(a []int) bool IntsAreSorted检查a是否已排序为递增顺序 ReverseReverse包装一个Interface接口并返回一个新的Interface接口，对该接口排序可生成递减序列。 123s :&#x3D; []int&amp;#123;5, 2, 6, 3, 1, 4&amp;#125; &#x2F;&#x2F; unsortedsort.Sort(">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Go Sort Library Common functions">
 <meta property="og:url" content="http://example.com/2021/02/28/Go-Sort-Library-Common-functions/index.html">
 <meta property="og:site_name" content="Bit">
+<meta property="og:description" content="IntsAreSorted1func IntsAreSorted(a []int) bool IntsAreSorted检查a是否已排序为递增顺序 ReverseReverse包装一个Interface接口并返回一个新的Interface接口，对该接口排序可生成递减序列。 123s :&#x3D; []int&amp;#123;5, 2, 6, 3, 1, 4&amp;#125; &#x2F;&#x2F; unsortedsort.Sort(">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-02-28T03:05:18.000Z">
-<meta property="article:modified_time" content="2021-02-28T03:05:18.098Z">
+<meta property="article:modified_time" content="2021-03-01T07:05:24.710Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
     
@@ -105,7 +107,7 @@
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#IntsAreSorted"><span class="toc-number">1.</span> <span class="toc-text">IntsAreSorted</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reverse"><span class="toc-number">2.</span> <span class="toc-text">Reverse</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Search"><span class="toc-number">3.</span> <span class="toc-text">Search</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#StringsAreSorted"><span class="toc-number">4.</span> <span class="toc-text">StringsAreSorted</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SearchStrings"><span class="toc-number">5.</span> <span class="toc-text">SearchStrings</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -136,6 +138,11 @@
 
 
       
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Go/">Go</a>
+    </div>
+
 
       
 
@@ -144,7 +151,19 @@
   
 
   <div class="content" itemprop="articleBody">
-    
+    <h4 id="IntsAreSorted"><a href="#IntsAreSorted" class="headerlink" title="IntsAreSorted"></a>IntsAreSorted</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">IntsAreSorted</span><span class="params">(a []<span class="keyword">int</span>)</span> <span class="title">bool</span></span></span><br></pre></td></tr></table></figure>
+<p>IntsAreSorted检查a是否已排序为递增顺序</p>
+<h4 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h4><p>Reverse包装一个Interface接口并返回一个新的Interface接口，对该接口排序可生成递减序列。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s := []<span class="keyword">int</span>&#123;<span class="number">5</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>&#125; <span class="comment">// unsorted</span></span><br><span class="line">sort.Sort(sort.Reverse(sort.IntSlice(s)))</span><br><span class="line">fmt.Println(s) <span class="comment">//[6 5 4 3 2 1]</span></span><br></pre></td></tr></table></figure>
+<h4 id="Search"><a href="#Search" class="headerlink" title="Search"></a>Search</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Search</span><span class="params">(n <span class="keyword">int</span>, f <span class="keyword">func</span>(<span class="keyword">int</span>)</span> <span class="title">bool</span>) <span class="title">int</span></span></span><br></pre></td></tr></table></figure>
+<p>Search函数采用二分法搜索找到[0, n)区间内最小的满足f(i)==true的值i。</p>
+<p>例如在一个递增顺序的整数切片中找到值x</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x := <span class="number">23</span></span><br><span class="line">i := sort.Search(<span class="built_in">len</span>(data), <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span> <span class="title">bool</span></span> &#123; <span class="keyword">return</span> data[i] &gt;= x &#125;)</span><br><span class="line"><span class="keyword">if</span> i &lt; <span class="built_in">len</span>(data) &amp;&amp; data[i] == x &#123;</span><br><span class="line">	<span class="comment">// x is present at data[i]</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="comment">// x is not present in data,</span></span><br><span class="line">	<span class="comment">// but i is the index where it would be inserted.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="StringsAreSorted"><a href="#StringsAreSorted" class="headerlink" title="StringsAreSorted"></a>StringsAreSorted</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">StringsAreSorted</span><span class="params">(a []<span class="keyword">string</span>)</span> <span class="title">bool</span></span></span><br></pre></td></tr></table></figure>
+<p>StringsAreSorted检查a是否已排序为递增顺序。</p>
+<h4 id="SearchStrings"><a href="#SearchStrings" class="headerlink" title="SearchStrings"></a>SearchStrings</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SearchStrings</span><span class="params">(a []<span class="keyword">string</span>, x <span class="keyword">string</span>)</span> <span class="title">int</span></span></span><br></pre></td></tr></table></figure>
+<p>SearchStrings在递增顺序的a中搜索x，返回x的索引。如果查找不到，返回值是x应该插入a的位置（以保证a的递增顺序），返回值可以是len(a)。</p>
+
   </div>
 </article>
 
@@ -171,7 +190,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#IntsAreSorted"><span class="toc-number">1.</span> <span class="toc-text">IntsAreSorted</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reverse"><span class="toc-number">2.</span> <span class="toc-text">Reverse</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Search"><span class="toc-number">3.</span> <span class="toc-text">Search</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#StringsAreSorted"><span class="toc-number">4.</span> <span class="toc-text">StringsAreSorted</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SearchStrings"><span class="toc-number">5.</span> <span class="toc-text">SearchStrings</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
