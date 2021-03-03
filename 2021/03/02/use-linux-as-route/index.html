@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="install1yum install quagga 然后就是出现2个文件路径，第一个是配置文件的例子，存放于&#x2F;usr&#x2F;share&#x2F;doc&#x2F;quagga-XXXXX。第二个是运行配置文件，存放于&#x2F;etc&#x2F;quagga。 解除selinux限制 通过命令解除selinux限制 1setsebool -P zebra_write_config 1  通过修改文件解除selinux限制   1vim &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="use quagga to turn linux into a router">
+<meta property="og:url" content="http://example.com/2021/03/02/use-linux-as-route/index.html">
+<meta property="og:site_name" content="Bit">
+<meta property="og:description" content="install1yum install quagga 然后就是出现2个文件路径，第一个是配置文件的例子，存放于&#x2F;usr&#x2F;share&#x2F;doc&#x2F;quagga-XXXXX。第二个是运行配置文件，存放于&#x2F;etc&#x2F;quagga。 解除selinux限制 通过命令解除selinux限制 1setsebool -P zebra_write_config 1  通过修改文件解除selinux限制   1vim &amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-02T12:09:29.000Z">
+<meta property="article:modified_time" content="2021-03-03T09:49:49.291Z">
+<meta property="article:author" content="Bit">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>use quagga to turn linux into a router</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2021/02/28/Go-Sort-Library-Common-functions/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/03/02/use-linux-as-route/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/03/02/use-linux-as-route/&text=use quagga to turn linux into a router"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/03/02/use-linux-as-route/&is_video=false&description=use quagga to turn linux into a router"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=use quagga to turn linux into a router&body=Check out this article: http://example.com/2021/03/02/use-linux-as-route/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/03/02/use-linux-as-route/&name=use quagga to turn linux into a router&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/03/02/use-linux-as-route/&t=use quagga to turn linux into a router"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#install"><span class="toc-number">1.</span> <span class="toc-text">install</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%99%A4selinux%E9%99%90%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text">解除selinux限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEIP"><span class="toc-number">3.</span> <span class="toc-text">配置IP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BC%80%E5%90%AFzebra"><span class="toc-number">3.1.</span> <span class="toc-text">开启zebra</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5Quagga%E9%85%8D%E7%BD%AEip"><span class="toc-number">3.2.</span> <span class="toc-text">进入Quagga配置ip</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4%E9%85%8D%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">确认配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BF%9D%E6%8C%81%E9%85%8D%E7%BD%AE"><span class="toc-number">3.4.</span> <span class="toc-text">保持配置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEBGP"><span class="toc-number">4.</span> <span class="toc-text">配置BGP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BC%80%E5%90%AFbgpd"><span class="toc-number">4.1.</span> <span class="toc-text">开启bgpd</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5Quagga%E9%85%8D%E7%BD%AEbgp"><span class="toc-number">4.2.</span> <span class="toc-text">进入Quagga配置bgp</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="toc-number">4.3.</span> <span class="toc-text">保存配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bbgp%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%E6%83%85%E5%86%B5"><span class="toc-number">4.4.</span> <span class="toc-text">查看bgp连接建立情况</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E8%B7%AF%E7%94%B1%E5%89%8D%E7%BC%80"><span class="toc-number">5.</span> <span class="toc-text">发布路由前缀</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%91%E5%B8%83"><span class="toc-number">5.1.</span> <span class="toc-text">发布</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4%E6%98%AF%E5%90%A6%E5%8F%91%E5%B8%83%E6%88%90%E5%8A%9F"><span class="toc-number">5.2.</span> <span class="toc-text">确认是否发布成功</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%BB%AD"><span class="toc-number">6.</span> <span class="toc-text">后续</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#question"><span class="toc-number">7.</span> <span class="toc-text">question</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        use quagga to turn linux into a router
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Bit</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-03-02T12:09:29.000Z" itemprop="datePublished">2021-03-02</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h4 id="install"><a href="#install" class="headerlink" title="install"></a>install</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install quagga</span><br></pre></td></tr></table></figure>
+<p>然后就是出现2个文件路径，第一个是配置文件的例子，存放于/usr/share/doc/quagga-XXXXX。第二个是运行配置文件，存放于/etc/quagga。</p>
+<h4 id="解除selinux限制"><a href="#解除selinux限制" class="headerlink" title="解除selinux限制"></a>解除selinux限制</h4><ul>
+<li><p>通过命令解除selinux限制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setsebool -P zebra_write_config 1 </span><br></pre></td></tr></table></figure></li>
+<li><p>通过修改文件解除selinux限制</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;selinux&#x2F;config </span><br></pre></td></tr></table></figure>
+<p>修改SELINUX为disabled </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># This file controls the state of SELinux on the system.</span><br><span class="line"># SELINUX&#x3D; can take one of these three values:</span><br><span class="line">#     enforcing - SELinux security policy is enforced.</span><br><span class="line">#     permissive - SELinux prints warnings instead of enforcing.</span><br><span class="line">#     disabled - No SELinux policy is loaded.</span><br><span class="line">SELINUX&#x3D;disabled </span><br><span class="line"># SELINUXTYPE&#x3D; can take one of three values:</span><br><span class="line">#     targeted - Targeted processes are protected,</span><br><span class="line">#     minimum - Modification of targeted policy. Only selected processes are protected. </span><br><span class="line">#     mls - Multi Level Security protection.</span><br><span class="line">SELINUXTYPE&#x3D;targeted</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="配置IP"><a href="#配置IP" class="headerlink" title="配置IP"></a>配置IP</h4><h5 id="开启zebra"><a href="#开启zebra" class="headerlink" title="开启zebra"></a>开启zebra</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;创建Zebra配置文件</span><br><span class="line"># cp &#x2F;usr&#x2F;share&#x2F;doc&#x2F;quagga-&lt;your Specific flie name&gt;&#x2F;zebra.conf.sample &#x2F;etc&#x2F;quagga&#x2F;zebra.conf </span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># systemctl start zebra</span><br><span class="line"># systemctl enable zebra </span><br></pre></td></tr></table></figure>
+<h5 id="进入Quagga配置ip"><a href="#进入Quagga配置ip" class="headerlink" title="进入Quagga配置ip"></a>进入Quagga配置ip</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># vtysh</span><br><span class="line"># show interface</span><br><span class="line">.......</span><br><span class="line"># configure terminal</span><br><span class="line">#(config) interface ××</span><br><span class="line">#(config-if) ip address &lt;ip&gt;</span><br><span class="line">#(config-if) description &quot; &quot;</span><br><span class="line">#(config-if) no shutdown</span><br><span class="line">#(config-if) exit</span><br></pre></td></tr></table></figure>
+<h5 id="确认配置"><a href="#确认配置" class="headerlink" title="确认配置"></a>确认配置</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># show interface</span><br><span class="line">Interface ens33 is up, line protocol detection is disabled</span><br><span class="line">  Description: &quot;to Router-B&quot;</span><br><span class="line">  index 2 metric 1 mtu 1500 </span><br><span class="line">  flags: &lt;UP,BROADCAST,RUNNING,MULTICAST&gt;</span><br><span class="line">  HWaddr: 00:0c:29:1f:32:55</span><br><span class="line">  inet 100.100.0.1&#x2F;30 broadcast 100.100.0.3</span><br><span class="line">  inet 192.168.10.131&#x2F;24 broadcast 192.168.10.255</span><br><span class="line">  inet6 fe80::c936:37d7:559f:aa5e&#x2F;64</span><br><span class="line">  ......</span><br><span class="line"># show interface description   </span><br><span class="line">Interface       Status  Protocol  Description</span><br><span class="line">ens33           up      unknown   &quot;to Router-B&quot;</span><br><span class="line">.....</span><br></pre></td></tr></table></figure>
+<h5 id="保持配置"><a href="#保持配置" class="headerlink" title="保持配置"></a>保持配置</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># write</span><br><span class="line">Building Configuration...</span><br><span class="line">Configuration saved to &#x2F;etc&#x2F;quagga&#x2F;zebra.conf</span><br><span class="line">Configuration saved to &#x2F;etc&#x2F;quagga&#x2F;bgpd.conf</span><br><span class="line">[OK]</span><br></pre></td></tr></table></figure>
+<h4 id="配置BGP"><a href="#配置BGP" class="headerlink" title="配置BGP"></a>配置BGP</h4><h5 id="开启bgpd"><a href="#开启bgpd" class="headerlink" title="开启bgpd"></a>开启bgpd</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;创建bgpd配置文件</span><br><span class="line"># cp &#x2F;usr&#x2F;share&#x2F;doc&#x2F;quagga-&lt;your Specific flie name&gt;&#x2F;bgpd.conf.sample &#x2F;etc&#x2F;quagga&#x2F;bgpd.conf </span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># systemctl start bgpd</span><br><span class="line"># systemctl enable bgpd</span><br></pre></td></tr></table></figure>
+<h5 id="进入Quagga配置bgp"><a href="#进入Quagga配置bgp" class="headerlink" title="进入Quagga配置bgp"></a>进入Quagga配置bgp</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># configure terminal</span><br><span class="line">#(config) router bgp &lt;asn&gt;</span><br><span class="line">#(config) no auto-summary</span><br><span class="line">#(config) no synchronizaiton</span><br><span class="line">#(config-router) neighbor &lt;ip&gt; remote-as &lt;asn&gt;</span><br><span class="line">#(config-router) neighbor &lt;ip&gt; description &quot;&quot;</span><br><span class="line">#(config-router) exit</span><br><span class="line">#(config) exit</span><br></pre></td></tr></table></figure>
+<h5 id="保存配置"><a href="#保存配置" class="headerlink" title="保存配置"></a>保存配置</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># write</span><br><span class="line">Building Configuration...</span><br><span class="line">Configuration saved to &#x2F;etc&#x2F;quagga&#x2F;zebra.conf</span><br><span class="line">Configuration saved to &#x2F;etc&#x2F;quagga&#x2F;bgpd.conf</span><br><span class="line">[OK]</span><br></pre></td></tr></table></figure>
+<h5 id="查看bgp连接建立情况"><a href="#查看bgp连接建立情况" class="headerlink" title="查看bgp连接建立情况"></a>查看bgp连接建立情况</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># show ip bgp summary</span><br><span class="line">BGP router identifier 192.168.10.149, local AS number 200</span><br><span class="line">RIB entries 0, using 0 bytes of memory</span><br><span class="line">Peers 1, using 4560 bytes of memory</span><br><span class="line"></span><br><span class="line">Neighbor       V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up&#x2F;Down  State&#x2F;PfxRcd</span><br><span class="line">100.100.0.1     4   100     9      25        0    0    0 00:00:27        </span><br><span class="line">0</span><br><span class="line"></span><br><span class="line">Total number of neighbors 1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="发布路由前缀"><a href="#发布路由前缀" class="headerlink" title="发布路由前缀"></a>发布路由前缀</h4><h5 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># configure terminal</span><br><span class="line">#(config) router bgp &lt;asn&gt;</span><br><span class="line">#(config-router) network &lt;ip&gt;</span><br><span class="line">#(config-router) exit</span><br><span class="line">#(config) exit</span><br></pre></td></tr></table></figure>
+<h5 id="确认是否发布成功"><a href="#确认是否发布成功" class="headerlink" title="确认是否发布成功"></a>确认是否发布成功</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># shou ip bgp summary</span><br><span class="line">BGP router identifier 192.168.10.149, local AS number 200</span><br><span class="line">RIB entries 3, using 336 bytes of memory</span><br><span class="line">Peers 1, using 4560 bytes of memory</span><br><span class="line"></span><br><span class="line">Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up&#x2F;Down  State&#x2F;PfxRcd</span><br><span class="line">100.100.0.1     4   100      16      32        0    0    0 00:06:33        </span><br><span class="line">1</span><br><span class="line"></span><br><span class="line">Total number of neighbors 1</span><br></pre></td></tr></table></figure>
+<p>从State/PfxRcd字段看出由0到1的变化，表明发布成功</p>
+<h4 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h4><p>其实quagga配置命令和路由器厂商都差不多，并不难。个人还是跟着配置教程一步一步配置的。</p>
+<h4 id="question"><a href="#question" class="headerlink" title="question"></a>question</h4><ul>
+<li><p>Can’t backup old configuration file /etc/quagga/××.conf.sav.</p>
+<p>权限问题 chmod -R 777  /etc/quagga/</p>
+</li>
+<li><p>注意从/usr/share/doc/quagga-&lt; your Specific flie name &gt;路径下copy过来的文件要注意修改route-id，这小地方会导致后面bgp建立连接失败</p>
+</li>
+</ul>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://linux.cn/article-4609-1.html">想玩 BGP 路由器么？用 CentOS 做一个</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.psychz.net/client/kb/en/quagga-routing--install-configure-and-setup-bgp.html#4">Quagga Routing - Install, Configure and setup BGP</a></li>
+<li><a href="chrome-extension://ikhdkkncnoglghljlkmcimlnlhkeamad/pdf-viewer/web/viewer.html?file=https%3A%2F%2Fwww.quagga.net%2Fdocs%2Fquagga.pdf">quagga文档</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#install"><span class="toc-number">1.</span> <span class="toc-text">install</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E9%99%A4selinux%E9%99%90%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text">解除selinux限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEIP"><span class="toc-number">3.</span> <span class="toc-text">配置IP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BC%80%E5%90%AFzebra"><span class="toc-number">3.1.</span> <span class="toc-text">开启zebra</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5Quagga%E9%85%8D%E7%BD%AEip"><span class="toc-number">3.2.</span> <span class="toc-text">进入Quagga配置ip</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4%E9%85%8D%E7%BD%AE"><span class="toc-number">3.3.</span> <span class="toc-text">确认配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BF%9D%E6%8C%81%E9%85%8D%E7%BD%AE"><span class="toc-number">3.4.</span> <span class="toc-text">保持配置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEBGP"><span class="toc-number">4.</span> <span class="toc-text">配置BGP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BC%80%E5%90%AFbgpd"><span class="toc-number">4.1.</span> <span class="toc-text">开启bgpd</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5Quagga%E9%85%8D%E7%BD%AEbgp"><span class="toc-number">4.2.</span> <span class="toc-text">进入Quagga配置bgp</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="toc-number">4.3.</span> <span class="toc-text">保存配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bbgp%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%E6%83%85%E5%86%B5"><span class="toc-number">4.4.</span> <span class="toc-text">查看bgp连接建立情况</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E8%B7%AF%E7%94%B1%E5%89%8D%E7%BC%80"><span class="toc-number">5.</span> <span class="toc-text">发布路由前缀</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%91%E5%B8%83"><span class="toc-number">5.1.</span> <span class="toc-text">发布</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4%E6%98%AF%E5%90%A6%E5%8F%91%E5%B8%83%E6%88%90%E5%8A%9F"><span class="toc-number">5.2.</span> <span class="toc-text">确认是否发布成功</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%BB%AD"><span class="toc-number">6.</span> <span class="toc-text">后续</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#question"><span class="toc-number">7.</span> <span class="toc-text">question</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/03/02/use-linux-as-route/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/03/02/use-linux-as-route/&text=use quagga to turn linux into a router"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/03/02/use-linux-as-route/&is_video=false&description=use quagga to turn linux into a router"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=use quagga to turn linux into a router&body=Check out this article: http://example.com/2021/03/02/use-linux-as-route/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/03/02/use-linux-as-route/&name=use quagga to turn linux into a router&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/03/02/use-linux-as-route/&t=use quagga to turn linux into a router"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    2021
+	<a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/">豫ICP备190号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
