@@ -15,6 +15,7 @@ date: 2020-07-18 03:16:28
 
 作为程序员，想必都知道int16，int32、int64所对应的字节数。那么在下面2个结构体所占的字节数又为多少呢？
 
+```go
 type A struct{
    a int8
    d int16
@@ -28,6 +29,9 @@ type B struct{
    b int64
    d int16
 }
+```
+
+
 
 #### 答案
 
