@@ -9,12 +9,12 @@
     <meta name="description" content="install1yum install quagga 然后就是出现2个文件路径，第一个是配置文件的例子，存放于&#x2F;usr&#x2F;share&#x2F;doc&#x2F;quagga-XXXXX。第二个是运行配置文件，存放于&#x2F;etc&#x2F;quagga。 解除selinux限制 通过命令解除selinux限制 1setsebool -P zebra_write_config 1  通过修改文件解除selinux限制   1vim &amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="use quagga to turn linux into a router">
-<meta property="og:url" content="http://example.com/2021/03/02/use-linux-as-route/index.html">
+<meta property="og:url" content="http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/index.html">
 <meta property="og:site_name" content="Bit">
 <meta property="og:description" content="install1yum install quagga 然后就是出现2个文件路径，第一个是配置文件的例子，存放于&#x2F;usr&#x2F;share&#x2F;doc&#x2F;quagga-XXXXX。第二个是运行配置文件，存放于&#x2F;etc&#x2F;quagga。 解除selinux限制 通过命令解除selinux限制 1setsebool -P zebra_write_config 1  通过修改文件解除selinux限制   1vim &amp;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-03-02T12:09:29.000Z">
-<meta property="article:modified_time" content="2021-03-03T09:49:49.291Z">
+<meta property="article:modified_time" content="2021-03-04T05:20:37.924Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
     
@@ -78,6 +78,8 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" href="/2021/03/04/Review-the-BGP-protocol/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
         
         <li><a class="icon" href="/2021/02/28/Go-Sort-Library-Common-functions/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
@@ -92,17 +94,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/03/02/use-linux-as-route/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/03/02/use-linux-as-route/&text=use quagga to turn linux into a router"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/03/02/use-linux-as-route/&is_video=false&description=use quagga to turn linux into a router"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=use quagga to turn linux into a router&body=Check out this article: http://example.com/2021/03/02/use-linux-as-route/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/03/02/use-linux-as-route/&name=use quagga to turn linux into a router&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/03/02/use-linux-as-route/&t=use quagga to turn linux into a router"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&text=use quagga to turn linux into a router"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&is_video=false&description=use quagga to turn linux into a router"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=use quagga to turn linux into a router&body=Check out this article: http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&name=use quagga to turn linux into a router&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&t=use quagga to turn linux into a router"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -140,7 +142,7 @@
       
     <div class="article-category">
         <i class="fas fa-archive"></i>
-        <a class="category-link" href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a>
+        <a class="category-link" href="/categories/network/">network</a>
     </div>
 
 
@@ -222,17 +224,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/03/02/use-linux-as-route/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/03/02/use-linux-as-route/&text=use quagga to turn linux into a router"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/03/02/use-linux-as-route/&is_video=false&description=use quagga to turn linux into a router"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=use quagga to turn linux into a router&body=Check out this article: http://example.com/2021/03/02/use-linux-as-route/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/03/02/use-linux-as-route/&title=use quagga to turn linux into a router"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/03/02/use-linux-as-route/&name=use quagga to turn linux into a router&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/03/02/use-linux-as-route/&t=use quagga to turn linux into a router"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&text=use quagga to turn linux into a router"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&is_video=false&description=use quagga to turn linux into a router"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=use quagga to turn linux into a router&body=Check out this article: http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&title=use quagga to turn linux into a router"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&name=use quagga to turn linux into a router&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/&t=use quagga to turn linux into a router"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
