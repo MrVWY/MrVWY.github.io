@@ -6,17 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="BGP  Message Marker: Included for compatibility, must be set to all ones. Length: Total length of the message in octets, including the header. Type：Type of BGP message. The following values are define">
+    <meta name="description" content="Routing PriorityBGP Routing Switching Principles从上到下  Weight：优先选择 highest weight 的路由（ cisco私有属性 ） Local Preference：优先选择 highest local preference 的路由 Originate：优先选择自己本地的路由 AS path length：优先选择 shortest">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Review the BGP protocol">
 <meta property="og:url" content="http://example.com/2021/03/04/Review-the-BGP-protocol/index.html">
 <meta property="og:site_name" content="Bit">
-<meta property="og:description" content="BGP  Message Marker: Included for compatibility, must be set to all ones. Length: Total length of the message in octets, including the header. Type：Type of BGP message. The following values are define">
+<meta property="og:description" content="Routing PriorityBGP Routing Switching Principles从上到下  Weight：优先选择 highest weight 的路由（ cisco私有属性 ） Local Preference：优先选择 highest local preference 的路由 Originate：优先选择自己本地的路由 AS path length：优先选择 shortest">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/03/04/images/2021/03/202103051314520.png">
 <meta property="article:published_time" content="2021-03-03T18:13:41.000Z">
-<meta property="article:modified_time" content="2021-03-03T18:48:14.235Z">
+<meta property="article:modified_time" content="2021-03-05T17:08:07.508Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/03/04/images/2021/03/202103051314520.png">
     
     
       
@@ -78,6 +80,8 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" href="/2021/03/04/what%20is%20the%20RIB%20and%20FIB/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
         
         <li><a class="icon" href="/2021/03/02/use%20quagga%20to%20turn%20linux%20into%20a%20router/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
@@ -107,7 +111,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Message"><span class="toc-number">1.</span> <span class="toc-text">BGP  Message</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Connection-State"><span class="toc-number">2.</span> <span class="toc-text">BGP Connection State</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Routing-Priority"><span class="toc-number">1.</span> <span class="toc-text">Routing Priority</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Routing-Switching-Principles"><span class="toc-number">2.</span> <span class="toc-text">BGP Routing Switching Principles</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Tables"><span class="toc-number">3.</span> <span class="toc-text">BGP Tables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Message-Format-Field"><span class="toc-number">4.</span> <span class="toc-text">BGP  Message Format Field</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Connection-State"><span class="toc-number">5.</span> <span class="toc-text">BGP Connection State</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E6%84%8F%E5%9B%BE%EF%BC%9A"><span class="toc-number">5.1.</span> <span class="toc-text">示意图：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Synchronization"><span class="toc-number">6.</span> <span class="toc-text">BGP Synchronization</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Aggregate"><span class="toc-number">7.</span> <span class="toc-text">BGP Aggregate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -138,6 +142,11 @@
 
 
       
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/network/">network</a>
+    </div>
+
 
       
 
@@ -146,15 +155,34 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h4 id="BGP-Message"><a href="#BGP-Message" class="headerlink" title="BGP  Message"></a>BGP  Message</h4><ul>
+    <h4 id="Routing-Priority"><a href="#Routing-Priority" class="headerlink" title="Routing Priority"></a>Routing Priority</h4><h4 id="BGP-Routing-Switching-Principles"><a href="#BGP-Routing-Switching-Principles" class="headerlink" title="BGP Routing Switching Principles"></a>BGP Routing Switching Principles</h4><p>从上到下</p>
+<ul>
+<li>Weight：优先选择 highest weight 的路由（ cisco私有属性 ）</li>
+<li>Local Preference：优先选择 highest local preference 的路由</li>
+<li>Originate：优先选择自己本地的路由</li>
+<li>AS path length：优先选择 shortest AS path length 的路由</li>
+<li>Origin code：优先选择 lowest origin code 的路由 ( IGP &lt; EGP &lt; incomplete)</li>
+<li>MED：优先选择 lowest MED 的路由</li>
+<li>eBGP path over iBGP path：EBGP的路由优于IBGP的路由</li>
+<li>Shortest IGP path to BGP next hop：</li>
+<li>Oldest Path：从更老的EBGP邻居学过来的路由，因为EBGP邻居建立时间越久，说明越稳定</li>
+<li>Router ID：优先选择lowest BGP neighbor router ID的路由</li>
+<li>Neighbor IP address：优先选择lowest neighbor IP address的路由</li>
+</ul>
+<h4 id="BGP-Tables"><a href="#BGP-Tables" class="headerlink" title="BGP Tables"></a>BGP Tables</h4><ul>
+<li>BGP Neighbor Table：包含有关BGP邻居信息的表</li>
+<li>BGP Table (BGP RIB)：包含从network layer reachability information (NLRI)学习到的路由和来自所以邻居的所以路由</li>
+<li>BGP Routing Table：包含由BGP Table的路由中选择最优路由</li>
+</ul>
+<h4 id="BGP-Message-Format-Field"><a href="#BGP-Message-Format-Field" class="headerlink" title="BGP  Message Format Field"></a>BGP  Message Format Field</h4><ul>
 <li>Marker: Included for compatibility, must be set to all ones.</li>
 <li>Length: Total length of the message in <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Octet_(computing)">octets</a>, including the header.</li>
 <li>Type：Type of BGP message. The following values are defined:<ul>
-<li>Open (1)</li>
-<li>Update (2)</li>
-<li>Notification (3)</li>
-<li>KeepAlive (4)</li>
-<li>Route-Refresh (5)</li>
+<li>Open (1)：发送一些参数以协商和建立连接，两个邻居都会发送OPEN报文，一个先发Open，另一个收到后，发送一个Open+Keeplive报文。OPEN报文里携带了version、BGP AS号、Holdtime、BGP identifier(router-id)</li>
+<li>Update (2)：用于对等体之间交换路由信息</li>
+<li>Notification (3)：只要检测到error，便发送并关闭BGP连接</li>
+<li>KeepAlive (4)：周期性（Holdtime）发送以确认邻居是否存活 （extend：Error Code, Error Subcode）</li>
+<li>Route-Refresh (5)：用来要求对等体重新发送指定地址族的路由信息</li>
 </ul>
 </li>
 </ul>
@@ -197,6 +225,15 @@
 <p>此状态下 BGP 对等体间的连接已经完全建立，此时可以相互交换路由信息，若收到 notification，则会将状态置为 Idle 中断连接</p>
 </li>
 </ul>
+<h5 id="示意图："><a href="#示意图：" class="headerlink" title="示意图："></a>示意图：</h5><p><img src="../images/2021/03/202103051314520.png"></p>
+<h4 id="BGP-Synchronization"><a href="#BGP-Synchronization" class="headerlink" title="BGP Synchronization"></a>BGP Synchronization</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;拓补图</span><br><span class="line">AS100(RTA) --------- AS200(RTB-RTC-RTD) ---------- AS300(RTE)</span><br></pre></td></tr></table></figure>
+<p>当AS100中的RTA发送关于1.1.1.1的路由update包，RTB和RTD运行着IBGP，理想情况下RTD在update包中学习到如何到达1.1.1.1的网络信息，接着RTD传播update包给RTE</p>
+<p>假如RTB没有将1.1.1.1的路由信息重发布到IGP中，那么RTC便无法得知如何去往1.1.1.1这段网络，那么RTD和RTE如果向1.1.1.1网段发送数据包，便会在RTC这被丢弃</p>
+<p>BGP同步规则：BGP路由器不应该使用或向EBGP邻居通告从IBGP邻居那里学习到的BGP路由信息，除非该路由是本地的或者该路由存在于IGP数据库，即该路由也能从IGP学习到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The BGP synchronization rule states that if an AS provides transit service to another AS, BGP should not advertise a route until all of the routers within the AS have learned about the route via an IGP.</span><br></pre></td></tr></table></figure>
+<h4 id="BGP-Aggregate"><a href="#BGP-Aggregate" class="headerlink" title="BGP Aggregate"></a>BGP Aggregate</h4><h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://networklessons.com/bgp/bgp-attributes-and-path-selection">https://networklessons.com/bgp/bgp-attributes-and-path-selection</a></li>
+</ul>
 
   </div>
 </article>
@@ -224,7 +261,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Message"><span class="toc-number">1.</span> <span class="toc-text">BGP  Message</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Connection-State"><span class="toc-number">2.</span> <span class="toc-text">BGP Connection State</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Routing-Priority"><span class="toc-number">1.</span> <span class="toc-text">Routing Priority</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Routing-Switching-Principles"><span class="toc-number">2.</span> <span class="toc-text">BGP Routing Switching Principles</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Tables"><span class="toc-number">3.</span> <span class="toc-text">BGP Tables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Message-Format-Field"><span class="toc-number">4.</span> <span class="toc-text">BGP  Message Format Field</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Connection-State"><span class="toc-number">5.</span> <span class="toc-text">BGP Connection State</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E6%84%8F%E5%9B%BE%EF%BC%9A"><span class="toc-number">5.1.</span> <span class="toc-text">示意图：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Synchronization"><span class="toc-number">6.</span> <span class="toc-text">BGP Synchronization</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Aggregate"><span class="toc-number">7.</span> <span class="toc-text">BGP Aggregate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
