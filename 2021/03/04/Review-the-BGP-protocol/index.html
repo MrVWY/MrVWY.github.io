@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Routing PriorityBGP Routing Switching Principles从上到下  Weight：优先选择 highest weight 的路由（ cisco私有属性 ） Local Preference：优先选择 highest local preference 的路由 Originate：优先选择自己本地的路由 AS path length：优先选择 shortest">
+    <meta name="description" content="As_Path  Type组成：Path Segment Type,  Path Segment Length,  Path Segment Value  As_Set: 由一系列As号无序地组成，包含在Updata消息里 As_Sequence: 由一系列As号顺序地组成，包含在Updata消息里 As_Confed_Sequence: 在本地联盟内由一系列成员As号按顺序地组成，包含在Upda">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Review the BGP protocol">
 <meta property="og:url" content="http://example.com/2021/03/04/Review-the-BGP-protocol/index.html">
 <meta property="og:site_name" content="Bit">
-<meta property="og:description" content="Routing PriorityBGP Routing Switching Principles从上到下  Weight：优先选择 highest weight 的路由（ cisco私有属性 ） Local Preference：优先选择 highest local preference 的路由 Originate：优先选择自己本地的路由 AS path length：优先选择 shortest">
+<meta property="og:description" content="As_Path  Type组成：Path Segment Type,  Path Segment Length,  Path Segment Value  As_Set: 由一系列As号无序地组成，包含在Updata消息里 As_Sequence: 由一系列As号顺序地组成，包含在Updata消息里 As_Confed_Sequence: 在本地联盟内由一系列成员As号按顺序地组成，包含在Upda">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/03/04/images/2021/03/202103051314520.png">
 <meta property="article:published_time" content="2021-03-03T18:13:41.000Z">
-<meta property="article:modified_time" content="2021-03-05T17:08:07.508Z">
+<meta property="article:modified_time" content="2021-03-06T18:44:49.996Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/03/04/images/2021/03/202103051314520.png">
@@ -111,7 +111,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Routing-Priority"><span class="toc-number">1.</span> <span class="toc-text">Routing Priority</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Routing-Switching-Principles"><span class="toc-number">2.</span> <span class="toc-text">BGP Routing Switching Principles</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Tables"><span class="toc-number">3.</span> <span class="toc-text">BGP Tables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Message-Format-Field"><span class="toc-number">4.</span> <span class="toc-text">BGP  Message Format Field</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Connection-State"><span class="toc-number">5.</span> <span class="toc-text">BGP Connection State</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E6%84%8F%E5%9B%BE%EF%BC%9A"><span class="toc-number">5.1.</span> <span class="toc-text">示意图：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Synchronization"><span class="toc-number">6.</span> <span class="toc-text">BGP Synchronization</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Aggregate"><span class="toc-number">7.</span> <span class="toc-text">BGP Aggregate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#As-Path-Type"><span class="toc-number">1.</span> <span class="toc-text">As_Path  Type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Ring-Protection"><span class="toc-number">2.</span> <span class="toc-text">BGP Ring Protection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Route-Reflector"><span class="toc-number">3.</span> <span class="toc-text">BGP Route Reflector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Confederation"><span class="toc-number">4.</span> <span class="toc-text">BGP Confederation</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Ring-Protection"><span class="toc-number">4.1.</span> <span class="toc-text">Ring Protection</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Confederation%E5%86%85As-Path%E5%B1%9E%E6%80%A7%E5%8F%98%E5%8C%96"><span class="toc-number">4.2.</span> <span class="toc-text">Confederation内As_Path属性变化</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Routing-Priority"><span class="toc-number">5.</span> <span class="toc-text">Routing Priority</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Routing-Switching-Principles"><span class="toc-number">6.</span> <span class="toc-text">BGP Routing Switching Principles</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Tables"><span class="toc-number">7.</span> <span class="toc-text">BGP Tables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Message-Format-Field"><span class="toc-number">8.</span> <span class="toc-text">BGP  Message Format Field</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Connection-State"><span class="toc-number">9.</span> <span class="toc-text">BGP Connection State</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E6%84%8F%E5%9B%BE%EF%BC%9A"><span class="toc-number">9.1.</span> <span class="toc-text">示意图：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Synchronization"><span class="toc-number">10.</span> <span class="toc-text">BGP Synchronization</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Aggregate"><span class="toc-number">11.</span> <span class="toc-text">BGP Aggregate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Flowspec"><span class="toc-number">12.</span> <span class="toc-text">BGP Flowspec</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">13.</span> <span class="toc-text">Reference</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -155,17 +155,54 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h4 id="Routing-Priority"><a href="#Routing-Priority" class="headerlink" title="Routing Priority"></a>Routing Priority</h4><h4 id="BGP-Routing-Switching-Principles"><a href="#BGP-Routing-Switching-Principles" class="headerlink" title="BGP Routing Switching Principles"></a>BGP Routing Switching Principles</h4><p>从上到下</p>
+    <h4 id="As-Path-Type"><a href="#As-Path-Type" class="headerlink" title="As_Path  Type"></a>As_Path  Type</h4><p>组成：Path Segment Type,  Path Segment Length,  Path Segment Value</p>
+<ul>
+<li>As_Set: 由一系列As号无序地组成，包含在Updata消息里</li>
+<li>As_Sequence: 由一系列As号顺序地组成，包含在Updata消息里</li>
+<li>As_Confed_Sequence: 在本地联盟内由一系列成员As号按顺序地组成，包含在Updata消息中，只能在本地联盟内传递</li>
+<li>As_Confed_Set: 在本地联盟内由一系列成员As无序地组成，包含在Updata消息中，同样只能在本地联盟内传递</li>
+</ul>
+<h4 id="BGP-Ring-Protection"><a href="#BGP-Ring-Protection" class="headerlink" title="BGP Ring Protection"></a>BGP Ring Protection</h4><ul>
+<li><p>As内部防环：通过iBGP水平分割实现。从iBGP邻居学到的路由不会更新给其他IBGP邻居。</p>
+<p>若无此机制，那么当三个路由器两两相连，并建立了iBGP邻居时，那么此时其中一个路由器发送的更新路由将在三个路由器之间无限循环</p>
+<p>要实现As内部每台路由器都可以学习到路由，需要建立iBGP邻居全互联（路由器数目很大的时候，那将导致网络中的路由器因为需要维护过多的BGP邻居关系导致性能下降）。可以通过路由反射器，eBGP联邦解决</p>
+</li>
+<li><p>As间防环：通过 As path 防环，每经过一个As，会添加该As的As编号在As_Path字段的最前面,当从eBGP邻居得到一条路由时，会检查该路由的As_path字段有没有自身所在As，如果有则，丢弃，如果没有则继续</p>
+</li>
+<li><p>RR防环</p>
+</li>
+<li><p>SOO防环</p>
+</li>
+</ul>
+<h4 id="BGP-Route-Reflector"><a href="#BGP-Route-Reflector" class="headerlink" title="BGP Route Reflector"></a>BGP Route Reflector</h4><h4 id="BGP-Confederation"><a href="#BGP-Confederation" class="headerlink" title="BGP Confederation"></a>BGP Confederation</h4><p>将一个大的As分割成多个小型的As，让As内部拥有足够数量的eBGP邻居关系来解决路由限制问题。</p>
+<p>对于外部邻居来说(联盟外的的对等体)，成员AS拓扑是不可见的。也就是说，在发向eBGP邻居的更新消息中，已经剥去了联盟内被修改的As_PATH。从其他的自治系统来看，联盟就像单个As一样。</p>
+<h5 id="Ring-Protection"><a href="#Ring-Protection" class="headerlink" title="Ring Protection"></a>Ring Protection</h5><p>Confederation内采用As_Confed防止子AS间路由环路</p>
+<h5 id="Confederation内As-Path属性变化"><a href="#Confederation内As-Path属性变化" class="headerlink" title="Confederation内As_Path属性变化"></a>Confederation内As_Path属性变化</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;示意图</span><br><span class="line">            |--------&gt;  As 200 &lt;----------------|            </span><br><span class="line">As(100) --&gt; As((1000),100) --&gt; As((1000,1001),100) --&gt; As(200,100)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Confederation内eBGP<ul>
+<li>子As号被添加到As_Path中的As_Confed_Sequence前面</li>
+</ul>
+</li>
+<li>Confederation内iBGP<ul>
+<li>不做任何改变</li>
+</ul>
+</li>
+<li>外部eBGP<ul>
+<li>As号从As_Path中清除，而大As号被添加到As_Path前面</li>
+</ul>
+</li>
+</ul>
+<h4 id="Routing-Priority"><a href="#Routing-Priority" class="headerlink" title="Routing Priority"></a>Routing Priority</h4><h4 id="BGP-Routing-Switching-Principles"><a href="#BGP-Routing-Switching-Principles" class="headerlink" title="BGP Routing Switching Principles"></a>BGP Routing Switching Principles</h4><p>从上到下</p>
 <ul>
 <li>Weight：优先选择 highest weight 的路由（ cisco私有属性 ）</li>
 <li>Local Preference：优先选择 highest local preference 的路由</li>
 <li>Originate：优先选择自己本地的路由</li>
-<li>AS path length：优先选择 shortest AS path length 的路由</li>
+<li>As path length：优先选择 shortest As path length 的路由</li>
 <li>Origin code：优先选择 lowest origin code 的路由 ( IGP &lt; EGP &lt; incomplete)</li>
 <li>MED：优先选择 lowest MED 的路由</li>
-<li>eBGP path over iBGP path：EBGP的路由优于IBGP的路由</li>
+<li>eBGP path over iBGP path：eBGP的路由优于iBGP的路由</li>
 <li>Shortest IGP path to BGP next hop：</li>
-<li>Oldest Path：从更老的EBGP邻居学过来的路由，因为EBGP邻居建立时间越久，说明越稳定</li>
+<li>Oldest Path：从更老的eBGP邻居学过来的路由，因为eBGP邻居建立时间越久，说明越稳定</li>
 <li>Router ID：优先选择lowest BGP neighbor router ID的路由</li>
 <li>Neighbor IP address：优先选择lowest neighbor IP address的路由</li>
 </ul>
@@ -178,7 +215,7 @@
 <li>Marker: Included for compatibility, must be set to all ones.</li>
 <li>Length: Total length of the message in <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Octet_(computing)">octets</a>, including the header.</li>
 <li>Type：Type of BGP message. The following values are defined:<ul>
-<li>Open (1)：发送一些参数以协商和建立连接，两个邻居都会发送OPEN报文，一个先发Open，另一个收到后，发送一个Open+Keeplive报文。OPEN报文里携带了version、BGP AS号、Holdtime、BGP identifier(router-id)</li>
+<li>Open (1)：发送一些参数以协商和建立连接，两个邻居都会发送Open报文，一个先发Open，另一个收到后，发送一个Open+Keeplive报文。Open报文里携带了version、BGP AS号、Holdtime、BGP identifier(router-id)</li>
 <li>Update (2)：用于对等体之间交换路由信息</li>
 <li>Notification (3)：只要检测到error，便发送并关闭BGP连接</li>
 <li>KeepAlive (4)：周期性（Holdtime）发送以确认邻居是否存活 （extend：Error Code, Error Subcode）</li>
@@ -193,7 +230,7 @@
 </li>
 <li><p>Connect State</p>
 <ul>
-<li>如果TCP negotiation (TCP三次握手)成功，BGP将connect Retry清零，完成初始化并发送一个 open 消息包给邻居并把自己的状态置为 Open send 状态 </li>
+<li>如果TCP Negotiation (TCP三次握手)成功，BGP将 connect Retry 清零，完成初始化并发送一个 open 消息包给邻居并把自己的状态置为 Open send 状态 </li>
 <li>如果失败，BGP会继续监听邻居发出的连接，重置 Connect Retry 并将自己状态转移到 Active 状态</li>
 <li>如果 Connect Retry 时间超时，将重新开始，再次试图与邻居建立TCP连接，BGP 保持 Connect 状态，出现其他事件转入 Idle 状态</li>
 </ul>
@@ -231,8 +268,9 @@
 <p>假如RTB没有将1.1.1.1的路由信息重发布到IGP中，那么RTC便无法得知如何去往1.1.1.1这段网络，那么RTD和RTE如果向1.1.1.1网段发送数据包，便会在RTC这被丢弃</p>
 <p>BGP同步规则：BGP路由器不应该使用或向EBGP邻居通告从IBGP邻居那里学习到的BGP路由信息，除非该路由是本地的或者该路由存在于IGP数据库，即该路由也能从IGP学习到</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The BGP synchronization rule states that if an AS provides transit service to another AS, BGP should not advertise a route until all of the routers within the AS have learned about the route via an IGP.</span><br></pre></td></tr></table></figure>
-<h4 id="BGP-Aggregate"><a href="#BGP-Aggregate" class="headerlink" title="BGP Aggregate"></a>BGP Aggregate</h4><h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><ul>
+<h4 id="BGP-Aggregate"><a href="#BGP-Aggregate" class="headerlink" title="BGP Aggregate"></a>BGP Aggregate</h4><h4 id="BGP-Flowspec"><a href="#BGP-Flowspec" class="headerlink" title="BGP Flowspec"></a>BGP Flowspec</h4><h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><ul>
 <li><a target="_blank" rel="noopener" href="https://networklessons.com/bgp/bgp-attributes-and-path-selection">https://networklessons.com/bgp/bgp-attributes-and-path-selection</a></li>
+<li><a target="_blank" rel="noopener" href="https://forum.huawei.com/enterprise/en/bgp-ring-protection-mechanisms/thread/481269-861">https://forum.huawei.com/enterprise/en/bgp-ring-protection-mechanisms/thread/481269-861</a></li>
 </ul>
 
   </div>
@@ -261,7 +299,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Routing-Priority"><span class="toc-number">1.</span> <span class="toc-text">Routing Priority</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Routing-Switching-Principles"><span class="toc-number">2.</span> <span class="toc-text">BGP Routing Switching Principles</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Tables"><span class="toc-number">3.</span> <span class="toc-text">BGP Tables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Message-Format-Field"><span class="toc-number">4.</span> <span class="toc-text">BGP  Message Format Field</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Connection-State"><span class="toc-number">5.</span> <span class="toc-text">BGP Connection State</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E6%84%8F%E5%9B%BE%EF%BC%9A"><span class="toc-number">5.1.</span> <span class="toc-text">示意图：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Synchronization"><span class="toc-number">6.</span> <span class="toc-text">BGP Synchronization</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Aggregate"><span class="toc-number">7.</span> <span class="toc-text">BGP Aggregate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#As-Path-Type"><span class="toc-number">1.</span> <span class="toc-text">As_Path  Type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Ring-Protection"><span class="toc-number">2.</span> <span class="toc-text">BGP Ring Protection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Route-Reflector"><span class="toc-number">3.</span> <span class="toc-text">BGP Route Reflector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Confederation"><span class="toc-number">4.</span> <span class="toc-text">BGP Confederation</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Ring-Protection"><span class="toc-number">4.1.</span> <span class="toc-text">Ring Protection</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Confederation%E5%86%85As-Path%E5%B1%9E%E6%80%A7%E5%8F%98%E5%8C%96"><span class="toc-number">4.2.</span> <span class="toc-text">Confederation内As_Path属性变化</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Routing-Priority"><span class="toc-number">5.</span> <span class="toc-text">Routing Priority</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Routing-Switching-Principles"><span class="toc-number">6.</span> <span class="toc-text">BGP Routing Switching Principles</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Tables"><span class="toc-number">7.</span> <span class="toc-text">BGP Tables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Message-Format-Field"><span class="toc-number">8.</span> <span class="toc-text">BGP  Message Format Field</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Connection-State"><span class="toc-number">9.</span> <span class="toc-text">BGP Connection State</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E6%84%8F%E5%9B%BE%EF%BC%9A"><span class="toc-number">9.1.</span> <span class="toc-text">示意图：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Synchronization"><span class="toc-number">10.</span> <span class="toc-text">BGP Synchronization</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Aggregate"><span class="toc-number">11.</span> <span class="toc-text">BGP Aggregate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-Flowspec"><span class="toc-number">12.</span> <span class="toc-text">BGP Flowspec</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">13.</span> <span class="toc-text">Reference</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
