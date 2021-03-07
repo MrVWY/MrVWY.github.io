@@ -14,7 +14,7 @@
 <meta property="og:description" content="Go与C家族的互调，Go的几种编译模式。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-08-28T14:21:23.000Z">
-<meta property="article:modified_time" content="2021-03-07T07:20:44.810Z">
+<meta property="article:modified_time" content="2021-03-07T08:10:48.685Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
     
@@ -192,14 +192,14 @@
 <li>-buildmode=c-archive （ C动态链接文件）<ul>
 <li>  原版文档解释：Build the listed main package, plus all packages it imports, into a <strong>C archive file</strong>. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.</li>
 <li>  注意：在使用go文件编译成能让C/C++引用的文件时，要主要必须要有的2个要求：第一是要在头部加入import “C”。第二是要在你想让C/C++引用的函数上方加入  //export  你的函数名。</li>
-<li>  产生文件：.a 、.h。.h文件可以在C/C++引用![](./Go compile mode/20200826095638331.png)</li>
+<li>  产生文件：.a 、.h。.h文件可以在C/C++引用![](Go compile mode/20200826095638331.png)</li>
 <li>  参考链接-<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/40573401/building-a-dll-with-go-1-7">stackoverflow</a></li>
 </ul>
 </li>
 <li>-buildmode=c-shared<ul>
 <li>  原版文档解释：Build the listed main package, plus all packages it imports, into a <strong>C shared library</strong>. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.</li>
 <li>  大体上和c-archive模式差不多，主要是C archive file和C shared library的区别。按字面意思是file和library的区别。</li>
-<li>  产生文件：一个文件(不知用来干啥)，.h文件供C/C++调用。![](./Go compile mode/20200826095532942.png)</li>
+<li>  产生文件：一个文件(不知用来干啥)，.h文件供C/C++调用。![](Go compile mode/20200826095532942.png)</li>
 </ul>
 </li>
 </ol>
@@ -210,7 +210,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;h.h&quot;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    Bar();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>编译C+运行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o main hello.c h.a -undefined reference to \&#96;pthread\_create&#39;</span><br></pre></td></tr></table></figure>
-<p> 注：这里的-lpthread参数还需研究，就目前来看是能够调用成功。与其相关的还有一个-pthread参数，仍需自行查阅相关资料。 就目前来看-lpthread是与POSIX(可移植操作系统接口) thread相关 ![](./Go compile mode/20200828140739493.png) 注意：上述只是个简单的例子，具体更复杂的问题涉及到C与Go直接的值范围等到一些问题还需要注意，因此在调用中更应该注重两种语言之间的类型转换。</p>
+<p> 注：这里的-lpthread参数还需研究，就目前来看是能够调用成功。与其相关的还有一个-pthread参数，仍需自行查阅相关资料。 就目前来看-lpthread是与POSIX(可移植操作系统接口) thread相关 ![](Go compile mode/20200828140739493.png) 注意：上述只是个简单的例子，具体更复杂的问题涉及到C与Go直接的值范围等到一些问题还需要注意，因此在调用中更应该注重两种语言之间的类型转换。</p>
 <h4 id="Go调C"><a href="#Go调C" class="headerlink" title="Go调C"></a>Go调C</h4><p>主要是运用了Go实现的CGO库调用，参考及内部实现：<a target="_blank" rel="noopener" href="https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-05-internal.html">链接</a> 加油！</p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
 <li>  <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5">静态链接(Static link)</a></li>
