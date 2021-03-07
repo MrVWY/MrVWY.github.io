@@ -8,8 +8,6 @@ comments: false
 date: 2020-08-24 16:36:06
 ---
 
-最近看到一个问题是关于TCP的短链接
-<!-- more -->
 ### 问题
 
 在一段时间里，有大量的短链接请求服务器，服务器会发生什么情况？
@@ -20,11 +18,15 @@ date: 2020-08-24 16:36:06
 
 #### 可能会发生的情况
 
-在linux中，有着对这种情况的解释，本人通过man tcp的命令找到里面对一个字段tcp\_max\_tw\_buckets解释如下图 ![](../images/2020/08/20200824072625562.png) 这段话说明了当linux中处于time\_wait状态的socket一旦超过规定的值，就会导致部分socket关闭。
+在linux中，有着对这种情况的解释，本人通过man tcp的命令找到里面对一个字段tcp\_max\_tw\_buckets解释如下图 ![](./当tcp出现了大量的短链接时/20200824072625562.png) 
+
+这段话说明了当linux中处于time\_wait状态的socket一旦超过规定的值，就会导致部分socket关闭。
 
 ### 解决方法
 
-关于解决方法网上已经有很多，不过主要还是涉及到几个参数分别为tcp\_tw\_reuse、tcp\_tw\_recycle，前者是对time\_wait socket重用，后者是对 time\_wait  socket的快速回收。 ![](../images/2020/08/20200824072729625.png) 可以通过linux参数说明得知，当启动tcp\_tw\_recycle可以对socket快速回收但是当网络是在NAT的情况下，就可能会引起一系列问题，因此该参数要慎用。 不过一般情况下，服务器都是作为被动连接的一方，而tcp\_tw\_reuse这个参数是否开启主要还是基于你是主动发起还是被动连接，因为time\_wait状态只出现在主动发起一方。 注：查看当前TCP状态：netstat -an grep tcp
+关于解决方法网上已经有很多，不过主要还是涉及到几个参数分别为tcp\_tw\_reuse、tcp\_tw\_recycle，前者是对time\_wait socket重用，后者是对 time\_wait  socket的快速回收。 ![](./当tcp出现了大量的短链接时/20200824072729625.png) 
+
+可以通过linux参数说明得知，当启动tcp\_tw\_recycle可以对socket快速回收但是当网络是在NAT的情况下，就可能会引起一系列问题，因此该参数要慎用。 不过一般情况下，服务器都是作为被动连接的一方，而tcp\_tw\_reuse这个参数是否开启主要还是基于你是主动发起还是被动连接，因为time\_wait状态只出现在主动发起一方。 注：查看当前TCP状态：netstat -an grep tcp
 
 ### Reference
 

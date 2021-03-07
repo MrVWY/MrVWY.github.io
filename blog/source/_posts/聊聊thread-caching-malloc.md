@@ -8,19 +8,19 @@ comments: false
 date: 2020-08-02 11:40:59
 ---
 
-TCmalloc是一种高效的内存管理技术，可以应用在很多地方。Go的内存管理也基于这实现的和借鉴的。因此理解TCmalloc的实现机制是必需的。
-<!-- more -->
 ### 前言
 
 关于TCMalloc的相关资料和讲解，网上有很多关于其细节文章，在这就不一一阐述。主要目的是大体的结合官方文档和图片来阐述，但是具体细节个人是希望通过查阅资料去理解，最重要是靠个人理解。
 
 ### 图解
 
-虽然图是在网上借鉴的，但个人走了一遍官方文档并查阅相关资料，并图上加了一点自己的注释。 ![](../images/2020/07/20200722022116565.png)
+虽然图是在网上借鉴的，但个人走了一遍官方文档并查阅相关资料，并图上加了一点自己的注释。 ![](./聊聊thread-caching-malloc/20200722022116565.png)
 
 #### Central Free Lists 、Thread Cache Free Lists
 
-关于Central Free Lists 、Thread Cache Free Lists这两个list分别对应着CentralCache和ThreadCache。CentralCache的主要工作是管理分配回收ThreadCache中的span。而ThreadCache的创建与销毁都是随着线程的创建与销毁进行的。 ![](../images/2020/07/20200722022316165.png) 初始化的主要工作是对PageHeap、CentralCache初始化、分配器和Size Class的初始化。当有线程需要申请内存时，ThreadCache会分配内存给它，如果不够就去CentralCache取。
+关于Central Free Lists 、Thread Cache Free Lists这两个list分别对应着CentralCache和ThreadCache。CentralCache的主要工作是管理分配回收ThreadCache中的span。而ThreadCache的创建与销毁都是随着线程的创建与销毁进行的。 ![](./聊聊thread-caching-malloc/20200722022316165.png) 
+
+初始化的主要工作是对PageHeap、CentralCache初始化、分配器和Size Class的初始化。当有线程需要申请内存时，ThreadCache会分配内存给它，如果不够就去CentralCache取。
 
 #### 内存回收
 

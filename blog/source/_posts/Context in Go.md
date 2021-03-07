@@ -8,9 +8,8 @@ comments: false
 date: 2020-06-09 12:15:38
 ---
 
-context称作“上下文”，是environment的snapshot。
-<!-- more -->
-![](../images/2020/06/20200609041455723.png)
+
+![](./Context in Go/20200609041455723.png)
 
 ### Context Interface
 
@@ -92,7 +91,7 @@ func WithCancel(parent Context) (ctx Context, cancel CancelFunc) {
 }
 ```
 
-但是不同的context子类是分布在不同的goroutine，那么它是如何实现当父类Done()，子节点接着Done()。通常首先想到的方法时子类监听一个channel传过来的关闭信号，然后子类收到这个关闭信号之后就结束自身。但具体如何实现的，请看下图。 ![](../images/2020/06/20200609041008165.png)
+但是不同的context子类是分布在不同的goroutine，那么它是如何实现当父类Done()，子节点接着Done()。通常首先想到的方法时子类监听一个channel传过来的关闭信号，然后子类收到这个关闭信号之后就结束自身。但具体如何实现的，请看下图。 ![](./Context in Go/20200609041008165.png)
 
 #### WithDeadline
 
