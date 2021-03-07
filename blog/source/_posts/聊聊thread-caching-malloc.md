@@ -14,11 +14,11 @@ date: 2020-08-02 11:40:59
 
 ### 图解
 
-虽然图是在网上借鉴的，但个人走了一遍官方文档并查阅相关资料，并图上加了一点自己的注释。 ![](./聊聊thread-caching-malloc/20200722022116565.png)
+虽然图是在网上借鉴的，但个人走了一遍官方文档并查阅相关资料，并图上加了一点自己的注释。 ![](聊聊thread-caching-malloc/20200722022116565.png)
 
 #### Central Free Lists 、Thread Cache Free Lists
 
-关于Central Free Lists 、Thread Cache Free Lists这两个list分别对应着CentralCache和ThreadCache。CentralCache的主要工作是管理分配回收ThreadCache中的span。而ThreadCache的创建与销毁都是随着线程的创建与销毁进行的。 ![](./聊聊thread-caching-malloc/20200722022316165.png) 
+关于Central Free Lists 、Thread Cache Free Lists这两个list分别对应着CentralCache和ThreadCache。CentralCache的主要工作是管理分配回收ThreadCache中的span。而ThreadCache的创建与销毁都是随着线程的创建与销毁进行的。 ![](聊聊thread-caching-malloc/20200722022316165.png) 
 
 初始化的主要工作是对PageHeap、CentralCache初始化、分配器和Size Class的初始化。当有线程需要申请内存时，ThreadCache会分配内存给它，如果不够就去CentralCache取。
 

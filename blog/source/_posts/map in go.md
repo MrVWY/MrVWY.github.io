@@ -113,7 +113,7 @@ type hiter struct {
 
 #### 结构图
 
-![](./map in go/20200622172122708.png)  
+![](map in go/20200622172122708.png)  
 
 #### 小结
 
@@ -460,7 +460,7 @@ func evacuate(t *maptype, h *hmap, oldbucket uintptr) {
 }
 ```
 
-这里有一个点需要注意，在上述evacuated函数加粗的代码，它定义了xy \[2\]evacDst，里面只含2个evacDst，同时结合上面所定义的cell的状态，可以推测在搬迁过程中，把原来的buckets看出X，而后来等量扩容的部分看成Y，如下图所示。 ![](./map in go/20200626082230923.png) 
+这里有一个点需要注意，在上述evacuated函数加粗的代码，它定义了xy \[2\]evacDst，里面只含2个evacDst，同时结合上面所定义的cell的状态，可以推测在搬迁过程中，把原来的buckets看出X，而后来等量扩容的部分看成Y，如下图所示。 ![](map in go/20200626082230923.png) 
 
 正因为如此，在搬迁的过程中，由于所计算的地址可能会跟原来的不同，map的遍历是按顺序遍历的，扩容之后有的key就可能被迁移到溢出桶那边，因此map的遍历是无序的。
 

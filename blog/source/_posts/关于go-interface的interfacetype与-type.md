@@ -47,7 +47,7 @@ type eface struct {
 
 #### 非空接口结构
 
-非空接口的构造相对复杂，这里就贴个本人画的图： ![](./关于go-interface的interfacetype与-type/20200804170130760.png) 由此可见，在Go中的interface内部构造还是挺复杂的。
+非空接口的构造相对复杂，这里就贴个本人画的图： ![](关于go-interface的interfacetype与-type/20200804170130760.png) 由此可见，在Go中的interface内部构造还是挺复杂的。
 
 ### 解题
 
@@ -69,7 +69,13 @@ fmt.Printf("%T", rw)
 
 #### 题目一的解法
 
-首先分析一下三个type，type X string只是一个自定义类型，底层类型还是string，但X与string是不同类型的。而type Y = string，Y只是string的一个别名。 根据Go语言规范里面的一句话： A value `x` of non-interface type `X` and a value `t` of interface type `T` are comparable when values of type `X` are comparable and `X` implements `T`. They are equal if `t`'s dynamic type is identical to `X` and `t`'s dynamic value is equal to `x`. 再结合上述所说的interface内部构造，可以得知t的动态类型(\_type)为string，动态值为abc，而x动态类型(\_type)为X，动态值为abc，因此 t != x 。
+首先分析一下三个type，type X string只是一个自定义类型，底层类型还是string，但X与string是不同类型的。而type Y = string，Y只是string的一个别名。 根据Go语言规范里面的一句话： 
+
+```
+A value `x` of non-interface type `X` and a value `t` of interface type `T` are comparable when values of type `X` are comparable and `X` implements `T`. They are equal if `t`'s dynamic type is identical to `X` and `t`'s dynamic value is equal to `x`.
+```
+
+ 再结合上述所说的interface内部构造，可以得知t的动态类型(\_type)为string，动态值为abc，而x动态类型(\_type)为X，动态值为abc，因此 t != x 。
 
 ### Reference
 

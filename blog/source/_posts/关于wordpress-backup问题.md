@@ -29,7 +29,7 @@ Stack trace:
 
 ### 解决方案
 
-解决方法可以去我[GitHub](https://github.com/MrVWY/wodpress-backup)上面查看(注:上面的Go脚本是我随手编写的，在实际中我已经改成用shell编写了，可以无视！)，下面放一些效果图 ![](./关于wordpress-backup问题/20200714133632307.png) 
+解决方法可以去我[GitHub](https://github.com/MrVWY/wodpress-backup)上面查看(注:上面的Go脚本是我随手编写的，在实际中我已经改成用shell编写了，可以无视！)，下面放一些效果图 ![](关于wordpress-backup问题/20200714133632307.png) 
 
 可以看到文章，分类标签等通过wp-cli导出来也就164KB(对应着目前本文章之前的文章等资料)，因此也十分让我满意。
 

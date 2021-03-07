@@ -20,7 +20,11 @@ ECN使用IP首部的Tos字段最后2位(也称最低有效位)，根据[RFC 3168
 
 ### TCP的ECN
 
-TCP头中新增三个flag来支持ECN，分别是Nonce Sum(NS)、ECN-Echo(ECE)和Congestion Window Reduced(CWR)。 NS用于防止TCP发送者的数据包标记被意外或恶意改动，而另外2位则是回传拥塞指示。当接收者收到IP报文，发现IP头部的ECN位为11，则会通知上层标记ECE位用于通知发送方减少发送速率。而发送方收到这个标记了ECE位的包后，发送速率减半，同时也会标记CWR位用于通知接收方已经确认阻塞指令。 附一张图： ![](./explicit-congestion-notification-ecn-in-ip/20200628121725644.png)
+TCP头中新增三个flag来支持ECN，分别是Nonce Sum(NS)、ECN-Echo(ECE)和Congestion Window Reduced(CWR)。 NS用于防止TCP发送者的数据包标记被意外或恶意改动，而另外2位则是回传拥塞指示。当接收者收到IP报文，发现IP头部的ECN位为11，则会通知上层标记ECE位用于通知发送方减少发送速率。而发送方收到这个标记了ECE位的包后，发送速率减半，同时也会标记CWR位用于通知接收方已经确认阻塞指令。
+
+ 附一张图：
+
+ ![](explicit-congestion-notification-ecn-in-ip/20200628121725644.png)
 
 ### ECN与现有的TCP拥塞控制
 

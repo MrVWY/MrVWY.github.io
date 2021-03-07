@@ -32,7 +32,49 @@ comments: false
 
 #### BGP Route Reflector ( RR )
 
+　在BGP的网络中，为保证IBGP对等体之间的连通性，需要在IBGP对等体之间建立全连接关系。假设在一个AS内部有n台路由器，那么应该建立的IBGP连接数就为n(n-1)/2.当IBGP对等体数目很多时，对网络资源和CPU资源的消耗都很大
+
+​    在一个AS内，其中一台路由器作为路由反射器RR（Route Reflector），RR和Client组成i一个集群（Cluster），其它路由器作为客户机（Client）与路由反射器之间建立IBGP连接。路由反射器在客户机之间传递（反射）路由信息，而客户机之间不需要建立BGP连接
+
+​    既不是反射器也不是客户机的BGP路由器被称为非客户机（Non-Client）。非客户机与路由反射器之间，以及所有的非客户机之间仍然必须建立全连接关系
+
+总结：
+
+- Client只需维护与RR之间的IBGP会话
+- Non-Client与Non-Client之间需要建立IBGP全互连
+- RR与Non-Client之间需要建立IBGP全互连
+- RR与RR之间需要建立IBGP的全互连
+
 ##### rule
+
+- 从非客户机IBGP对等体学到的路由，发布给此RR的所有客户机
+- 从EBGP对等体学到的路由，发布给所有的非客户机和客户机
+- 从客户机学到的路由，发布给此RR的所有非客户机和客户机（发起此路由的客户机除外）
+- 从EBGP对等体学到的路由，发布给所有的非客户机和客户机
+
+##### Router Reflector Cluster
+
+当一个AS内存在多台RR为Client提供冗余时，RR间的路由更新很有可能会形成环路，为防止该现象，引入簇（Cluster）的概念
+
+- 通过4字节的Cluster_ID来标识Cluster，通常会使用Loopback地址作为Cluster_ID
+-  一个Cluster里可以包括一个或多个RR；一个Client可以同时属于多个Cluster
+- 通常，一个客户的簇只拥有一个RR，并由RR的BGP Router-id去标识该簇。有时，为了防止单点失效，在单一簇里引入多个RR。
+
+##### Ring Protection
+
+- Originator_ID
+  - Originator_ID属性用于防止在反射器和客户机/非客户机之间产生环路
+  - Originator_ID属性长4字节，可选非过渡属性，属性类型为9 ，是由路由反射器（RR）产生的，携带了本地AS内部路由发起者的Router ID
+  - 当一条路由第一次被RR反射的时候，RR将Originator_ID属性加入到这条路由，标识这条路由的始发路由器。如果一条路由中已经存在了Originator_ID属性，则RR将不会创建新的Originator_ID
+  - 当其它BGP Speaker接收到这条路由的时候，将比较收到的Originator_ID和本地的Router ID，如果两个ID相同，BGP Speaker会忽略掉这条路由，不做处理
+- Cluster_List 
+  - Originator_ID属性用于防止在RR之间产生环路
+  - Cluster_List是可选非过渡属性，属性类型编码为10
+  - Cluster_List由一系列的Cluster_ID组成，描述了一条路由所经过的反射器路径，这和描述路由经过的As路径的AS_Path属性有相似之处。Cluster_List由路由反射器产生
+  - Cluster_List只在AS内部传播，从EBGP对等体收到的含有Cluster_List的路由将被丢弃。
+    当RR在它的客户机之间或客户机与非客户机之间反射路由时，RR会把本地Cluster_ID添加到Cluster_List的前面。如果Cluster_List为空，RR就创建一个
+  - 当RR接收到一条更新路由时，RR会检查Cluster_List。如果Cluster_List中已经有本地Cluster_ID，丢弃该路由不需要再反射；如果没有本地Cluster_ID，将其加入Cluster_List，然后反射该更新路由
+  - Cluster_List只被RR用来检测路由环路，不是RR的客户机和非客户机不会检测该属性。
 
 #### BGP Confederation
 
@@ -135,7 +177,7 @@ As(100) --> As((1000),100) --> As((1000,1001),100) --> As(200,100)
 
 ##### 示意图：
 
-![](./Review-the-BGP-protocol/202103051314520.png)
+![](Review-the-BGP-protocol/202103051314520.png)
 
 #### BGP Synchronization
 

@@ -60,7 +60,7 @@ type entry struct {
 ```go
 func (m *Map) Load(key interface{}) (value interface{}, ok bool) {
    read, _ := m.read.Load().(readOnly)
-   e, ok := read.m\[key\]
+   e, ok := read.m[key]
    if !ok && read.amended {
       m.mu.Lock()
       //防止第一次从read取数据时碰上数据正从dirty复制到read中

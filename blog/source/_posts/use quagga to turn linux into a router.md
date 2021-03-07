@@ -47,6 +47,12 @@ SELINUXTYPE=targeted
 
 ```
 
+关闭防火墙
+
+```
+systemctl stop firewalld.service
+```
+
 #### 配置IP
 
 ##### 开启zebra
@@ -147,9 +153,9 @@ Configuration saved to /etc/quagga/bgpd.conf
 # show ip bgp summary
 ```
 
-![431db398e0c34ad7eeaf275e37b23c5](./use quagga to turn linux into a router/202103061.png)
+![431db398e0c34ad7eeaf275e37b23c5](use quagga to turn linux into a router/202103061.png)
 
-![67f2fd4f3cb8673769c45b67c1a9cc5](./use quagga to turn linux into a router/202103062.png)
+![67f2fd4f3cb8673769c45b67c1a9cc5](use quagga to turn linux into a router/202103062.png)
 
 #### 发布路由前缀
 
@@ -180,13 +186,52 @@ Total number of neighbors 1
 
 从State/PfxRcd字段看出由0到1的变化，表明发布成功
 
-#### 发布BGP黑洞
+#### 利用Gobgp发布BGP黑洞
 
-利用Gobgp
-
+```
+//开启Gobgp
 sudo ./gobgpd -f gobgpd.conf -l debug -p
+```
 
+##### 让目标路由器发布带community：blackhole的路由
 
+- CommunitySet Operations
+
+  ```
+  gobgp policy community add <community set name> <community>
+  ```
+
+##### 向上游路由配置policy
+
+- PrefixSet Operation 
+
+  ```
+  gobgp policy prefix add <prefix set name> <prefix> [<mask length range>]
+  ```
+
+- NeighborSet Operation 
+
+  ```
+  gobgp policy neighbor add <neighbor set name> <neighbor address/prefix>
+  ```
+
+- Statement Operation 
+
+  ```
+  # mod statement
+  gobgp policy statement <statement name> { add | del | set } 
+  condition { { prefix | neighbor | community } <set name> [{ any | all | invert }] }
+  # mod an action to a statement
+  gobgp policy statement <statement name> { add | del | set } action { reject | accept }
+  ```
+
+- Policy Operation 
+
+  ```
+  gobgp policy add <policy name> [<statement name>...]
+  ```
+
+  
 
 #### 后续
 
