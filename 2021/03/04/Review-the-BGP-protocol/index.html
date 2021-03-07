@@ -13,12 +13,12 @@
 <meta property="og:site_name" content="Bit">
 <meta property="og:description" content="As_Path  Type组成：Path Segment Type,  Path Segment Length,  Path Segment Value  As_Set: 由一系列As号无序地组成，包含在Updata消息里 As_Sequence: 由一系列As号顺序地组成，包含在Updata消息里 As_Confed_Sequence: 在本地联盟内由一系列成员As号按顺序地组成，包含在Upda">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2021/03/04/Review-the-BGP-protocol/Review-the-BGP-protocol/202103051314520.png">
+<meta property="og:image" content="http://example.com/2021/03/04/Review-the-BGP-protocol/202103051314520.png">
 <meta property="article:published_time" content="2021-03-03T18:13:41.000Z">
-<meta property="article:modified_time" content="2021-03-07T07:38:12.100Z">
+<meta property="article:modified_time" content="2021-03-07T08:04:09.545Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/03/04/Review-the-BGP-protocol/Review-the-BGP-protocol/202103051314520.png">
+<meta name="twitter:image" content="http://example.com/2021/03/04/Review-the-BGP-protocol/202103051314520.png">
     
     
       
@@ -262,7 +262,7 @@
 <p>此状态下 BGP 对等体间的连接已经完全建立，此时可以相互交换路由信息，若收到 notification，则会将状态置为 Idle 中断连接</p>
 </li>
 </ul>
-<h5 id="示意图："><a href="#示意图：" class="headerlink" title="示意图："></a>示意图：</h5><p><img src="./Review-the-BGP-protocol/202103051314520.png"></p>
+<h5 id="示意图："><a href="#示意图：" class="headerlink" title="示意图："></a>示意图：</h5><p><img src="/2021/03/04/Review-the-BGP-protocol/202103051314520.png"></p>
 <h4 id="BGP-Synchronization"><a href="#BGP-Synchronization" class="headerlink" title="BGP Synchronization"></a>BGP Synchronization</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;拓补图</span><br><span class="line">AS100(RTA) --------- AS200(RTB-RTC-RTD) ---------- AS300(RTE)</span><br></pre></td></tr></table></figure>
 <p>当AS100中的RTA发送关于1.1.1.1的路由update包，RTB和RTD运行着IBGP，理想情况下RTD在update包中学习到如何到达1.1.1.1的网络信息，接着RTD传播update包给RTE</p>
 <p>假如RTB没有将1.1.1.1的路由信息重发布到IGP中，那么RTC便无法得知如何去往1.1.1.1这段网络，那么RTD和RTE如果向1.1.1.1网段发送数据包，便会在RTC这被丢弃</p>
