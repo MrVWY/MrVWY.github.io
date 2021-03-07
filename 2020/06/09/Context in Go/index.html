@@ -6,20 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="context称作“上下文”，是environment的snapshot。">
+    <meta name="description" content="![](.&#x2F;Context in Go&#x2F;20200609041455723.png) Context Interface12345678910type Context interface &amp;#123;   &#x2F;&#x2F;超过时间，该context便死亡  Deadline() (deadline time.Time, ok bool)  &#x2F;&#x2F;当context结束时，返回一个channel  Done() &amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Context in Go">
 <meta property="og:url" content="http://example.com/2020/06/09/Context%20in%20Go/index.html">
 <meta property="og:site_name" content="Bit">
-<meta property="og:description" content="context称作“上下文”，是environment的snapshot。">
+<meta property="og:description" content="![](.&#x2F;Context in Go&#x2F;20200609041455723.png) Context Interface12345678910type Context interface &amp;#123;   &#x2F;&#x2F;超过时间，该context便死亡  Deadline() (deadline time.Time, ok bool)  &#x2F;&#x2F;当context结束时，返回一个channel  Done() &amp;">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2020/06/09/images/2020/06/20200609041455723.png">
-<meta property="og:image" content="http://example.com/2020/06/09/images/2020/06/20200609041008165.png">
 <meta property="article:published_time" content="2020-06-09T04:15:38.000Z">
-<meta property="article:modified_time" content="2021-02-28T03:39:03.577Z">
+<meta property="article:modified_time" content="2021-03-07T07:09:24.933Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2020/06/09/images/2020/06/20200609041455723.png">
     
     
       
@@ -84,7 +81,7 @@
         <li><a class="icon" href="/2020/06/10/go%20sync.Map/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2020/06/08/%E8%AE%B0%E4%B8%80%E6%AC%A1wordpress%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6%E5%87%BA%E7%8E%B0%E8%87%B4%E5%91%BD%E9%94%99%E8%AF%AF/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2020/06/05/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -106,7 +103,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/06/09/Context%20in%20Go/&title=Context in Go"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/06/09/Context%20in%20Go/&title=Context in Go"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/06/09/Context%20in%20Go/&title=Context in Go"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/09/Context%20in%20Go/&name=Context in Go&description=&lt;p&gt;context称作“上下文”，是environment的snapshot。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/09/Context%20in%20Go/&name=Context in Go&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/06/09/Context%20in%20Go/&t=Context in Go"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
@@ -156,9 +153,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>context称作“上下文”，是environment的snapshot。</p>
-<a id="more"></a>
-<p><img src="../images/2020/06/20200609041455723.png"></p>
+    <p>![](./Context in Go/20200609041455723.png)</p>
 <h3 id="Context-Interface"><a href="#Context-Interface" class="headerlink" title="Context Interface"></a>Context Interface</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Context <span class="keyword">interface</span> &#123; </span><br><span class="line">  <span class="comment">//超过时间，该context便死亡</span></span><br><span class="line">  Deadline() (deadline time.Time, ok <span class="keyword">bool</span>)</span><br><span class="line">  <span class="comment">//当context结束时，返回一个channel</span></span><br><span class="line">  Done() &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line">  <span class="comment">//context错误</span></span><br><span class="line">  Err() error</span><br><span class="line">  <span class="comment">//返回上下文所关联的key/value值</span></span><br><span class="line">  Value(key <span class="keyword">interface</span>&#123;&#125;) <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
@@ -170,7 +165,7 @@
 <h3 id="CancelFunc"><a href="#CancelFunc" class="headerlink" title="CancelFunc"></a>CancelFunc</h3><p>这个类定义了一个可以返回的cancel函数，它可以cancel当前的context和它的子context，并且把自己从父类的context删除。它提供三个可以cancel的方法。</p>
 <h4 id="WithCancel"><a href="#WithCancel" class="headerlink" title="WithCancel"></a>WithCancel</h4><p>这个方法主要是当上下文操作完成时立即调用结束该context链。当调用父类的cancel时，父类和其子节点就会一起Done()。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WithCancel</span><span class="params">(parent Context)</span> <span class="params">(ctx Context, cancel CancelFunc)</span></span> &#123;</span><br><span class="line">   <span class="comment">//创建一个新context节点</span></span><br><span class="line">   c := newCancelCtx(parent)</span><br><span class="line">   <span class="comment">//创建context的链路，其主要是创建一个map来存储context的子节点</span></span><br><span class="line">   propagateCancel(parent, &amp;c)</span><br><span class="line">   <span class="keyword">return</span> &amp;c, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; c.cancel(<span class="literal">true</span>, Canceled) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>但是不同的context子类是分布在不同的goroutine，那么它是如何实现当父类Done()，子节点接着Done()。通常首先想到的方法时子类监听一个channel传过来的关闭信号，然后子类收到这个关闭信号之后就结束自身。但具体如何实现的，请看下图。 <img src="../images/2020/06/20200609041008165.png"></p>
+<p>但是不同的context子类是分布在不同的goroutine，那么它是如何实现当父类Done()，子节点接着Done()。通常首先想到的方法时子类监听一个channel传过来的关闭信号，然后子类收到这个关闭信号之后就结束自身。但具体如何实现的，请看下图。 ![](./Context in Go/20200609041008165.png)</p>
 <h4 id="WithDeadline"><a href="#WithDeadline" class="headerlink" title="WithDeadline"></a>WithDeadline</h4><p>这个方法主要是当超过一定时间后，context就自行结束自己和其子节点。同时它也返回一个可以主动cancel的方法</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WithDeadline</span><span class="params">(parent Context, d time.Time)</span> <span class="params">(Context, CancelFunc)</span></span> &#123;</span><br><span class="line">   ........</span><br><span class="line">   c := &amp;timerCtx&#123;</span><br><span class="line">      cancelCtx: newCancelCtx(parent),</span><br><span class="line">      deadline:  d,</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//创建context的链路，其主要是创建一个map来存储context的子节点</span></span><br><span class="line">   propagateCancel(parent, c)</span><br><span class="line">   dur := time.Until(d)</span><br><span class="line">   <span class="keyword">if</span> dur &lt;= <span class="number">0</span> &#123;</span><br><span class="line">      c.cancel(<span class="literal">true</span>, DeadlineExceeded) <span class="comment">// deadline has already passed</span></span><br><span class="line">      <span class="keyword">return</span> c, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; c.cancel(<span class="literal">false</span>, Canceled) &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   c.mu.Lock()</span><br><span class="line">   <span class="keyword">defer</span> c.mu.Unlock()</span><br><span class="line">   <span class="keyword">if</span> c.err == <span class="literal">nil</span> &#123;</span><br><span class="line">      c.timer = time.AfterFunc(dur, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">         c.cancel(<span class="literal">true</span>, DeadlineExceeded)</span><br><span class="line">      &#125;)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> c, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; c.cancel(<span class="literal">true</span>, Canceled) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -243,7 +238,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/06/09/Context%20in%20Go/&title=Context in Go"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/06/09/Context%20in%20Go/&title=Context in Go"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/06/09/Context%20in%20Go/&title=Context in Go"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/09/Context%20in%20Go/&name=Context in Go&description=&lt;p&gt;context称作“上下文”，是environment的snapshot。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/06/09/Context%20in%20Go/&name=Context in Go&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/06/09/Context%20in%20Go/&t=Context in Go"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 

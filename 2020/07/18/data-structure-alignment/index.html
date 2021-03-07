@@ -6,21 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="最近看到一个很有意思的编程问题，同时也引出了Data Structure Alignment的知识点，这便引起了我的兴趣。">
+    <meta name="description" content="提问作为程序员，想必都知道int16，int32、int64所对应的字节数。那么在下面2个结构体所占的字节数又为多少呢？ 12345678910111213type A struct&amp;#123;   a int8   d int16   c int32   b int64&amp;#125;type B struct&amp;#123;   a int8   c int32   b int64   d int16">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Data Structure Alignment">
 <meta property="og:url" content="http://example.com/2020/07/18/data-structure-alignment/index.html">
 <meta property="og:site_name" content="Bit">
-<meta property="og:description" content="最近看到一个很有意思的编程问题，同时也引出了Data Structure Alignment的知识点，这便引起了我的兴趣。">
+<meta property="og:description" content="提问作为程序员，想必都知道int16，int32、int64所对应的字节数。那么在下面2个结构体所占的字节数又为多少呢？ 12345678910111213type A struct&amp;#123;   a int8   d int16   c int32   b int64&amp;#125;type B struct&amp;#123;   a int8   c int32   b int64   d int16">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2020/07/18/images/2020/07/20200717180044881.png">
-<meta property="og:image" content="http://example.com/2020/07/18/images/2020/07/20200717182436110.png">
-<meta property="og:image" content="http://example.com/2020/07/18/images/2020/07/20200717190554660.png">
+<meta property="og:image" content="http://example.com/2020/07/18/data-structure-alignment/data-structure-alignment/20200717180044881.png">
+<meta property="og:image" content="http://example.com/2020/07/18/data-structure-alignment/data-structure-alignment/20200717182436110.png">
+<meta property="og:image" content="http://example.com/2020/07/18/data-structure-alignment/data-structure-alignment/20200717190554660.png">
 <meta property="article:published_time" content="2020-07-17T19:16:28.000Z">
-<meta property="article:modified_time" content="2021-03-03T09:43:03.768Z">
+<meta property="article:modified_time" content="2021-03-07T07:11:21.860Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2020/07/18/images/2020/07/20200717180044881.png">
+<meta name="twitter:image" content="http://example.com/2020/07/18/data-structure-alignment/data-structure-alignment/20200717180044881.png">
     
     
       
@@ -107,7 +107,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/07/18/data-structure-alignment/&title=Data Structure Alignment"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/07/18/data-structure-alignment/&title=Data Structure Alignment"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/07/18/data-structure-alignment/&title=Data Structure Alignment"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/07/18/data-structure-alignment/&name=Data Structure Alignment&description=&lt;p&gt;最近看到一个很有意思的编程问题，同时也引出了Data Structure Alignment的知识点，这便引起了我的兴趣。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/07/18/data-structure-alignment/&name=Data Structure Alignment&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/07/18/data-structure-alignment/&t=Data Structure Alignment"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
@@ -157,17 +157,15 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>最近看到一个很有意思的编程问题，同时也引出了Data Structure Alignment的知识点，这便引起了我的兴趣。</p>
-<a id="more"></a>
-<h3 id="提问"><a href="#提问" class="headerlink" title="提问"></a>提问</h3><p>作为程序员，想必都知道int16，int32、int64所对应的字节数。那么在下面2个结构体所占的字节数又为多少呢？</p>
+    <h3 id="提问"><a href="#提问" class="headerlink" title="提问"></a>提问</h3><p>作为程序员，想必都知道int16，int32、int64所对应的字节数。那么在下面2个结构体所占的字节数又为多少呢？</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A <span class="keyword">struct</span>&#123;</span><br><span class="line">   a <span class="keyword">int8</span></span><br><span class="line">   d <span class="keyword">int16</span></span><br><span class="line">   c <span class="keyword">int32</span></span><br><span class="line">   b <span class="keyword">int64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> B <span class="keyword">struct</span>&#123;</span><br><span class="line">   a <span class="keyword">int8</span></span><br><span class="line">   c <span class="keyword">int32</span></span><br><span class="line">   b <span class="keyword">int64</span></span><br><span class="line">   d <span class="keyword">int16</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-<h4 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h4><p><img src="../images/2020/07/20200717180044881.png"> 答案显而易见，如果仔细观察就会发现A、B两个结构体中的字段类型排序不同。这就涉及到了Data Structure Alignment(也就是内存对齐)的知识点了。</p>
+<h4 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h4><p><img src="./data-structure-alignment/20200717180044881.png"> 答案显而易见，如果仔细观察就会发现A、B两个结构体中的字段类型排序不同。这就涉及到了Data Structure Alignment(也就是内存对齐)的知识点了。</p>
 <h4 id="32位与64位的区别"><a href="#32位与64位的区别" class="headerlink" title="32位与64位的区别"></a>32位与64位的区别</h4><p>在了解什么是内存对齐前，首先要知道CPU、内存、地址总线、数据总线的概念。当cpu想要从内存中获取数据，就要通过地址总线传送地址给内存，内存在根据传送过来的地址得到数据，最后将数据从数据总线传给cpu。通常8根数据总线就寻址255byte的内存空间，而平常我们所说的32位和64位实际上是代表32根/64根数据总线，它们所对应可寻址空间位2^32和2^64。也就是说64位的机子当对于32位的机子的寻址空间更大了。</p>
-<h3 id="什么是Data-Structure-Alignment"><a href="#什么是Data-Structure-Alignment" class="headerlink" title="什么是Data Structure Alignment"></a>什么是Data Structure Alignment</h3><h4 id="内存条的bank，chip，rank"><a href="#内存条的bank，chip，rank" class="headerlink" title="内存条的bank，chip，rank"></a>内存条的bank，chip，rank</h4><p>(这里偏理解的东西，个人感觉不好口述，还是贴一下大佬的图（会在下面Refrence注明）) <img src="../images/2020/07/20200717182436110.png"> </p>
+<h3 id="什么是Data-Structure-Alignment"><a href="#什么是Data-Structure-Alignment" class="headerlink" title="什么是Data Structure Alignment"></a>什么是Data Structure Alignment</h3><h4 id="内存条的bank，chip，rank"><a href="#内存条的bank，chip，rank" class="headerlink" title="内存条的bank，chip，rank"></a>内存条的bank，chip，rank</h4><p>(这里偏理解的东西，个人感觉不好口述，还是贴一下大佬的图（会在下面Refrence注明）) <img src="./data-structure-alignment/20200717182436110.png"> </p>
 <p>而8个Bank所对应的同一个位置的字节(8个位置)连起来就称为连续8个字节(这里标注为a0到a8)。但是如果不是从a0开始，而是从a1到a9呢？这时候就不能在一次操作中一次取出，而是通过二次操作，第一次取a1到a8，第二次取a9。这样就浪费了一次cpu的操作，而且更极端的情况就是一个占2字节的值分别在a8，a9上，这样不仅消费cpu，更浪费内存(因此明明可用a0、a1来解决同时又可以在一次操作完全取出)。所以编译器就会给不同类型的数据安排适合的内存地址，以此来提高性能。简单来说就是争取在cpu一次操作(操作8个字节)中，一次性读取出想要的数据。 因此Data Structure Alignment(内存对齐)出现便是作用于此。注意不同平台每种类型的对齐边界都会有所不同。</p>
-<h3 id="题目图解-64位window下"><a href="#题目图解-64位window下" class="headerlink" title="题目图解(64位window下)"></a>题目图解(64位window下)</h3><p><img src="../images/2020/07/20200717190554660.png"></p>
+<h3 id="题目图解-64位window下"><a href="#题目图解-64位window下" class="headerlink" title="题目图解(64位window下)"></a>题目图解(64位window下)</h3><p><img src="./data-structure-alignment/20200717190554660.png"></p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
 <li><p>  <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Data_structure_alignment">Data Structure Alignment in Wikipedia</a></p>
 </li>
@@ -217,7 +215,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/07/18/data-structure-alignment/&title=Data Structure Alignment"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/07/18/data-structure-alignment/&title=Data Structure Alignment"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/07/18/data-structure-alignment/&title=Data Structure Alignment"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/07/18/data-structure-alignment/&name=Data Structure Alignment&description=&lt;p&gt;最近看到一个很有意思的编程问题，同时也引出了Data Structure Alignment的知识点，这便引起了我的兴趣。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/07/18/data-structure-alignment/&name=Data Structure Alignment&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/07/18/data-structure-alignment/&t=Data Structure Alignment"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 

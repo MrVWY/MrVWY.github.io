@@ -13,12 +13,12 @@
 <meta property="og:site_name" content="Bit">
 <meta property="og:description" content="题目一1234567891011121314151617........type T interface&amp;#123;&amp;#125;type X stringtype Y &#x3D; stringfunc main() &amp;#123;   var t T &#x3D; &quot;abc&quot;   var x X &#x3D; &quot;abc&quot;   var y Y &#x3D; &quot;abc&quot;   fmt">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2020/08/06/images/2020/08/20200804170130760.png">
+<meta property="og:image" content="http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/20200804170130760.png">
 <meta property="article:published_time" content="2020-08-05T16:37:35.000Z">
-<meta property="article:modified_time" content="2021-02-28T03:52:21.580Z">
+<meta property="article:modified_time" content="2021-03-07T07:46:21.151Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2020/08/06/images/2020/08/20200804170130760.png">
+<meta name="twitter:image" content="http://example.com/2020/08/06/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/20200804170130760.png">
     
     
       
@@ -159,7 +159,7 @@
 <h3 id="interface的内部结构"><a href="#interface的内部结构" class="headerlink" title="interface的内部结构"></a>interface的内部结构</h3><p>总所周知，在Go里面任何类型都实现了空接口，而非空接口则必须要实现其里面的方法才算是实现了这个非空接口。 当比较t==x时，t的动态类型是string，而x的动态类型是</p>
 <h4 id="空接口结构"><a href="#空接口结构" class="headerlink" title="空接口结构"></a>空接口结构</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> eface <span class="keyword">struct</span> &#123;</span><br><span class="line">   _type *_type</span><br><span class="line">   data  unsafe.Pointer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>空接口的结构也十分简单，_type是指向Go内部所定义的类型系统，在这就不展开述说，而data这指向接口的数据。</p>
-<h4 id="非空接口结构"><a href="#非空接口结构" class="headerlink" title="非空接口结构"></a>非空接口结构</h4><p>非空接口的构造相对复杂，这里就贴个本人画的图： <img src="../images/2020/08/20200804170130760.png"> 由此可见，在Go中的interface内部构造还是挺复杂的。</p>
+<h4 id="非空接口结构"><a href="#非空接口结构" class="headerlink" title="非空接口结构"></a>非空接口结构</h4><p>非空接口的构造相对复杂，这里就贴个本人画的图： <img src="./%E5%85%B3%E4%BA%8Ego-interface%E7%9A%84interfacetype%E4%B8%8E-type/20200804170130760.png"> 由此可见，在Go中的interface内部构造还是挺复杂的。</p>
 <h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><p>解决题目的关键是要理解Go interface。</p>
 <h4 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h4><p>比如说请看下面一题</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> rw io.ReadWriter</span><br><span class="line">v, _ := os.Open(<span class="string">&quot;test.txt&quot;</span>)</span><br><span class="line">rw = v</span><br><span class="line">fmt.Printf(<span class="string">&quot;%T&quot;</span>, rw)</span><br><span class="line"><span class="comment">//*os.File</span></span><br></pre></td></tr></table></figure>

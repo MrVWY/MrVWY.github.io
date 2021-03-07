@@ -6,20 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="最近看到一个问题是关于TCP的短链接">
+    <meta name="description" content="问题在一段时间里，有大量的短链接请求服务器，服务器会发生什么情况？ time_wait状态与可能导致情况当TCP进入了四次挥手阶段，当主动请求关闭连接时就会在接下来的过程中进入time_wait状态，其时长为2msl。具体就不多说，TCP三次握手和四次挥手都是基础知识。 那么会不会出现一种情况，当大量的短链接请求过来，但每条短链接请求的数据量都比较小，服务器飞速的处理完毕，这时候没有发生任何的错误">
 <meta property="og:type" content="article">
 <meta property="og:title" content="当TCP出现了大量的短链接时......">
 <meta property="og:url" content="http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/index.html">
 <meta property="og:site_name" content="Bit">
-<meta property="og:description" content="最近看到一个问题是关于TCP的短链接">
+<meta property="og:description" content="问题在一段时间里，有大量的短链接请求服务器，服务器会发生什么情况？ time_wait状态与可能导致情况当TCP进入了四次挥手阶段，当主动请求关闭连接时就会在接下来的过程中进入time_wait状态，其时长为2msl。具体就不多说，TCP三次握手和四次挥手都是基础知识。 那么会不会出现一种情况，当大量的短链接请求过来，但每条短链接请求的数据量都比较小，服务器飞速的处理完毕，这时候没有发生任何的错误">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2020/08/24/images/2020/08/20200824072625562.png">
-<meta property="og:image" content="http://example.com/2020/08/24/images/2020/08/20200824072729625.png">
+<meta property="og:image" content="http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/20200824072625562.png">
+<meta property="og:image" content="http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/20200824072729625.png">
 <meta property="article:published_time" content="2020-08-24T08:36:06.000Z">
-<meta property="article:modified_time" content="2021-02-28T03:11:27.419Z">
+<meta property="article:modified_time" content="2021-03-07T07:45:17.389Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2020/08/24/images/2020/08/20200824072625562.png">
+<meta name="twitter:image" content="http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/20200824072625562.png">
     
     
       
@@ -81,7 +81,7 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" href="/2020/08/28/Go%20compile%20mode/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" href="/2020/08/18/nginx-listen%E5%8F%82%E6%95%B0-reuseport%E4%B8%8Ebacklog/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -106,7 +106,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&title=当TCP出现了大量的短链接时......"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&title=当TCP出现了大量的短链接时......"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&title=当TCP出现了大量的短链接时......"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&name=当TCP出现了大量的短链接时......&description=&lt;p&gt;最近看到一个问题是关于TCP的短链接&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&name=当TCP出现了大量的短链接时......&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&t=当TCP出现了大量的短链接时......"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
@@ -156,12 +156,12 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>最近看到一个问题是关于TCP的短链接</p>
-<a id="more"></a>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>在一段时间里，有大量的短链接请求服务器，服务器会发生什么情况？</p>
+    <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>在一段时间里，有大量的短链接请求服务器，服务器会发生什么情况？</p>
 <h3 id="time-wait状态与可能导致情况"><a href="#time-wait状态与可能导致情况" class="headerlink" title="time_wait状态与可能导致情况"></a>time_wait状态与可能导致情况</h3><p>当TCP进入了四次挥手阶段，当主动请求关闭连接时就会在接下来的过程中进入time_wait状态，其时长为2msl。具体就不多说，TCP三次握手和四次挥手都是基础知识。 那么会不会出现一种情况，当大量的短链接请求过来，但每条短链接请求的数据量都比较小，服务器飞速的处理完毕，这时候没有发生任何的错误，但是仍要等待2msl时间才能关闭结束TCP连接。因此思考一下，如果服务器处理时间为万分之2msl，那么这个在不发生任何包丢失的情况下，这个等待2msl时间是不是有点不合理？ 因此在有无数个短链接请求过来时，大量的socket都停留在了time_wait状态导致服务器里的socket数量爆满(换句话说必须要等到2msl后才能释放)。</p>
-<h4 id="可能会发生的情况"><a href="#可能会发生的情况" class="headerlink" title="可能会发生的情况"></a>可能会发生的情况</h4><p>在linux中，有着对这种情况的解释，本人通过man tcp的命令找到里面对一个字段tcp_max_tw_buckets解释如下图 <img src="../images/2020/08/20200824072625562.png"> 这段话说明了当linux中处于time_wait状态的socket一旦超过规定的值，就会导致部分socket关闭。</p>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>关于解决方法网上已经有很多，不过主要还是涉及到几个参数分别为tcp_tw_reuse、tcp_tw_recycle，前者是对time_wait socket重用，后者是对 time_wait  socket的快速回收。 <img src="../images/2020/08/20200824072729625.png"> 可以通过linux参数说明得知，当启动tcp_tw_recycle可以对socket快速回收但是当网络是在NAT的情况下，就可能会引起一系列问题，因此该参数要慎用。 不过一般情况下，服务器都是作为被动连接的一方，而tcp_tw_reuse这个参数是否开启主要还是基于你是主动发起还是被动连接，因为time_wait状态只出现在主动发起一方。 注：查看当前TCP状态：netstat -an grep tcp</p>
+<h4 id="可能会发生的情况"><a href="#可能会发生的情况" class="headerlink" title="可能会发生的情况"></a>可能会发生的情况</h4><p>在linux中，有着对这种情况的解释，本人通过man tcp的命令找到里面对一个字段tcp_max_tw_buckets解释如下图 <img src="./%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/20200824072625562.png"> </p>
+<p>这段话说明了当linux中处于time_wait状态的socket一旦超过规定的值，就会导致部分socket关闭。</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>关于解决方法网上已经有很多，不过主要还是涉及到几个参数分别为tcp_tw_reuse、tcp_tw_recycle，前者是对time_wait socket重用，后者是对 time_wait  socket的快速回收。 <img src="./%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/20200824072729625.png"> </p>
+<p>可以通过linux参数说明得知，当启动tcp_tw_recycle可以对socket快速回收但是当网络是在NAT的情况下，就可能会引起一系列问题，因此该参数要慎用。 不过一般情况下，服务器都是作为被动连接的一方，而tcp_tw_reuse这个参数是否开启主要还是基于你是主动发起还是被动连接，因为time_wait状态只出现在主动发起一方。 注：查看当前TCP状态：netstat -an grep tcp</p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
 <li>  <a target="_blank" rel="noopener" href="https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt">kernel.org (相关参数)</a></li>
 <li>  <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1412003">以讹传讹的“tcp_tw_reuse”</a></li>
@@ -207,7 +207,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&title=当TCP出现了大量的短链接时......"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&title=当TCP出现了大量的短链接时......"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&title=当TCP出现了大量的短链接时......"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&name=当TCP出现了大量的短链接时......&description=&lt;p&gt;最近看到一个问题是关于TCP的短链接&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&name=当TCP出现了大量的短链接时......&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/24/%E5%BD%93tcp%E5%87%BA%E7%8E%B0%E4%BA%86%E5%A4%A7%E9%87%8F%E7%9A%84%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%97%B6/&t=当TCP出现了大量的短链接时......"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 

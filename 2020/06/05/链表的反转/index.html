@@ -13,13 +13,13 @@
 <meta property="og:site_name" content="Bit">
 <meta property="og:description" content="链表的反转的类型，就我目前做题的经历和情况来看，目前我一共遇到2种类型的链表反转，第一类是最简单的把整条链表反转，第二类就是把链表中的某一段进行反转，但每次遇到这第二类题总感觉堵在那，因此很有必要自己画个流程图手推一波。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2020/06/05/images/2020/06/20200608140325319.png">
-<meta property="og:image" content="http://example.com/2020/06/05/images/2020/06/20200608140351604.png">
+<meta property="og:image" content="http://example.com/2020/06/05/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/20200608140325319.png">
+<meta property="og:image" content="http://example.com/2020/06/05/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/20200608140351604.png">
 <meta property="article:published_time" content="2020-06-05T06:11:28.000Z">
-<meta property="article:modified_time" content="2021-02-28T03:14:33.674Z">
+<meta property="article:modified_time" content="2021-03-07T07:48:47.789Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2020/06/05/images/2020/06/20200608140325319.png">
+<meta name="twitter:image" content="http://example.com/2020/06/05/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/20200608140325319.png">
     
     
       
@@ -81,7 +81,7 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2020/06/08/%E8%AE%B0%E4%B8%80%E6%AC%A1wordpress%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6%E5%87%BA%E7%8E%B0%E8%87%B4%E5%91%BD%E9%94%99%E8%AF%AF/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" href="/2020/06/09/Context%20in%20Go/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" href="/2020/06/04/Go%E4%B8%AD%E7%9A%84defer/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -159,11 +159,11 @@
     <p>链表的反转的类型，就我目前做题的经历和情况来看，目前我一共遇到2种类型的链表反转，第一类是最简单的把整条链表反转，第二类就是把链表中的某一段进行反转，但每次遇到这第二类题总感觉堵在那，因此很有必要自己画个流程图手推一波。</p>
 <a id="more"></a>
 <h2 id="第一类：将整条链表反转"><a href="#第一类：将整条链表反转" class="headerlink" title="第一类：将整条链表反转"></a>第一类：将整条链表反转</h2><p>这一类很简单，便不再讲述，请看图</p>
-<p><img src="../images/2020/06/20200608140325319.png"></p>
+<p><img src="./%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/20200608140325319.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">循环体 &#123;</span><br><span class="line"> mid :&#x3D; cur.Next</span><br><span class="line"> cur.Next &#x3D; prev</span><br><span class="line"> prev &#x3D; cur</span><br><span class="line"> cur &#x3D; mid</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>第二类：将链表中的某一部分反转</p>
 <p>这一类你要先找到要反转的区间，然后用head和tail标记，接着就按照第一类反转链表的方法反转这一段区间的链表，最后你会得到三段链表：原链表的未反转首部，已经被反转的链表，原链表的未反转尾部，你只要把这三段连接起来即可。</p>
-<p><img src="../images/2020/06/20200608140351604.png"></p>
+<p><img src="./%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8F%8D%E8%BD%AC/20200608140351604.png"></p>
 
   </div>
 </article>

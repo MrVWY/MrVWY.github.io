@@ -6,20 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="因为个人也是网工出身，大一时被一个很负责的老师教我计算机网络这一课程，同时粗略地看了TCP-IP详解第一版的PDF，在网上的这一概念就一看而过了。">
+    <meta name="description" content="前言关于“粘包”这概念一开始我也是十分模糊，网上一搜全是相关内容一开始就了解一下是如何解决这问题就结束了。直到看到一篇文章-我工作五年的时候也不知道 “TCP 粘包”，这一下使我陷入了深深的思考，脑中全是TCP协议定义的字段和那零零星星的记忆，发现这一概念还真没出现在所看到的书籍中。这一下就有趣起来了。 “粘包”这一概念是如何产生的关于TCP这一协议就不详述了，关键是当发送方中有2个应用程序A、B">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP 粘包？">
 <meta property="og:url" content="http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/index.html">
 <meta property="og:site_name" content="Bit">
-<meta property="og:description" content="因为个人也是网工出身，大一时被一个很负责的老师教我计算机网络这一课程，同时粗略地看了TCP-IP详解第一版的PDF，在网上的这一概念就一看而过了。">
+<meta property="og:description" content="前言关于“粘包”这概念一开始我也是十分模糊，网上一搜全是相关内容一开始就了解一下是如何解决这问题就结束了。直到看到一篇文章-我工作五年的时候也不知道 “TCP 粘包”，这一下使我陷入了深深的思考，脑中全是TCP协议定义的字段和那零零星星的记忆，发现这一概念还真没出现在所看到的书籍中。这一下就有趣起来了。 “粘包”这一概念是如何产生的关于TCP这一协议就不详述了，关键是当发送方中有2个应用程序A、B">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2020/08/11/images/2020/08/20200810171255219.png">
-<meta property="og:image" content="http://example.com/2020/08/11/images/2020/08/20200810182116176.png">
+<meta property="og:image" content="http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/20200810171255219.png">
+<meta property="og:image" content="http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/20200810182116176.png">
 <meta property="article:published_time" content="2020-08-10T18:23:50.000Z">
-<meta property="article:modified_time" content="2021-02-28T03:10:52.825Z">
+<meta property="article:modified_time" content="2021-03-07T07:41:55.588Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2020/08/11/images/2020/08/20200810171255219.png">
+<meta name="twitter:image" content="http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/20200810171255219.png">
     
     
       
@@ -106,7 +106,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&title=TCP 粘包？"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&title=TCP 粘包？"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&title=TCP 粘包？"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&name=TCP 粘包？&description=&lt;p&gt;因为个人也是网工出身，大一时被一个很负责的老师教我计算机网络这一课程，同时粗略地看了TCP-IP详解第一版的PDF，在网上的这一概念就一看而过了。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&name=TCP 粘包？&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&t=TCP 粘包？"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
@@ -156,13 +156,13 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>因为个人也是网工出身，大一时被一个很负责的老师教我计算机网络这一课程，同时粗略地看了TCP-IP详解第一版的PDF，在网上的这一概念就一看而过了。</p>
-<a id="more"></a>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>关于“粘包”这概念一开始我也是十分模糊，网上一搜全是相关内容一开始就了解一下是如何解决这问题就结束了。直到看到一篇文章-我工作五年的时候也不知道 “TCP 粘包”，这一下使我陷入了深深的思考，脑中全是TCP协议定义的字段和那零零星星的记忆，发现这一概念还真没出现在所看到的书籍中。这一下就有趣起来了。</p>
-<h3 id="“粘包”这一概念是如何产生的"><a href="#“粘包”这一概念是如何产生的" class="headerlink" title="“粘包”这一概念是如何产生的"></a>“粘包”这一概念是如何产生的</h3><p>关于TCP这一协议就不详述了，关键是当发送方中有2个应用程序A、B，接收方收到了这2个程序A、B所发送的数据包（比如说各2M），那么接收方开始recv()数据，那么这时候你就应该开始思考到底读取多少字节的数据才好呢？读多读少肯定会出问题。因此这就是所出现的“粘包”这一概念，简单来说就是接收方处理缓冲区的数据包的边界的问题。 <img src="../images/2020/08/20200810171255219.png"> TCP一个基于<strong>字节流</strong>的传输层通信协议，它是一个面向<strong>字节流</strong>的一个协议，保证了数据字节顺序可靠的传达到接收方。就是说TCP已经把数据按顺序的传达到了，至于接收方只需要按顺序读取即可，但是你一次读多少读到哪里就不归我管了。很明显问题就出现在传输层以上的应用层，应用程序是如何读取的事了。</p>
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>关于“粘包”这概念一开始我也是十分模糊，网上一搜全是相关内容一开始就了解一下是如何解决这问题就结束了。直到看到一篇文章-我工作五年的时候也不知道 “TCP 粘包”，这一下使我陷入了深深的思考，脑中全是TCP协议定义的字段和那零零星星的记忆，发现这一概念还真没出现在所看到的书籍中。这一下就有趣起来了。</p>
+<h3 id="“粘包”这一概念是如何产生的"><a href="#“粘包”这一概念是如何产生的" class="headerlink" title="“粘包”这一概念是如何产生的"></a>“粘包”这一概念是如何产生的</h3><p>关于TCP这一协议就不详述了，关键是当发送方中有2个应用程序A、B，接收方收到了这2个程序A、B所发送的数据包（比如说各2M），那么接收方开始recv()数据，那么这时候你就应该开始思考到底读取多少字节的数据才好呢？读多读少肯定会出问题。因此这就是所出现的“粘包”这一概念，简单来说就是接收方处理缓冲区的数据包的边界的问题。 <img src="./tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/20200810171255219.png"> </p>
+<p>TCP一个基于<strong>字节流</strong>的传输层通信协议，它是一个面向<strong>字节流</strong>的一个协议，保证了数据字节顺序可靠的传达到接收方。就是说TCP已经把数据按顺序的传达到了，至于接收方只需要按顺序读取即可，但是你一次读多少读到哪里就不归我管了。很明显问题就出现在传输层以上的应用层，应用程序是如何读取的事了。</p>
 <h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>读到这问题已经很明显，相关的解决方法网上也大同小异。</p>
 <h4 id="PSH解决方案"><a href="#PSH解决方案" class="headerlink" title="PSH解决方案"></a>PSH解决方案</h4><p>这个方案是在知乎上找到的一个解决方法，仔细一想好像也有道理，PSH是TCP中的一个字段，如果使用了PSH标志，就不会等到缓冲区填满直接将缓冲区的数据全部推到上层。不过在知乎看的时候在评论区看到似乎还有问题，这里就不清楚具体情况了。如果想了解可以从下方Reference点进去了解。</p>
-<h3 id="TCP-IP每层的协议单元与协议"><a href="#TCP-IP每层的协议单元与协议" class="headerlink" title="TCP/IP每层的协议单元与协议"></a>TCP/IP每层的协议单元与协议</h3><p>关于每层的协议和名词都十分多，这里我就挑一些与本文有关的概念，比如数据报、包、段等。请看下图： Tip：协议数据单元PDU（Protocol Data Unit） <img src="../images/2020/08/20200810182116176.png"> 由此可以作用在传输层的TCP的PDU为段，而包的概念则出现在网络层上面。</p>
+<h3 id="TCP-IP每层的协议单元与协议"><a href="#TCP-IP每层的协议单元与协议" class="headerlink" title="TCP/IP每层的协议单元与协议"></a>TCP/IP每层的协议单元与协议</h3><p>关于每层的协议和名词都十分多，这里我就挑一些与本文有关的概念，比如数据报、包、段等。请看下图： Tip：协议数据单元PDU（Protocol Data Unit） <img src="./tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/20200810182116176.png"></p>
+<p> 由此可以作用在传输层的TCP的PDU为段，而包的概念则出现在网络层上面。</p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
 <li>  <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/13059323/how-does-tcp-psh-work/13059521#13059521">How does TCP PSH work?</a></li>
 <li>  <a target="_blank" rel="noopener" href="https://www.v2ex.com/t/519253">我工作五年的时候也不知道 “TCP 粘包”</a></li>
@@ -209,7 +209,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&title=TCP 粘包？"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&title=TCP 粘包？"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&title=TCP 粘包？"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&name=TCP 粘包？&description=&lt;p&gt;因为个人也是网工出身，大一时被一个很负责的老师教我计算机网络这一课程，同时粗略地看了TCP-IP详解第一版的PDF，在网上的这一概念就一看而过了。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&name=TCP 粘包？&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/11/tcp%E6%B2%A1%E6%9C%89%E7%B2%98%E5%8C%85%E5%92%8C%E5%8C%85/&t=TCP 粘包？"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 

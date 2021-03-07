@@ -8,19 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="Go与C家族的互调，Go的几种编译模式。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Go 编译模式">
-<meta property="og:url" content="http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:title" content="Go-compile mode">
+<meta property="og:url" content="http://example.com/2020/08/28/Go%20compile%20mode/index.html">
 <meta property="og:site_name" content="Bit">
 <meta property="og:description" content="Go与C家族的互调，Go的几种编译模式。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2020/08/28/images/2020/08/20200826095638331.png">
-<meta property="og:image" content="http://example.com/2020/08/28/images/2020/08/20200826095532942.png">
-<meta property="og:image" content="http://example.com/2020/08/28/images/2020/08/20200828140739493.png">
 <meta property="article:published_time" content="2020-08-28T14:21:23.000Z">
-<meta property="article:modified_time" content="2021-02-28T03:08:14.238Z">
+<meta property="article:modified_time" content="2021-03-07T07:20:44.810Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2020/08/28/images/2020/08/20200826095638331.png">
     
     
       
@@ -40,7 +36,7 @@
       
     
     <!-- title -->
-    <title>Go 编译模式</title>
+    <title>Go-compile mode</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/css/style.css">
@@ -98,17 +94,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&text=Go 编译模式"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&is_video=false&description=Go 编译模式"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Go 编译模式&body=Check out this article: http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&name=Go 编译模式&description=&lt;p&gt;Go与C家族的互调，Go的几种编译模式。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&t=Go 编译模式"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/08/28/Go%20compile%20mode/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/08/28/Go%20compile%20mode/&text=Go-compile mode"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/08/28/Go%20compile%20mode/&is_video=false&description=Go-compile mode"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Go-compile mode&body=Check out this article: http://example.com/2020/08/28/Go%20compile%20mode/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/28/Go%20compile%20mode/&name=Go-compile mode&description=&lt;p&gt;Go与C家族的互调，Go的几种编译模式。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/28/Go%20compile%20mode/&t=Go-compile mode"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -125,7 +121,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        Go 编译模式
+        Go-compile mode
     </h1>
 
 
@@ -196,24 +192,25 @@
 <li>-buildmode=c-archive （ C动态链接文件）<ul>
 <li>  原版文档解释：Build the listed main package, plus all packages it imports, into a <strong>C archive file</strong>. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.</li>
 <li>  注意：在使用go文件编译成能让C/C++引用的文件时，要主要必须要有的2个要求：第一是要在头部加入import “C”。第二是要在你想让C/C++引用的函数上方加入  //export  你的函数名。</li>
-<li>  产生文件：.a 、.h。.h文件可以在C/C++引用<img src="../images/2020/08/20200826095638331.png"></li>
+<li>  产生文件：.a 、.h。.h文件可以在C/C++引用![](./Go compile mode/20200826095638331.png)</li>
 <li>  参考链接-<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/40573401/building-a-dll-with-go-1-7">stackoverflow</a></li>
 </ul>
 </li>
 <li>-buildmode=c-shared<ul>
 <li>  原版文档解释：Build the listed main package, plus all packages it imports, into a <strong>C shared library</strong>. The only callable symbols will be those functions exported using a cgo //export comment. Requires exactly one main package to be listed.</li>
 <li>  大体上和c-archive模式差不多，主要是C archive file和C shared library的区别。按字面意思是file和library的区别。</li>
-<li>  产生文件：一个文件(不知用来干啥)，.h文件供C/C++调用。<img src="../images/2020/08/20200826095532942.png"></li>
+<li>  产生文件：一个文件(不知用来干啥)，.h文件供C/C++调用。![](./Go compile mode/20200826095532942.png)</li>
 </ul>
 </li>
 </ol>
 <p>关于buildmode的参数还有exe、pie、plugin，这些参数就不展开多说。可以通过go help buildmode查看文档解析。</p>
-<h3 id="C调Go、Go调C例子"><a href="#C调Go、Go调C例子" class="headerlink" title="C调Go、Go调C例子"></a>C调Go、Go调C例子</h3><h4 id="C调Go"><a href="#C调Go" class="headerlink" title="C调Go"></a>C调Go</h4><p>//A.go<br>import “C”<br>import “fmt”</p>
-<p>//export A<br>func A() {<br>   fmt.Println(“From DLL: A!”)<br>}</p>
+<h3 id="C调Go、Go调C例子"><a href="#C调Go、Go调C例子" class="headerlink" title="C调Go、Go调C例子"></a>C调Go、Go调C例子</h3><h4 id="C调Go"><a href="#C调Go" class="headerlink" title="C调Go"></a>C调Go</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;A.go</span><br><span class="line">import &quot;C&quot;</span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;export A</span><br><span class="line">func A() &#123;</span><br><span class="line">   fmt.Println(&quot;From DLL: A!&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>func main() {}</p>
 <p>通过**<em>go build -buildmode=c-archive -o ××.a  A.go</em> ** 生成A.a 和 A.h文件。然后编写.c文件</p>
-<p>#include “h.h”<br>#include &lt;stdio.h&gt;<br>int main()<br>{<br>    Bar();<br>    return 0;<br>}</p>
-<p>编译C+运行：<strong><em>gcc -o main hello.c h.a -undefined reference to `pthread_create’</em></strong> 注：这里的-lpthread参数还需研究，就目前来看是能够调用成功。与其相关的还有一个-pthread参数，仍需自行查阅相关资料。 就目前来看-lpthread是与POSIX(可移植操作系统接口) thread相关 <img src="../images/2020/08/20200828140739493.png"> 注意：上述只是个简单的例子，具体更复杂的问题涉及到C与Go直接的值范围等到一些问题还需要注意，因此在调用中更应该注重两种语言之间的类型转换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;h.h&quot;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    Bar();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译C+运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o main hello.c h.a -undefined reference to \&#96;pthread\_create&#39;</span><br></pre></td></tr></table></figure>
+<p> 注：这里的-lpthread参数还需研究，就目前来看是能够调用成功。与其相关的还有一个-pthread参数，仍需自行查阅相关资料。 就目前来看-lpthread是与POSIX(可移植操作系统接口) thread相关 ![](./Go compile mode/20200828140739493.png) 注意：上述只是个简单的例子，具体更复杂的问题涉及到C与Go直接的值范围等到一些问题还需要注意，因此在调用中更应该注重两种语言之间的类型转换。</p>
 <h4 id="Go调C"><a href="#Go调C" class="headerlink" title="Go调C"></a>Go调C</h4><p>主要是运用了Go实现的CGO库调用，参考及内部实现：<a target="_blank" rel="noopener" href="https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-05-internal.html">链接</a> 加油！</p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
 <li>  <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5">静态链接(Static link)</a></li>
@@ -252,17 +249,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&text=Go 编译模式"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&is_video=false&description=Go 编译模式"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Go 编译模式&body=Check out this article: http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&title=Go 编译模式"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&name=Go 编译模式&description=&lt;p&gt;Go与C家族的互调，Go的几种编译模式。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/28/go-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F/&t=Go 编译模式"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/08/28/Go%20compile%20mode/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/08/28/Go%20compile%20mode/&text=Go-compile mode"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/08/28/Go%20compile%20mode/&is_video=false&description=Go-compile mode"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Go-compile mode&body=Check out this article: http://example.com/2020/08/28/Go%20compile%20mode/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/08/28/Go%20compile%20mode/&title=Go-compile mode"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/08/28/Go%20compile%20mode/&name=Go-compile mode&description=&lt;p&gt;Go与C家族的互调，Go的几种编译模式。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/08/28/Go%20compile%20mode/&t=Go-compile mode"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
