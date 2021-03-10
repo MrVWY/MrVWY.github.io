@@ -9,12 +9,12 @@
     <meta name="description" content="Commonly use .h network file IPv4 header netinet&#x2F;ip.h：struct ip 1234567891011121314151617181920struct ip &amp;#123;#if BYTE_ORDER &#x3D;&#x3D; LITTLE_ENDIAN 	u_char	ip_hl:4,		&#x2F;* header length *&#x2F;		ip_v:4;			&#x2F;* versi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C language - TCP&#x2F;IP .h file and use Xdp">
-<meta property="og:url" content="http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/index.html">
+<meta property="og:url" content="http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/index.html">
 <meta property="og:site_name" content="Bit">
 <meta property="og:description" content="Commonly use .h network file IPv4 header netinet&#x2F;ip.h：struct ip 1234567891011121314151617181920struct ip &amp;#123;#if BYTE_ORDER &#x3D;&#x3D; LITTLE_ENDIAN 	u_char	ip_hl:4,		&#x2F;* header length *&#x2F;		ip_v:4;			&#x2F;* versi">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-02-02T08:17:01.000Z">
-<meta property="article:modified_time" content="2021-02-12T10:49:07.926Z">
+<meta property="article:published_time" content="2021-01-02T08:17:01.000Z">
+<meta property="article:modified_time" content="2021-03-10T07:23:44.636Z">
 <meta property="article:author" content="Bit">
 <meta name="twitter:card" content="summary">
     
@@ -81,7 +81,7 @@
         <li><a class="icon" href="/2021/02/02/Disjoint-set/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2020/10/02/%E8%AE%B0%E5%BD%95%E8%B4%B4%EF%BC%9Anginx-compilation-parameters/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2020/12/01/Review-the-BGP-protocol/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -94,17 +94,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&text=C language - TCP/IP .h file and use Xdp"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&is_video=false&description=C language - TCP/IP .h file and use Xdp"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=C language - TCP/IP .h file and use Xdp&body=Check out this article: http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&name=C language - TCP/IP .h file and use Xdp&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&t=C language - TCP/IP .h file and use Xdp"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&text=C language - TCP/IP .h file and use Xdp"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&is_video=false&description=C language - TCP/IP .h file and use Xdp"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=C language - TCP/IP .h file and use Xdp&body=Check out this article: http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&name=C language - TCP/IP .h file and use Xdp&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&t=C language - TCP/IP .h file and use Xdp"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -133,7 +133,7 @@
       
     <div class="postdate">
       
-        <time datetime="2021-02-02T08:17:01.000Z" itemprop="datePublished">2021-02-02</time>
+        <time datetime="2021-01-02T08:17:01.000Z" itemprop="datePublished">2021-01-02</time>
         
       
     </div>
@@ -260,17 +260,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&text=C language - TCP/IP .h file and use Xdp"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&is_video=false&description=C language - TCP/IP .h file and use Xdp"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=C language - TCP/IP .h file and use Xdp&body=Check out this article: http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&name=C language - TCP/IP .h file and use Xdp&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/02/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&t=C language - TCP/IP .h file and use Xdp"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&text=C language - TCP/IP .h file and use Xdp"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&is_video=false&description=C language - TCP/IP .h file and use Xdp"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=C language - TCP/IP .h file and use Xdp&body=Check out this article: http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&title=C language - TCP/IP .h file and use Xdp"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&name=C language - TCP/IP .h file and use Xdp&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/01/02/C%20language%20-%20TCPIP%20.h%20file%20and%20use%20Xdp/&t=C language - TCP/IP .h file and use Xdp"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
